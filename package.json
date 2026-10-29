@@ -1,0 +1,15 @@
+{
+  "name": "jmssup-blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy",
+    "check": "node scripts/check.mjs",
+    "import:tistory": "node scripts/import-tistory.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "cheerio": "^1.1.2"
+  }
+}

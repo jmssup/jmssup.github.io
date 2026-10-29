@@ -1,0 +1,30 @@
+---
+title: "다중 분류 문제"
+date: "2025-05-27T01:22:47+09:00"
+category: "development"
+originalCategory: "인공지능"
+source: "https://myinfosub.tistory.com/4"
+description: "참과 거짓으로 나눌 수 있는 두 개중에 하나를 예측하는 것이 아닌 여러개 중에 어떤 것이 답인지 예측하는 문제 원-핫 인코딩(one-hot encoding) 예측하려는 문자열 set 이 {setosa, versicolor, virginica} 일 때 원-핫 인코딩을 진행하면 다"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/4/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">참과 거짓으로 나눌 수 있는 두 개중에 하나를 예측하는 것이 아닌 여러개 중에 어떤 것이 답인지 예측하는 문제</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">원-핫 인코딩(one-hot encoding)</p>
+<p data-ke-size="size16">예측하려는 문자열 set 이 {setosa, versicolor, virginica} 일 때 원-핫 인코딩을 진행하면 다음의 모습처럼 만들 수 있다.</p>
+<p data-ke-size="size16">setosa = {1,0,0}</p>
+<p data-ke-size="size16">versicolor = {0,1,0}</p>
+<p data-ke-size="size16">virginica = {0,0,1}</p>
+<p data-ke-size="size16">위와 같은 형태로 예측하려는 문자열을 행열의 형태처럼 변형시켜 각각의 고유한 값을 숫자로 지정해주는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">소프트맥스 활성화함수</p>
+<p data-ke-size="size16">기존에 이항문제에서 최종 예측 결과를 위한 활성화 함수로 시그모이드를 사용하여 해결한 것과 다르게</p>
+<p data-ke-size="size16">다중 분류 문제에서는 예측 결과가 여러개이기에 각각의 샘플을 예측할 확률로 표현할 수 있는 소프트맥스 함수를 사용한다.</p>
+<p data-ke-size="size16">&nbsp;샘플&nbsp; &nbsp; = { 각각의 확률들 }</p>
+<p data-ke-size="size16">setosa = {setosa: 0.2, versicolor: 0.7, virginica = 0.1}&nbsp;</p>
+<p data-ke-size="size16">확률로 표현하기에 총 합은 1이 된다. (0.2 + 0.7 + 0.1 = 1)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">시그모이드와 소프트맥스는 비슷하게 생겼으나 확률을 위해 따로 만들어낸 함수가 소프트맥스라는 점에서</p>
+<p data-ke-size="size16">시그모이드를 통한 값들은 확률이 아니기에 소프트맥스를 사용하여 확률로 만들어준다.</p></div>

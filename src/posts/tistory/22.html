@@ -1,0 +1,45 @@
+---
+title: "Flask 특징"
+date: "2025-06-22T18:44:24+09:00"
+category: "development"
+originalCategory: "Development/Web"
+source: "https://myinfosub.tistory.com/22"
+description: "Flask 는 파이썬으로 작성된 마이크로 웹 프레임워크이다. Flask의 특징은 다음과 같다. 간단한 구조: Flask는 매우 간단한 코드로 웹 서버를 만드는게 가능하다. from flask import Flask app = Flask(__name__) @app.route('/"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/22/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">Flask 는 파이썬으로 작성된 마이크로 웹 프레임워크이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Flask의 특징은 다음과 같다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>간단한 구조: Flask는 매우 간단한 코드로 웹 서버를 만드는게 가능하다.</li>
+</ul>
+<pre id="code_1750578140046" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run()</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li><b>유연성과 확장성:</b> Flask는 최소한의 핵심 기능만 ㅈ공하며, 필요한 기능은 확장 모듈로 추가할 수 있다.</li>
+<li><b>Jinja2 템플릿 엔진:</b> 동적 웹 페이지를 쉽게 생성할 수 있도록 Jinja2 템플릿을 내장하고 있다.</li>
+<li><b>라우팅 기능:</b> URL 경로에 따라 실행 함수를 지정가능한 라우팅 기능을 제공한다.</li>
+<li><b>경량화: </b>Django와 같은 풀스택 프레임워크에 비해 가볍고, 빠르게 프로토타이핑이 가능하다<span>.</span></li>
+<li><b>커뮤니티와 문서: </b>강력한 커뮤니티와 잘 정리된 공식 문서가 있어, 문제 해결이나 학습이 편리하다.</li>
+</ul>
+<p data-ke-size="size16">+ Flask가 가볍기에 Django를 함께 사용하여 개발하는 경우도 있다.</p>
+<p data-ke-size="size16"><span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: left;">+ Flask는 웹 프레임워크의 핵심 기능(라우팅, 템플릿, 서버 실행 등)만 제공하고, 그 외 기능은 확장 모듈을 통해 필요한 경우에 추가할 수 있다. 이로 인해 코드가 간결해지고, 개발자는 빠르게 프로토타이핑이나 서버 구축을 할 수 있게 된다.</span></p>
+<p data-ke-size="size16">+ <span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;">Flask는 HTTP를 기반으로 웹 서버를 구동하며, HTTP 요청을 받아 처리하고 응답을 반환하는 방식으로 동작한다. Flask의 라우팅 기능과 HTTP 메서드 지원 덕분에 다양한 웹 서비스와 REST API를 쉽게 개발할 수 있다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Flask는 개발자들이 보통 정해진 구조를 따르도록 개발한다.</p>
+<p data-ke-size="size16">deploy라는 디렉토리에 static, templates 디렉토리와 파이썬 파일이 존재하도록 구성한다.</p>
+<p data-ke-size="size16">static 에는 css, javascript, 이미지등의 파일들을, templates은 html 파일이 들어간다.&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p></div>

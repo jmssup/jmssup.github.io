@@ -1,0 +1,72 @@
+---
+title: "[글로벌인재 프로그램] Diffusion, CLIP, T2I"
+date: "2026-08-03T05:51:11+09:00"
+category: "development"
+originalCategory: "인공지능"
+source: "https://myinfosub.tistory.com/143"
+description: "Diffusion Diffusion은 데이터에 노이즈를 아주 조금씩 추가하는 과정(Forward)과 이를 다시 조금씩 지워나가는 과정(Reverse)을 수백~수천 단계에 걸쳐 잘게 쪼개어 수행하는 생성 모델 이다. 1. Forward Process: 노이즈 주입 과정 2. Re"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/143/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><h2 data-ke-size="size26">Diffusion</h2>
+<p data-ke-size="size16">Diffusion은 <b>데이터에 노이즈를 아주 조금씩 추가하는 과정(Forward)과 이를 다시 조금씩 지워나가는 과정(Reverse)을 수백~수천 단계에 걸쳐 잘게 쪼개어 수행</b><span style="color: #000000; text-align: start;">하는 생성 모델 이다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">1. <span style="color: #000000; text-align: start;">Forward Process: 노이즈 주입 과정</span></p>
+<p data-ke-size="size16">2. Reverse<span style="color: #000000; text-align: start;"> Process: 노이즈 제거 과정</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">주입하는 노이즈와 지워내는 노이즈는 가우시안 노이즈이다.</span></span></p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">가우시안 노이즈(Gaussian Noise)란, 무작위로 생성되는 노이즈(잡음)의 수치들이<span>&nbsp;</span></span><b data-index-in-node="51" data-path-to-node="0">가우시안 분포(Gaussian/Normal Distribution, 정규분포)를 따르는 무작위 오차</b><span style="color: #000000; text-align: start;">를 의미한다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">Foward Process 과정은 수학적으로 한번에 진행하는게 가능하다. (One-shot noisification)</span></p>
+<p data-ke-size="size16">이를 위해서는 한번의 노이즈 스텝에서 무슨 일이 이뤄지는지 알 필요가 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="894" data-origin-height="128"><span data-url="https://blog.kakaocdn.net/dna/6GkpC/dJMb99N0nkU/AAAAAAAAAAAAAAAAAAAAABTv4iUSsszF6-lSCWwDiL8MCOO9lQe_9Ax8VHMjNU1j/img.png" data-phocus="https://blog.kakaocdn.net/dna/6GkpC/dJMb99N0nkU/AAAAAAAAAAAAAAAAAAAAABTv4iUSsszF6-lSCWwDiL8MCOO9lQe_9Ax8VHMjNU1j/img.png" data-alt="One-step noisification"><img src="/assets/tistory/211279925957774b42a4.png" loading="lazy" width="894" height="128" data-origin-width="894" data-origin-height="128" decoding="async" alt="One-step noisification"></span><figcaption>One-step noisification</figcaption>
+</figure>
+<p></p>
+<p data-ke-size="size16">위는 One-step noisification으로 한 번의 스텝에 대한 노이즈 과정을 뜻하는 공식이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li style="color: #000000;"><span data-index-in-node="0" data-math="\beta_t"><span><span aria-hidden="true"><span><span><span>β</span><span><span><span><span><span><span><span>t</span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span></span></span><span>&nbsp;</span>(노이즈 스케줄):<span>&nbsp;</span>*<span>&nbsp;</span><span data-index-in-node="21" data-math="t"><span><span aria-hidden="true"><span><span>t</span></span></span></span></span>번째 단계에서 주입할 노이즈의 비율을 결정하는 아주 작은 상수이다. (보통<span>&nbsp;</span><span data-index-in-node="65" data-math="0.0001 \sim 0.02"><span><span aria-hidden="true"><span><span>0.0001</span><span>∼</span></span><span><span>0.02</span></span></span></span></span><span>&nbsp;</span>사이의 값)</li>
+<li style="color: #000000;"><span data-index-in-node="0" data-math="\sqrt{1 - \beta_t} \cdot x_{t-1}"><span><span aria-hidden="true"><span><span><span><span><span><span><span><span>sqrt(1</span><span>−</span><span><span>β</span><span><span><span><span><span><span><span>t)</span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span><span><span></span></span></span></span></span></span></span></span></span></span><span data-index-in-node="0" data-math="\sqrt{1 - \beta_t} \cdot x_{t-1}"><span><span aria-hidden="true"><span><span><span><span><span><span><span></span></span></span><span>​</span></span><span><span></span></span></span></span><span>⋅</span></span><span><span><span>x</span><span><span><span><span><span><span><span><span>t</span><span>−</span><span>1</span></span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span></span></span><span>&nbsp;</span>(신호 감쇄):
+<ul style="list-style-type: disc;" data-path-to-node="10,1,1" data-ke-list-type="disc">
+<li>이전 단계 이미지<span>&nbsp;</span><span data-index-in-node="10" data-math="x_{t-1}$의 밝기/신호 세기를 1보다 살짝 작은 비율($\sqrt{1-\beta_t}"><span style="color: #000000;">x{t-1}의 밝기/신호 세기를 1보다 살짝 작은 비율(sqrt{1-\beta_t}</span></span>)만큼 깎아낸다.</li>
+</ul>
+</li>
+<li style="color: #000000;"><span data-index-in-node="0" data-math="\epsilon_t \sim \mathcal{N}(0, \mathbf{I})"><span><span aria-hidden="true"><span><span><span>ϵ</span><span><span><span><span><span><span><span>t</span></span></span></span><span>​</span></span><span><span></span></span></span></span></span><span>∼</span></span><span><span>N</span><span>(</span><span>0</span><span>,</span><span>I</span><span>)</span></span></span></span></span><span>&nbsp;</span>(새로운 가우시안 노이즈):
+<ul style="list-style-type: disc;" data-path-to-node="10,2,1" data-ke-list-type="disc">
+<li>컴퓨터 난수 생성기에서 무작위로 뽑아낸 '표준 가우시안 노이즈'이다.</li>
+</ul>
+</li>
+<li style="color: #000000;"><span data-index-in-node="0" data-math="\sqrt{\beta_t} \cdot \epsilon_t"><span><span aria-hidden="true"><span><span><span><span><span><span><span><span><span>sqrt(β</span><span><span><span><span><span><span><span>t)</span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span><span><span></span></span></span></span></span></span></span></span></span></span><span data-index-in-node="0" data-math="\sqrt{\beta_t} \cdot \epsilon_t"><span><span aria-hidden="true"><span><span><span><span><span><span><span></span></span></span><span>​</span></span><span><span></span></span></span></span><span>⋅</span></span><span><span><span>ϵ</span><span><span><span><span><span><span><span>t</span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span></span></span><span>&nbsp;</span>(노이즈 주입):
+<ul style="list-style-type: disc;" data-path-to-node="10,3,1" data-ke-list-type="disc">
+<li>뽑아낸 무작위 노이즈에 비율(<span data-index-in-node="16" data-math="\sqrt{\beta_t}"><span data-index-in-node="16" data-math="\sqrt{\beta_t}"><span><span aria-hidden="true"><span><span><span><span><span><span><span><span><span>β</span><span><span><span><span><span><span><span>t</span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span><span><span></span></span></span></span></span></span></span></span></span></span></span><span data-index-in-node="16" data-math="\sqrt{\beta_t}"><span><span aria-hidden="true"><span><span><span><span><span><span><span></span></span></span><span>​</span></span><span><span></span></span></span></span></span></span></span></span>)을 곱해 세기를 조절한 뒤 덧붙인다.</li>
+</ul>
+</li>
+</ul>
+<p data-ke-size="size16">이렇게 노이즈를 입히는 과정은 수학적으로 계산되는 행위로 진행된다.</p>
+<p data-ke-size="size16">그런데 이 노이즈를 씌우는 과정은 마르코프 체인 구조를 가지고 있다보니 단번에 T step 까지의 노이즈를 씌운 상태로 점프뛰는게 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Reverse Process 과정은 Foward Process와 다르게 단번에 점프 뛰는 행위가 불가능하다.</p>
+<p data-ke-size="size16">신경망 구조를 이용해 순차적으로 노이즈를 걷어내는 과정을 겪어야 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">구체적인 수학적인 수식은 생략하겠다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">U-Net 신경망 구조를 이용하여 학습이 완료된 U-Net을 Reverse Process 과정에 사용하여 어떤 노이즈가 지금 이미지에 포함되어 있는지 확률적으로 연산해내서 찾아낸 가우시안 노이즈를 걷어내고 이 행위를 반복하여 최종 이미지를 생성해낸다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">CLIP, T2I</h2>
+<p data-ke-size="size16">CLIP은 Text와 Image에 대한 Latent space를 매핑해 Text to image가 가능하도록 만든 멀티모달 AI 모델이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">기존의 AI가 강아지 사진을 보면 [개] 라는 라벨만 맞히는 모델이라면 이 CLIP은 Text와 Image의 의미적 유사성을 학습한 모델이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">1. 문장을 받아서 텍스트 벡터 T로 변환한다.&nbsp;</p>
+<p data-ke-size="size16">2. Image를 받아서 이미지 벡터 I로 변환한다.</p>
+<p data-ke-size="size16">짝이 맞는 벡터끼리는 벡터 거리를 최대한 가깝게 만든다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이렇게 하면 CLIP의 Latent space에서는 <b>강아지 사진 이미지 벡터</b>와 <b>"<span style="color: #000000; text-align: start;">A photo of a</span></b><span style="color: #000000; text-align: start;"><b> dog"&nbsp;라는 텍스트 벡터</b>가 거의 같은 좌표 위치에 찍히게 되는 것이다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">그래서 이 CLIP 모델을 이용하여 Text 입력에 대하여 Image 생성을 진행하는 시스템을 가지는 모델들이 T2I 모델이다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p><span style="color: #000000;"><span style="caret-color: #000000;">그래서 T2I 모델들 내부를 뜯어보면 CLIP 모델을 가지고 있는 경우가 꽤 있다.</span></span></p></div>
+

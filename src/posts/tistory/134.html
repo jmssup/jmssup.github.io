@@ -1,0 +1,41 @@
+---
+title: "Rust의 메모리 안정성"
+date: "2026-07-25T15:02:44+09:00"
+category: "development"
+originalCategory: "Rust"
+source: "https://myinfosub.tistory.com/134"
+description: "Rust 관련하여 C++과 비교하며 타임시스탬과 메모리 안정성이 수학적으로 검증된 시스템이라는 글을 보게 되어서 관련 내용을 찾아보고 정리하게 되었다. 이전에 정리하였던 라이프타임, 소유권에 관한 글을 정리하며 어느정도 개념은 알고 있었으나, 정확히 어떤 논리적 구조를 가지고 "
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/134/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">Rust 관련하여 C++과 비교하며 타임시스탬과 메모리 안정성이 &nbsp;수학적으로 검증된 시스템이라는 글을 보게 되어서 관련 내용을 찾아보고 정리하게 되었다. 이전에 정리하였던 라이프타임, 소유권에 관한 글을 정리하며 어느정도 개념은 알고 있었으나, 정확히 어떤 논리적 구조를 가지고 설계된 언어인지는 몰랐기에 많은 정보를 알게 되었다.</p>
+<h2 data-ke-size="size26"><span style="color: #000000; text-align: start;">1. 타입 시스템의 논리적 기반: 하위구조 논리 (Substructural Logic)</span></h2>
+<p data-ke-size="size16">Rust에는 선형논리, 아핀논리가 존재한다. 이를 이용하여 Ownership(소유권) 시스템이 보장되는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span>수학적으로<span>&nbsp;</span></span><b data-index-in-node="6" data-path-to-node="5"><span>논리적 함의(Logical Implication)</span></b><span><span>&nbsp;</span>규칙에서 명제를 사용하는 방식에 따라 다음과 같이 구분된다.</span></p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="6" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="6,0,0"><span>선형 논리 (Linear Logic):</span></b><span>&nbsp;</span>자원<span>&nbsp;</span><span data-index-in-node="25" data-math="A"><span><span aria-hidden="true"><span><span>A</span></span></span></span></span>는<span>&nbsp;</span><b data-index-in-node="28" data-path-to-node="6,0,0">정확히 한 번</b><span>&nbsp;</span>사용되어야 함 (<span data-index-in-node="45" data-math="A \to B"><span><span aria-hidden="true"><span><span>A</span><span>→</span></span><span><span>B</span></span></span></span></span>를 실행하면<span>&nbsp;</span><span data-index-in-node="59" data-math="A"><span><span aria-hidden="true"><span><span>A</span></span></span></span></span>는 소멸).</li>
+<li><b data-index-in-node="0" data-path-to-node="6,1,0">아핀 논리 (Affine Logic):</b><span>&nbsp;</span>자원<span>&nbsp;</span><span data-index-in-node="25" data-math="A"><span><span aria-hidden="true"><span><span>A</span></span></span></span></span>는<span>&nbsp;</span><b data-index-in-node="28" data-path-to-node="6,1,0">최대 한 번</b><span>&nbsp;</span>사용될 수 있음 (사용하지 않고 버리는 Dropping 허용, 스코프를 벗어남을 의미).</li>
+</ul>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16"><span style="color: #000000; text-align: start;">Rust의 타입 시스템은 모든 값(Value)을 하나의 자원(Resource)으로 취급한다.</span><span style="color: #000000; text-align: start;"></span></p>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16">let x:T = value 구조에서 x가 타입 T인 메모리 자원에 대하여 유일한 권리를 가진다는 것이다.</p>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16">&nbsp;</p>
+<h2 style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size26"><span style="color: #000000; text-align: start;">2. 핵심 불변성: 에일리어싱과 가변성의 상호 배제</span></h2>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16"><span style="color: #000000; text-align: start;">Rust는 위의 선형 논리와 아핀 논리에 따라서 <span style="color: #000000; text-align: start;">참조 공유와 가변성의 배타적 관계가 형성된다. <b>(Aliasing XOR Mutability)</b></span></span></p>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16">&nbsp;</p>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16">Borrow Checker(대여 검사기)는 라이프타임(<span data-index-in-node="30" data-math="\tau"><span><span aria-hidden="true"><span><span>τ</span></span></span></span></span>)을 추론하여 이 불변성을 정적으로 검증합니다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="16" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="16,0,0">&amp;'a T<span>&nbsp;</span>(불변 대여):</b><span>&nbsp;</span>메모리 영역<span>&nbsp;</span><span data-index-in-node="22" data-math="T"><span><span aria-hidden="true"><span><span>T</span></span></span></span></span>에 대한 읽기 권한을 여러 개 공유할 수 있지만, 누구도 쓸 수 없음 (<span data-index-in-node="63" data-math="Read \land \neg Write"><span><span aria-hidden="true"><span><span>R</span><span>e</span><span>a</span><span>d</span><span>∧</span></span><span><span>¬</span><span>W</span><span>r</span><span>i</span><span>t</span><span>e</span></span></span></span></span>).</li>
+<li><b data-index-in-node="0" data-path-to-node="16,1,0">&amp;'a mut T<span>&nbsp;</span>(가변 대여):</b><span>&nbsp;</span>메모리 영역<span>&nbsp;</span><span data-index-in-node="26" data-math="T"><span><span aria-hidden="true"><span><span>T</span></span></span></span></span>에 대해 단 하나의 독점적인 쓰기 권한만 가짐 (<span data-index-in-node="54" data-math="\neg Read \land Write"><span><span aria-hidden="true"><span><span>¬</span><span>R</span><span>e</span><span>a</span><span>d</span><span>∧</span></span><span><span>W</span><span>r</span><span>i</span><span>t</span><span>e</span></span></span></span></span>).</li>
+</ul>
+<p style="color: #000000; text-align: start;" data-path-to-node="17" data-ke-size="size16">이 조건이 유지되기에 읽는 도중에 값이 변경되거나(Data Race), 메모리가 재할당되어 포인터가 무효화되는 현상(Iterator Invalidation 등)이 수학적으로 발생할 수 없다.</p>
+<p style="color: #000000; text-align: start;" data-path-to-node="17" data-ke-size="size16">&nbsp;</p>
+<h2 style="color: #000000; text-align: start;" data-path-to-node="17" data-ke-size="size26"><span style="color: #000000; text-align: start;">3. 수학적 완전성 증명: RustBelt 프로젝트</span></h2>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">Rust에는 unsafe라는 Borrow Checker의 동작을 일부 다르게 하는 블록을 생성할 수 있다.</span></p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">Borrow Checker의 동작이 일부 제한되는 것이기에 말 그대로 unsafe한 &nbsp;사용이 가능해지는 것이다. 위에서 설명한 선형논리와 아핀논리에 맞지않는 동작을 하는 코드를 블록 내부에서 작성하는게 가능하다고 보면 된다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p><span style="color: #000000;"><span style="caret-color: #000000;">이러한 unsafe가 있다보니 <span>unsafe</span><span style="color: #000000; text-align: start;"><span>&nbsp;</span>블록을 포함하는 실제 Rust 표준 라이브러리 전체도 안전하다고 증명할 수 있냐는 질문이 있었고 이를 RustBelt 프로젝트를 통하여 표준라이브러리에 존재하는 unsafe 내부에서는 규칙을 무시하지만 외부에 감싸고 있는 인터페이스에서 안정성을 증명해냈다.</span></span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p><span style="color: #000000;"><span style="caret-color: #000000;">나는 RustBelt 관련 내용은 직접적으로 찾아보지 않았다. 궁금하다면 찾아보길 바란다.</span></span></p></div>

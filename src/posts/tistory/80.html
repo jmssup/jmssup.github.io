@@ -1,0 +1,108 @@
+---
+title: "열거형 (enumerate)"
+date: "2026-01-06T23:18:32+09:00"
+category: "development"
+originalCategory: "Rust"
+source: "https://myinfosub.tistory.com/80"
+description: "rust에서의 열거형은 구조체와 비슷하게 선언 및 사용 스코프영역에 접근하는 :: 연산으로 접근하여 해당 열거형 타입과 값을 가져옴 사용방식을 보면 tuple 처럼 여러 인자를 받아서 사용가능한데 이를 tuple variant로 취급함. enum의 tuple variant 형식"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/80/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">rust에서의 열거형은 구조체와 비슷하게 선언 및 사용</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">스코프영역에 접근하는 :: 연산으로 접근하여 해당 열거형 타입과 값을 가져옴</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">사용방식을 보면 tuple 처럼 여러 인자를 받아서 사용가능한데 이를 tuple variant로 취급함.</p>
+<p data-ke-size="size16">enum의 tuple variant 형식은 패턴 메칭을 통해서만 값을 꺼낼 수 있음</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">열거형에도 impl 타입 {} 형식으로 함수 정의가 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Option, 표준라이브러리에 정의된 enum 타입</p>
+<p data-ke-size="size16">rust에는 null 개념이 없기 때문에 Option을 사용, Option에는 값의 존재 여부를 파악가능한 값들이 들어있다.</p>
+<p data-ke-size="size16">Option의 코드</p>
+<pre id="code_1767702879824" class="cpp" data-ke-language="cpp" data-ke-type="codeblock"><code>enum Option&lt;T&gt; {
+    None,
+    Some(T),
+}</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Option은 rust의 <span style="color: #000000; text-align: start;">Prelude에 포함된 enum 타입으로 명시적으로 Option:: 을 붙이지 않고 None, Some을 바로 사용할 수 있다.</span></p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">Prelude란 컴파일러가 자동으로 호출하는 표준라이브러리이다. 프로그래머는 필요시에 이 라이브러리에 작성하여 특정 타입을 명시적 호출없이 호출가능하게 만들 수 있다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">Option은 특정 함수의 반환값으로 자주 사용되며 해당 Option 타입의 제네릭 타입인 T 타입으로의 변환을 강제하기에 기존의 Null 값이 유발하는 런타임 오류들을 컴파일 타임에 찾아낼 수 있도록 만든다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">enum 타입은 앞서 말했듯이 패턴 매칭을 통해서 값을 사용할 수 있다. 이는 match 라는 제어 흐름 연산자로 수행 가능하다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">match는 들어온 enum 타입 값에 대하여 모든 내부 필드에 대한 처리를 행해야 한다. 즉, match는 철저해야한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">하지만 i32같은 너무 광범위한 타입의 경우 _ 이라는 와일드 카드를 통해 필요한 몇가지만 처리하고 나머지를 처리하거나 아니면 변수명을 적고 해당 변수로 따로 처리하려는 값을 담아서 처리가능하다. (포괄패턴 및 와일드 카드)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">match는 하나의 값만을 처리하기 위해서는 무조건 _ =&gt; () 를 마지막에 작성하여 나머지 값들에 대한 처리를 진행해줘야하는 번거로움이 있다.</p>
+<p data-ke-size="size16">이러한 번거로움을 해결해주는 문법으로 if let 이 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Before, 패턴매칭을 통한 분해로 값의 분해가 자연스럽게 이뤄진다.</p>
+<pre id="code_1767708242696" class="javascript" data-ke-language="javascript" data-ke-type="codeblock"><code>    let config_max = Some(3u8);
+    match config_max {
+        Some(max) =&gt; println!("The maximum is configured to be {}", max),
+        _ =&gt; (),
+    }</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">After, 패턴매칭을 통한 분해로 값의 분해가 자연스럽게 이뤄진다.</p>
+<pre id="code_1767708280545" class="cpp" data-ke-language="cpp" data-ke-type="codeblock"><code>    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {}", max);
+    }</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">enum 관련 예시 코드</p>
+<pre id="code_1767709087015" class="javascript" data-ke-language="javascript" data-ke-type="codeblock"><code>enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+#[derive(Debug)] // so we can inspect the state in a minute
+enum UsState {
+    Alabama,
+    Alaska,
+    // --생략--
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+
+
+
+fn value_in_cents(coin: Coin) -&gt; u8 {
+    match coin {
+        Coin::Penny =&gt; {
+            println!("Lucky penny!");
+            1
+        }
+        Coin::Nickel =&gt; 5,
+        Coin::Dime =&gt; 10,
+        Coin::Quarter(state) =&gt;{
+            println!("State quarter from {:?}!", state);
+            25
+        }
+    }
+}
+
+fn main() {
+    let some_number = Some(5);
+    let some_char = Some('e');
+
+    let absent_number: Option&lt;i32&gt; = None;
+
+    let coin = Coin::Dime;
+    let coin_qs = Coin::Quarter(UsState::Alaska);
+    let coin = value_in_cents(coin);
+    println!("{coin}");
+}</code></pre></div>

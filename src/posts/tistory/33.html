@@ -1,0 +1,42 @@
+---
+title: "스위핑(Sweeping)"
+date: "2025-07-08T22:17:03+09:00"
+category: "development"
+originalCategory: "알고리즘"
+source: "https://myinfosub.tistory.com/33"
+description: "정렬된 데이터를 순서대로 훑으면서 문제를 해결하는 기법들을 통틀어서 스위핑이라고 칭한다. 스위핑은 정렬된 데이터를 한 번만 탐색하는게 특징이자 핵심이다. 스위핑의 핵심 토대 정렬: 먼저, 구간의 시작점/끝점, 이벤트 좌표 등 문제의 핵심이 되는 값들을 정렬한다. 단방향 순회: "
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/33/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">정렬된 데이터를 순서대로 훑으면서 문제를 해결하는 기법들을 통틀어서 스위핑이라고 칭한다.</p>
+<p data-ke-size="size16">스위핑은 정렬된 데이터를 <b>한 번만&nbsp;</b>탐색하는게 특징이자 핵심이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size20">스위핑의 핵심 토대</h4>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li><b>정렬</b>: 먼저, 구간의 시작점/끝점, 이벤트 좌표 등 문제의 핵심이 되는 값들을 정렬한다.</li>
+<li><b>단방향 순회</b>: 정렬된 데이터를 한 번만(왼→오른쪽 또는 아래→위 등) 순회한다.</li>
+<li><b>상태 갱신</b>: 순회 중에 현재 겹치는 구간 수, 활성화된 이벤트, 누적 합 등 문제에 맞는 상태를 실시간으로 갱신한다.</li>
+<li><b>최적해 도출</b>: 각 시점(이벤트 포인트)에서 필요한 최적의 값을 판단한다.</li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">스위핑은 보통 DP로 메모이제이션하기에 너무 많은 경우의 수가 존재하는 겹치는 선분, 구간을 찾는 문제에서 주로 사용된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">보통 시작점과 끝점을 이벤트로 보고 정렬시킨뒤 문제 상황에 맞춰 정보를 관리한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">예시 코드) 가장 많이 겹치는 선분에 대한 탐색</p>
+<pre id="code_1751980342569" class="java" data-ke-language="java" data-ke-type="codeblock"><code>ArrayList&lt;Integer&gt; line = new ArrayList&lt;&gt;();
+HashSet&lt;Integer&gt; now = new HashSet&lt;&gt;();
+for (Event ev : events) {
+            if (ev.type == 1) now.add(ev.idx);
+            cnt += ev.type;
+            if (cnt &gt; max) {
+                max = cnt;
+                line = new ArrayList&lt;&gt;(now);
+            }
+            if (ev.type == -1) now.remove(ev.idx);
+}</code></pre>
+<p data-ke-size="size16">여기서 ev는 좌표값 x, 시작점이라면 type으로 1을 끝점이라면 -1을 저장한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이러한 방식처럼 단방향으로 상태를 갱신하며 탐색하는 방법이 스위핑이다.</p></div>

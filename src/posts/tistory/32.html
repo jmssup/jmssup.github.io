@@ -1,0 +1,71 @@
+---
+title: "Linux 메모리 구조(memory layout)"
+date: "2025-07-06T02:53:46+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/32"
+description: "프로세스가 실행 될 때 각 프로세스는 독립된 메모리 공간을 할당받는다. 이 메모리 공간은 용도에 따라 특정한 목적을 가지는 여러 영역으로 세분된다. 여러 영역으로 나누게 되면, 각 영역을 용도에 맞게 권한을 부여할 수 있다는 장점을 가진다. 이 때 부여할 수 있는 조건은 r, "
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/32/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">프로세스가 실행 될 때 각 프로세스는 독립된 메모리 공간을 할당받는다.</p>
+<p data-ke-size="size16">이 메모리 공간은 용도에 따라 특정한 목적을 가지는 여러 영역으로 세분된다.</p>
+<p data-ke-size="size16">여러 영역으로 나누게 되면, 각 영역을 용도에 맞게 권한을 부여할 수 있다는 장점을 가진다.</p>
+<p data-ke-size="size16">이 때 부여할 수 있는 조건은<b> r, w, x (읽기, 쓰기, 실행)</b>&nbsp; 세가지가 존재하며 CPU는 해당 영역에 부여된 권한의 행위만 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">리눅스는 프로세스의 메모리를 크게 5가지 영역으로 구분한다. (Segment 라고 부름, 데이터의 용도별로 나눈 것을 의미)</p>
+<p data-ke-size="size16">이 메모리를 5가지 영역으로 구분할 때 운영체제에서 <b>세그멘테이션 기법</b>을 사용하여 구분한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">코드 세그먼트(Code Segment) r, x</h4>
+<p data-ke-size="size16"><b>텍스트 세그먼트(Text segment)</b>라고도 부르며 프로그램의 기계어 코드가 저장되는 영역이다.</p>
+<p data-ke-size="size16">CPU가 프로그램을 실행할 때 이 영역의 기계 코드를 메모리에 올려 실행한다. 따라서 이 영역은 읽기, 실행 권한만 주어진다. 이 영역에 쓰기 권한이 주어지지 않는 이유는 쓰기 권한이 존재하면 해커가 취약점을 이용하여 코드를 악성 코드로 수정하는 행위가 가능해지기 때문이다. 그래서 대부분의 현대 운영체제는 코드 세그먼트의 쓰기 권한을 제거한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">데이터 세그먼트 (Data Segment) r, w?</h4>
+<p data-ke-size="size16">프로그램의 컴파일 시점에 값이 정해지는 전역 변수, 전역 상수들이 저장되는 영역이다.</p>
+<p data-ke-size="size16">CPU가 읽을 수 있어야 하기에 읽기 권한이 부여된다.</p>
+<p data-ke-size="size16">이 데이터 세그먼트는 쓰기가 가능한 <b>data segment</b>와 쓰기가 불가능한 <b>rodata segment(read-only data)</b> 로 나뉜다.</p>
+<p data-ke-size="size16">쓰기가 가능한 영역은 프로그램이 실행되며 값이 변할 수 있는 데이터가 있고 쓰기가 불가능한 영역은 상수와 같이 값이 변할 수 없는 데이터가 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">BSS 세그먼트 (BSS Segment) r, w</h4>
+<p data-ke-size="size16"><b>Block Started By Symbol Segment</b>의 줄임말로 BSS라고 한다. 읽기 및 쓰기 권한이 부여된다.</p>
+<p data-ke-size="size16">컴파일 시점에 값이 정해지지 않는 전역 변수가 저장되는 영역이다.</p>
+<p data-ke-size="size16">BSS에는 선언만하고 초기화하지 않은 전역변수 등이 위치한다.</p>
+<p data-ke-size="size16">이 영역은 프로그램이 시작될 때 모두 0으로 값이 초기화된다. 이런 특성덕에 C코드를 작성할 때 초기화되지 않은 전역변수의 값은 0이 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">스택 세그먼트 (Stack Segment) r, w</h4>
+<p data-ke-size="size16">프로세스의 스택이 위치하는 영역으로 함수의 매개변수나 지역변수같은 임시 변수들이 실행 중에 이곳에 저장된다.</p>
+<p data-ke-size="size16">이 세그먼트는<b> NX(Non-eXcutable) 보호기법</b>이 나오기 전까지 실행 권한이 존재했으나 쉘코드로 스택에 기계 코드를 넣어서 해커가 스택 영역을 호출하는 기법이 나오면서 컴파일시 NX 보호기법이 활성화되어 실행권한을 없앴기에 읽기 권한과 쓰기 권한만 주어진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">옛날 OS, CPU에는 스택 영역에 실행권한이 기본적으로 존재했으나 현대에는 기본적으로 실행권한이 부여되지 않는다.</p>
+<p data-ke-size="size16">그럼에도 NX 보호기법은 사용되고 있다.</p>
+<p data-ke-size="size16">기본적으로 읽기와 쓰기 권한만 부여한 영역에도 NX 보호기법을 사용하는 이유는 실행 권한을 부여하는 행위도 막기 위함이다.</p>
+<p data-ke-size="size16">컴파일 옵션중에 -z execstack 이라는 스택영역에 실행권한을 부여하도록 옵션을 지정하는게 가능한데 이 NX 보호기법이 실행권한을 부여하는 것을 막아주는 역할을 한다. 만약 NX 보호기법이 없다면 실행권한을 부여하는게 가능해져 취약점이 발생할 수 있게 된다.</p>
+<p data-ke-size="size16">이 NX 보호기법은 스택 세그먼트만이 아닌 실행권한이 없는 데이터, BSS, 힙 세그먼트에도 적용된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">스택은 스택 프레임이라는 단위로 구성된다.</p>
+<p data-ke-size="size16">이 스택 프레임은 매개변수, 반환주소, 지역변수를 저장하고 있다.</p>
+<p data-ke-size="size16">프로그램의 전체 실행 흐름은 사용자의 입력을 비롯한 여러 요인에 영향을 받는다. 이 때문에 프로세스가 실행될 때 얼만큼의 스택 프레임을 사용하게 될지 계산하는 것은 불가능하다. 그래서 운영체제는 프로세스를 시작할 때 작은 크기의 스택 세그먼트를 먼저 할당하고 부족할 때마다 이를 확장해준다. 이 확장을 진행할 때 기존 주소보다 낮은 주소로 확장(스택 포인터의 주소값 감소)시키기에 스택에 대하여 "아래로 자란다" 고 표현한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이렇게 스택 영역에는 CPU가 값을 읽고 쓰는 것이 가능해야하기에 읽기와 쓰기 권한이 부여된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 스택프레임은 C언어나 파이썬 같은 고급 언어에서는 컴파일러가 관리해주지만 어셈블리어에서는 직접 프로그래머가 관리해줘야 한다. 함수 프롤로그와 함수 에필로그 방법을 사용하여 관리한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>함수 프롤로그</b></p>
+<p data-ke-size="size16">push ebp //현재 베이스 포인터를 스택에 푸쉬하여 에필로그 과정에 복수할 수 있도록 한다.<br>mov ebp, esp //베이스 포인터를 현재 스택 포인터의 주소로 설정해 베이스 포인터가 스택 상단을 가리키게 한다.<br>sub esp, 0x100 //스택 포인터의 주소로부터 일정 숫자만큼 감소시켜 함수의 지역 변수, 인자를 위한 공간을 확보한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>함수 에필로그</b></p>
+<p data-ke-size="size16">mov esp, ebp //스택 포인터가 프롤로그를 호출한 시점의 스택포인터를 가리키도록 한다.<br>pop ebp //푸쉬했던 베이스포인터를 팝 연산으로 스택에서 제거한다.<br>ret //함수를 호출하기 전으로 돌아간다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">x86 프로세서에서는 내장명령어가 존재하여&nbsp;</p>
+<p data-ke-size="size16">leave</p>
+<p data-ke-size="size16">ret</p>
+<p data-ke-size="size16">로 프로그래밍 해도 동일하게 동작한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">힙 세그먼트 (Heap Segment) r, w</h4>
+<p data-ke-size="size16">힙 데이터가 위치하는 세그먼트이다. 스택과 마찬가지로 실행중에 동적으로 할당될 수 있으며, 리눅스에서는 스택 세그먼트와 반대 방향으로 자란다.</p>
+<p data-ke-size="size16">C에서 malloc() 류의 함수로 호출해 할당받는 메모리가 이 세그먼트에 위치하며 일반적으로 읽기, 쓰기 권한이 부여된다.</p>
+<p data-ke-size="size16">어셈블리어에서 힙 세그먼트를 관리하고 싶으면 sys_brk()이나 mmap() 시스템 콜을 호출해 관리하는게 가능하다.</p>
+<p data-ke-size="size16">C에서 malloc() 같은 함수를 사용하면 내부적으로 앞서 얘기한 시스템 콜을 사용해 힙 세그먼트를 생성한다.</p>
+<p data-ke-size="size16">스택과 힙 세그먼트를 반대 방향으로 자라게 하는 이유는 최대한 충돌 문제를 적게 만들기 위해서다.</p></div>
