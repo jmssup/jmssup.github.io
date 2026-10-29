@@ -1,0 +1,37 @@
+---
+title: "Instruction(shift, if-else, loop)"
+date: "2025-10-01T23:02:34+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/64"
+description: "시프트 (shift) 연산 32비트 체제 기준 5비트 이하가 필요 그래서 immediate 연산들에 대하여 func7, func3이 사용될 수 있다. 많은 명령어에 논리와 산술 연산이 따로 존재한다. 컴파일러의 관점에서 처리하기 위해 많은 도구를 준비하는 것이다. --- 조건-"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/64/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">시프트 (shift) 연산</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">32비트 체제 기준</p>
+<p data-ke-size="size16">5비트 이하가 필요 그래서 immediate 연산들에 대하여 func7, func3이 사용될 수 있다.</p>
+<p data-ke-size="size16">많은 명령어에 논리와 산술 연산이 따로 존재한다.</p>
+<p data-ke-size="size16">컴파일러의 관점에서 처리하기 위해 많은 도구를 준비하는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">---</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">조건-분기 와 메모리 이동, 계산을 이용한 구현</p>
+<p data-ke-size="size16">심볼과 레이블</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">심볼은 특정 함수, 변수등에 대하여 그 함수, 변수의 특징을 저장해놓는 것.</p>
+<p data-ke-size="size16">레이블은 어셈블리어에서 (프로시저 이름): 이런 식으로 특정 프로시저의 영역을 지정해 놓는 것을 레이블이라 한다.&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">if- else</p>
+<p data-ke-size="size16">어셈블리어에서 조건문은 j? 명령어와 cmp? 명령어로 수행된다. 여기서 ?는 다양한 형식이 올 수 있기에 ?로 표현하였다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">loop = if와 goto의 결합</p>
+<p data-ke-size="size16">loop는 if-else와 jal 와 같은 ip, PC(프로그램 카운터)를 특정 주소의 명령어로 옮겨주는 명령어를 이용하여 구현한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">고급 언어의 다양한 표현(arr[i], *(arr + i) )에 대한 컴파일러의 처리는 동일하다는 것은 하나의 표현으로 변환함을 의미한다.</p>
+<p data-ke-size="size16">C에서 arr[i] 의 형태는 컴파일러에 의해 *(arr+i)의 변환되어 컴파일이 진행된다. 이 때 변환과정은 전체 컴파일 타임에 큰 영향을 주지 않는다. 그저 단순 구문처리(Syntax <span style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: left;">desugaring)</span>이기 때문이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">instruction의 개수를 늘리기보다는 피연산자의 순서를 바꾸는게 효율적이다 -&gt; 컴파일러에게 처리를 맡긴다.</p></div>

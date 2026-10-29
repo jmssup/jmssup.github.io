@@ -1,0 +1,29 @@
+---
+title: "Union-find"
+date: "2025-06-10T11:07:57+09:00"
+category: "development"
+originalCategory: "알고리즘"
+source: "https://myinfosub.tistory.com/16"
+description: "Union 2개의 집합을 하나의 집합으로 만드는 연산 노드의 rank, depth 등으로 트리의 노드 수를 근사하여 더 높은 루트가 union 후에도 루트가 되도록 한다. 트리의 높이가 커지면 find 연산의 수행시간이 늘어나기에 높이를 줄이기 위함이다. union 연산의 수행"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/16/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><h3 data-ke-size="size23">Union</h3>
+<p data-ke-size="size16">2개의 집합을 하나의 집합으로 만드는 연산</p>
+<p data-ke-size="size16">노드의 rank, depth 등으로 트리의 노드 수를 근사하여 더 높은 루트가 union 후에도 루트가 되도록 한다.</p>
+<p data-ke-size="size16">트리의 높이가 커지면 find 연산의 수행시간이 늘어나기에 높이를 줄이기 위함이다.</p>
+<p data-ke-size="size16">union 연산의 수행시간은 내부의 find 연산을 제외하면 O(1) 이다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="828" data-origin-height="370"><span data-url="https://blog.kakaocdn.net/dna/cRKZ3m/btsOuCW6lzj/AAAAAAAAAAAAAAAAAAAAACse5JTnZbJb6-xavYkTeHzvH3-I_zVFGDUVbBtFqw-E/img.png" data-phocus="https://blog.kakaocdn.net/dna/cRKZ3m/btsOuCW6lzj/AAAAAAAAAAAAAAAAAAAAACse5JTnZbJb6-xavYkTeHzvH3-I_zVFGDUVbBtFqw-E/img.png"><img src="/assets/tistory/1c6694723ad36b9401a2.png" loading="lazy" width="486" height="217" data-origin-width="828" data-origin-height="370" decoding="async" alt="Union-find의 참고 이미지"></span></figure>
+<p></p>
+<h3 data-ke-size="size23">find</h3>
+<p data-ke-size="size16">인자로 주어지는 노드가 속한 집합의 대표 노드 즉, 루트를 찾는 연산</p>
+<p data-ke-size="size16">연산을 진행하며 각 노드의 부모를 최고조상 즉, 루트로 갱신하는 경로압축을 진행한다.&nbsp;</p>
+<p data-ke-size="size16">경로압축은 당장의 수행시간을 줄이지는 않으나 나중에 사용하는 경우를 위해 진행한다.</p>
+<p data-ke-size="size16">경로압축이 돼있는 경우 O(1)</p>
+<p data-ke-size="size16">경로압축이 돼있지 않다면 높이에 비례한 수행시간을 가진다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1022" data-origin-height="123"><span data-url="https://blog.kakaocdn.net/dna/djSkTe/btsOuPIH3Gg/AAAAAAAAAAAAAAAAAAAAAB8Lx4xgfON1GRgeIk-VXyJdBjK6GTwe14XmeW7g5eW2/img.png" data-phocus="https://blog.kakaocdn.net/dna/djSkTe/btsOuPIH3Gg/AAAAAAAAAAAAAAAAAAAAAB8Lx4xgfON1GRgeIk-VXyJdBjK6GTwe14XmeW7g5eW2/img.png"><img src="/assets/tistory/54e61bc5608e8ded02fa.png" loading="lazy" width="612" height="74" data-origin-width="1022" data-origin-height="123" decoding="async" alt="Union-find의 참고 이미지"></span></figure>
+<p></p>
+<p data-ke-size="size16">&nbsp;</p></div>
+

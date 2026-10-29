@@ -1,0 +1,5 @@
+---
+layout: base.njk
+---
+{% from "icons.njk" import icon %}{% set item = category | category %}
+<article class="article"><header class="article-header"><a class="category-label {{ item.color }}" href="/categories/{{ item.id }}/">{{ item.name }}</a><h1>{{ title }}</h1><div class="post-details"><span>정명섭</span><span>·</span><time datetime="{{ date | isoDate }}">{{ date | dateLabel }}</time><span>·</span><span>{{ content | readingTime }}분 읽기</span></div>{% if source %}<div class="source-note">티스토리에서 옮긴 기록입니다.{% if originalCategory %} <span>원래 분류: {{ originalCategory }}</span>{% endif %}<a href="{{ source }}" target="_blank" rel="noopener">원문 보기 {{ icon('external') }}</a></div>{% endif %}</header><div class="prose">{{ content | safe }}</div><div class="article-end"><span class="brand-dot">✳</span><p>배운 것은 기록하고, 기록한 것은 다시 연결합니다.</p><a class="intro-link" href="/categories/{{ item.id }}/">{{ item.name }}의 다른 기록 {{ icon('arrow') }}</a></div></article>

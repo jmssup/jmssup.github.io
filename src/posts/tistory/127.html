@@ -1,0 +1,53 @@
+---
+title: "topeet - i.MX 8M mini / yocto to ubuntu (Edit build script)"
+date: "2026-07-21T05:01:31+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/127"
+description: "프로젝트를 진행하기 앞서 환경 구축을 위해 ubuntu와 optee를 패키징하여 topeet의 i.MX 8m mini 보드에 올려야 한다. 현재 yocto linux를 빌드시킬 때 optee가 함께 패키징되는 build script는 가지고 있는 상태이다. 현재 가지고 있는 y"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/127/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">프로젝트를 진행하기 앞서 환경 구축을 위해 &nbsp;ubuntu와 optee를 패키징하여 topeet의 i.MX 8m mini 보드에 올려야 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">현재 yocto linux를 빌드시킬 때 optee가 함께 패키징되는 build script는 가지고 있는 상태이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">현재 가지고 있는 yocto와 optee가 함께 페키징되는 build script 내부에 ubuntu 20 core, ubuntu 20 desk 등으로 빌드 가능한 경로가 심어져있는 것을 확인 하였고 일단 현 시점에서는 OP-Tee 관련 build script의 경로만 ubuntu 20 desk용으로 수정하면 되지 않을까 싶다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 16.07.26 오전</p>
+<p data-ke-size="size16">지금 수정을 진행 중인데, 기존 optee 를 패키징 시키는 build script 들의 경로가 하드 코딩 되어있다. 일단 1차적으로 yocto에서 단순 ubuntu 20 desk로만 변경하면 되기에 경로만 수정해서 진행하고자 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 16.07.26 오후 (점심시간 즈음)</p>
+<p data-ke-size="size16">현재 build script를 수정해서 build를 진행하였다. 문제는 flash.bin 파일이 수정이 되어야 할거 같은데 수정이 안되었다.</p>
+<p data-ke-size="size16">그래서 해당 문제를 해결해야하는데, sd card를 굽는 것을 도와주는 result 폴더 자체를 삭제하는 실수를 해버려서 다시 초기화 시키고 진행한다. build script 수정 자체는 어렵지 않아서 괜찮다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 16.07.26 오후 (저녁)</p>
+<p data-ke-size="size16">ubuntu 20 버전을 VM내부에 다운로드해야한다. ubuntu 20버전 파일시스템이 존재해야 해당 파일시스템 내부에 op-tee나 다른 필요 파일들을 올리는게 가능하다. 그래야만 flash.bin과 같은 결과 바이너리 파일들을 정상적으로 얻고, 이를 보드에 올려서 사용가능하도록 만드는게 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- &nbsp;17.07.26 오후 (점심시간 즈음)</p>
+<p data-ke-size="size16">중국 공식 문서를 찾아보다가 i.MX 8m Mini 보드에 대한 사용 설명서를 내가 제공받았음을 깨닫고 해당 문서에 ubuntu 20 desktop 버전 &nbsp;컴파일 방법이 적혀있기에 해당 문서를 참고하려고 한다.</p>
+<p data-ke-size="size16">기존에 제공 받은 VM 파일에 ubuntu 20 desk 가 존재했어야하는데 겉으로 드러나는 파일들에는 지금 없는 상태, 그래서 내부적으로 파일들을 찾아봐야할 필요가 생겼다.</p>
+<p data-ke-size="size16">VM 내부에 없는거 같다. 사용설명서도 네트워크 디스크, 드라이버를 이용하여 진행하는 것으로 보아 다시 이곳저곳 찾아봐야할거 같다.</p>
+<p data-ke-size="size16">아마 추측컨데 바이두에 저장되어 있을거 같기는 하다. 안찾아지면 랩실에 물어보는 방법으로 돌릴 예정이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 20.07.26 오후 (점심시간 즈음)</p>
+<p data-ke-size="size16">찾아본 결과 함께 동봉된 바이두 넷디스크에 접속 가능한 경로 및 비밀번호가 필요한 것으로 파악되었다.</p>
+<p data-ke-size="size16">그래서 랩실에 물어보기로 결정했다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 21.07.26 오후 (점심시간 즈음)</p>
+<p data-ke-size="size16">랩실에서도 정확히 파악하고 있는 것 같지 않아서 팀원에게 현재 상황을 공유하고 진행하기로 했다.</p>
+<p data-ke-size="size16">팀원이 Claude를 이용한 결과 SDK에서 알아서 잘 진행해줄테니 빌드해도 된다라고 했다고 한다.</p>
+<p data-ke-size="size16">내가 수정한 빌드 스크립트에 대한 명세를 작성하여 공유하고자 한다.</p>
+<p data-ke-size="size16">작성된 명세를 토대로 팀원이 sdcard 굽는 과정까지 진행하는 것으로 진행하고자 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 22.07.26 오전 (아침)</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">빌드 스크립트 수정에 관하여 명세를 작성해 팀원에게 공유하였으나, 팀원이 무언가 더 수정을 진행했다고 한다. 다만 어느 부분인지를 모르겠다.<span style="color: #333333; text-align: start;"><span>&nbsp;</span>내가 보낸 명세에서 추가로 진행했다는 말과 함께</span><span>&nbsp;</span>내가 보낸 부분과 동일한 부분을 수정했다고 연락이 왔다보니 어떻게 수정을 진행한 것인지 이해가 잘 되지 않는다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-- 22.07.26 오후 (저녁)</p>
+<p data-ke-size="size16">팀원이 sdcard를 굽고 보드를 이용해 실행하는 것 까지는 성공적으로 되었다고 한다.</p>
+<p data-ke-size="size16">예상대로 GUI 화면이 뜨지는 않으며, CLI 화면만 사용 가능하다고 한다.</p>
+<p data-ke-size="size16">이 상태로 프로젝트를 진행할까 싶다.</p>
+<p data-ke-size="size16">이후로는 블록체인, 디지털 지갑 관련 오픈소스를 찾아보고 관련 연구 방향을 잡을 예정이다.</p>
+<p data-ke-size="size16">현재 생각하는 방향으로는 해당 보드를 적극 활용하는 방향으로 진행하거나, 관련 자료를 찾다 더 괜찮은 방향이 생각나면 옮기는 것으로 생각 중이다.</p></div>

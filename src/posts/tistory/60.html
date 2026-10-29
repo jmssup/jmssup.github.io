@@ -1,0 +1,39 @@
+---
+title: "그래프 (Graph)"
+date: "2025-09-08T14:17:51+09:00"
+category: "development"
+originalCategory: "자료구조"
+source: "https://myinfosub.tistory.com/60"
+description: "그래프의 활용 • 깊이 우선 탐색(DFS) • 너비 우선 탐색(BFS) • 연결 성분(Connected Components) • 이중 연결 성분(Doubly Connected Components) • 강 연결 성분(Strongly Connected Components) • 위상"
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/60/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><h4 data-ke-size="size20">그래프의 활용</h4>
+<p data-ke-size="size16">• 깊이 우선 탐색(DFS) <br>•&nbsp;너비&nbsp;우선&nbsp;탐색(BFS) <br>•&nbsp;연결&nbsp;성분(Connected&nbsp;Components) <br>•&nbsp;이중&nbsp;연결&nbsp;성분(Doubly&nbsp;Connected&nbsp;Components) <br>•&nbsp;강&nbsp;연결&nbsp;성분(Strongly&nbsp;Connected&nbsp;Components) <br>•&nbsp;위상&nbsp;정렬(Topological&nbsp;Sort) <br>•&nbsp;최소&nbsp;신장&nbsp;트리(minimum&nbsp;Spanning&nbsp;Tree) <br>•&nbsp;최단&nbsp;경로(Shortest&nbsp;Paths) <br>•&nbsp;소셜&nbsp;네트워크&nbsp;분석(Social&nbsp;network&nbsp;Analysis)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">그래프 용어</h4>
+<p data-ke-size="size16">그래프는 <b>정점(Vertex)</b>과 <b>간선(Edge)</b>의 집합으로 간선은 두 정점을 연결하는 선을 의미한다.</p>
+<p data-ke-size="size16">그래프는 <b>G=(V, E)</b>로 표현한다. V=정점의 집합, E=간선의집합 <br>• <b>방향 그래프(Directed Graph)</b>: 간선에 방향이 있는 그래프 <br>• <b>무방향 그래프(Undirected Graph)</b>: 간선에 방향이 없는 그래프</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">•&nbsp;정점&nbsp;a와&nbsp;b를&nbsp;연결하는&nbsp;간선&nbsp;<b>(a,&nbsp;b)</b> <br>•&nbsp;정점&nbsp;a에서&nbsp;b로&nbsp;방향&nbsp;있는&nbsp;간선&nbsp;<b>&lt;a,&nbsp;b&gt;</b> <br>•&nbsp;<b>차수(Degree)</b>:&nbsp;정점에&nbsp;인접한&nbsp;정점의&nbsp;수 <br>• 방향 그래프에서는 차수를 <b>진입 차수(In-degree)</b>와 <b>진출 차수(Out-degree)</b>로 구분한다.</p>
+<p data-ke-size="size16">•&nbsp;그림(a)&nbsp;정점&nbsp;a의&nbsp;차수&nbsp;=&nbsp;3,&nbsp;정점&nbsp;e의&nbsp;차수&nbsp;=&nbsp;2 <br>•&nbsp;그림(b)&nbsp;정점&nbsp;g의&nbsp;진입&nbsp;차수&nbsp;=&nbsp;3,&nbsp;진출&nbsp;차수&nbsp;=&nbsp;1</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="571" data-origin-height="227"><span data-url="https://blog.kakaocdn.net/dna/UAlzr/btsQo87HARu/AAAAAAAAAAAAAAAAAAAAAGnAhnACQHvBvhwihNrKkajkHvVfHcEr0_oWpfOQEExa/img.png" data-phocus="https://blog.kakaocdn.net/dna/UAlzr/btsQo87HARu/AAAAAAAAAAAAAAAAAAAAAGnAhnACQHvBvhwihNrKkajkHvVfHcEr0_oWpfOQEExa/img.png"><img src="/assets/tistory/761c5e719d0d2ba6494c.png" loading="lazy" width="571" height="227" data-origin-width="571" data-origin-height="227" decoding="async" alt="그래프 (Graph)의 참고 이미지"></span></figure>
+<p></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">• <b>경로(Path)</b>는 시작점 u부터 도착점 v까지 정점의 나열 - [a, c, b, e]: 정점 a에서 도착점 e까지의 여러 경로 중 하나이다.<br>• <b>단순 경로(Simple Path)</b>: 경로 상의 정점이 모두 다른 경로 <br>• <b>‘일반적인’ 경로</b>: 동일한 정점을 중복하여 방문 포함 - [a, <b>b</b>, c, <b>b</b>, e]: 정점 a에서 도착점 e까지의 경로 <br>• <b>사이클(Cycle)</b>: 시작점과 도착점이 동일한 단순 경로 -&nbsp;[a,&nbsp;b,&nbsp;e,&nbsp;d,&nbsp;c,&nbsp;a]</p>
+<p data-ke-size="size16">• <b>연결 성분(Connected Component)</b>: 그래프에서 정점들이 서로 연결되어 있는 부분이다.</p>
+<p data-ke-size="size16">• <b>가중치(Weighted) 그래프</b>: 간선에 가중치가 부여된 그래프 - 가중치는 두 점 사이의 거리, 지나는 시간, 음수인 경우도 있다.<br>• <b>부분 그래프(Subgraph)</b>: 주어진 그래프의 정점과 간선의 일부분(부분 집합)으로 이루어진 그래프 - 부분 그래프는 원래의 그래프에 없는 정점이나 간선을 포함하지 않는다.<br>•&nbsp;<b>트리(Tree)</b>:&nbsp;사이클이&nbsp;없는&nbsp;그래프 <br>• <b>신장 트리(Spanning Tree)</b>: 주어진 그래프가 하나의 연결 성분으로 구성되어 있을 때, 그래프의 모든 정점들을 사이클 없이 연결하는 부분 그래프</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">그래프 자료구조</h4>
+<p data-ke-size="size16">•&nbsp;그래프를&nbsp;자료구조로서&nbsp;저장하는&nbsp;방법 <br>-&nbsp;인접&nbsp;행렬(Adjacency&nbsp;Matrix) <br>-&nbsp;인접&nbsp;리스트(Adjacency&nbsp;List) <br>• n개의 정점을 가진 그래프의 인접 행렬은 2차원 n by n 배열에&nbsp;저장 <br>• 배열이 a라면, 정점들을 0, 1, 2, · · · , n-1로 하여, 정점 i와 j 사이에 간선이 없으면 a[i][j] = 0, 간선이 있으면 a[i][j] =&nbsp;1로&nbsp;표현 <br>• 가중치 그래프는 1 대신 가중치를 저장한다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="523" data-origin-height="187"><span data-url="https://blog.kakaocdn.net/dna/k4GEG/btsQnQz1m1w/AAAAAAAAAAAAAAAAAAAAALGYZhoYxeIosrdvXNT4GVnRJaavf9cuehz4DLYypLg2/img.png" data-phocus="https://blog.kakaocdn.net/dna/k4GEG/btsQnQz1m1w/AAAAAAAAAAAAAAAAAAAAALGYZhoYxeIosrdvXNT4GVnRJaavf9cuehz4DLYypLg2/img.png" data-alt="인접 행렬 구현"><img src="/assets/tistory/67c7533df947aaeae8a3.png" loading="lazy" width="523" height="187" data-origin-width="523" data-origin-height="187" decoding="async" alt="인접 행렬 구현"></span><figcaption>인접 행렬 구현</figcaption>
+</figure>
+<figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="348" data-origin-height="202"><span data-url="https://blog.kakaocdn.net/dna/bszu0B/btsQqz4CVPP/AAAAAAAAAAAAAAAAAAAAAIWtF-0ogenSAzDeb-DFdEsuI7on2odrddBUGr0E0ata/img.png" data-phocus="https://blog.kakaocdn.net/dna/bszu0B/btsQqz4CVPP/AAAAAAAAAAAAAAAAAAAAAIWtF-0ogenSAzDeb-DFdEsuI7on2odrddBUGr0E0ata/img.png" data-alt="인접 리스트 구현"><img src="/assets/tistory/9513e6dbc01b4c715336.png" loading="lazy" width="348" height="202" data-origin-width="348" data-origin-height="202" decoding="async" alt="인접 리스트 구현"></span><figcaption>인접 리스트 구현</figcaption>
+</figure>
+<p></p>
+<p data-ke-size="size16">• 실세계의 그래프는 대부분 정점의 평균 차수가 작은 희소 그래프(Sparse&nbsp;Graph)이다.&nbsp; <br>• 희소 그래프의 간선 수는 최대 간선 수인 n(n-1)/2보다 휠씬 작으므로 인접 리스트에 저장하는 것이 적절하다.</p>
+<p data-ke-size="size16">• 조밀 그래프(Dense Graph): 간선의 수가 최대 간선 수에 근접한 그래프이다.</p></div>
+

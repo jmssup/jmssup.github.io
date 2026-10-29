@@ -1,0 +1,105 @@
+---
+title: "전이학습"
+date: "2025-07-29T14:15:00+09:00"
+category: "development"
+originalCategory: "인공지능"
+source: "https://myinfosub.tistory.com/48"
+description: "전이 학습(Transfer Learning)은 하나의 기계 학습 작업 또는 데이터 세트를 통해 얻은 지식을 사용하여 다른 관련 작업 및/또는 다른 데이터 세트에서 모델 성능을 개선하는 기계 학습 기술입니다. 즉, 한 환경에서 학습된 내용을 사용하여 다른 환경에서 일반화 성능을 "
+layout: "post.njk"
+tags: ["post"]
+permalink: "/posts/tistory/48/"
+templateEngineOverride: false
+---
+<div class="tistory-content"><p data-ke-size="size16">전이 학습(Transfer Learning)은 하나의 기계 학습 작업 또는 데이터 세트를 통해 얻은 지식을 사용하여 다른 관련 작업 및/또는 다른 데이터 세트에서 모델 성능을 개선하는 기계 학습 기술입니다<span>.</span><span>&nbsp;</span>즉, 한 환경에서 학습된 내용을 사용하여 다른 환경에서 일반화 성능을 개선하는 방식입니다<span>.</span><span>&nbsp;</span>이는 기존 모델의 지식을 새로운 작업에 적용하여 효율성을 높이고, 더 빠른 학습과 성능 향상을 이끌어내는 중요한 방법입니다<span>.</span></p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16"><b>주요 특징 및 장점:</b></p>
+<ul style="list-style-type: disc; color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-list-type="disc">
+<li><b>지식 재활용:</b><span>&nbsp;</span>이미 대규모 데이터셋(예: ImageNet)으로 학습된 모델의 지식을 새로운 작업에 적용합니다<span>.</span>이를 '사전 학습된 모델(pre-trained model)'이라고 합니다<span>.</span></li>
+<li><b>효율성:</b><span>&nbsp;</span>새로운 모델을 처음부터 훈련시키는 대신, 사전 학습된 모델을 활용하여 시간과 리소스를 절약할 수 있습니다<span>.</span><span>&nbsp;</span>딥러닝 모델을 처음부터 개발하고 훈련하는 것은 많은 양의 데이터와 막대한 비용, 노력이 필요합니다<span>.</span></li>
+<li><b>데이터 부족 문제 해결:</b><span>&nbsp;</span>특히 레이블링된 데이터가 부족한 상황에서 유용합니다<span>.</span><span>&nbsp;</span>기존에 학습된 모델이 축적한 지식을 활용하여 새로운 문제에 더 빠르고 효과적으로 접근할 수 있도록 돕습니다<span>.</span></li>
+<li><b>성능 향상:</b><span>&nbsp;</span>풍부한 데이터로 학습된 강력한 모델의 지식을 활용하여 새로운 작업에서도 높은 정확도를 달성할 수 있습니다<span>.</span></li>
+<li><b>적용 범위 확대:</b><span>&nbsp;</span>인공지능 및 기계 학습의 적용 범위를 넓히고 다양한 응용 분야에서 활용될 수 있습니다<span>.</span><span>&nbsp;</span>초거대 언어 모델(LLM) 개발에도 핵심적인 학습 방법으로 사용됩니다<span>.</span></li>
+</ul>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16"><b>전이 학습의 종류:</b><br>전이 학습은 다양한 방법으로 구현될 수 있으며, 주로 사용되는 종류는 다음과 같습니다:</p>
+<ul style="list-style-type: disc; color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-list-type="disc">
+<li><b>도메인 적응(Domain Adaptation):</b><span>&nbsp;</span>사전 학습된 모델을 레이블링된 데이터가 부족한 다른 도메인에 적응시키는 방법입니다. 사전 학습된 도메인과 타겟 도메인이 다르지만 유사성이 있을 때 효과적입니다<span>.</span></li>
+<li><b>다중 작업 학습(Multi-task Learning):</b><span>&nbsp;</span>여러 관련 작업을 동시에 학습하는 방법으로, 하나의 모델이 두 개 이상의 작업을 학습함으로써 각 작업 간의 공통된 정보를 활용합니다<span>.</span></li>
+<li><b>특징 추출(Feature Extraction):</b><span>&nbsp;</span>사전 학습된 모델이 학습한 기본 패턴을 가져와 문제에 더 적합하도록 출력을 조정하는 방법입니다. 모델의 초기 레이어는 변경하지 않고, 마지막 레이어만 재학습합니다<span>.</span></li>
+<li><b>파인 튜닝(Fine-tuning):</b><span>&nbsp;</span>사전 학습된 모델 전체 또는 일부 레이어를 새로운 작업에 맞게 재학습하는 방법입니다. 사전 학습된 모델의 원래 기능을 유지하면서 보다 전문적인 사용 사례에 맞게 조정하는 데 사용됩니다</li>
+</ul>
+<div style="background-color: #ffffff; color: #000000; text-align: start;">
+<div>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16"><b>전이 학습이 정상적으로 작동하는 이유:</b></p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">핵심은 <b>지식의 일반화 및 특징 추출 능력</b>에 있습니다.</p>
+<ol style="list-style-type: decimal; color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-list-type="decimal">
+<li><b>계층적 특징 학습 (Hierarchical Feature Learning):</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>대부분의 딥러닝 모델, 특히 CNN(합성곱 신경망)이나 트랜스포머(Transformer) 같은 아키텍처는 데이터를 처리할 때 계층적으로 특징을 학습합니다.</li>
+<li><b>초기 레이어 (Early Layers):</b><span>&nbsp;</span>모델의 초기 레이어는 데이터의 매우 일반적이고 보편적인 특징(예: 이미지의 경우 에지, 코너, 색상, 텍스처; 텍스트의 경우 단어 임베딩, 문법 구조 등)을 학습합니다. 이러한 특징들은 특정 작업이나 데이터셋에 한정되지 않고, 다양한 작업에서 공통적으로 유용하게 사용될 수 있습니다.</li>
+<li><b>후기 레이어 (Later Layers):</b><span>&nbsp;</span>모델의 후기 레이어는 이러한 일반적인 특징들을 조합하여 점점 더 복잡하고 작업에 특화된 특징(예: 이미지의 경우 눈, 코, 입, 특정 사물의 형태; 텍스트의 경우 문맥적 의미, 감성 등)을 학습합니다.</li>
+</ul>
+</li>
+<li><b>보편적인 패턴 인식:</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>예를 들어, ImageNet과 같은 대규모 이미지 데이터셋으로 학습된 모델은 세상의 다양한 시각적 정보를 이해하는 데 필요한 보편적인 시각적 패턴(색상, 질감, 형태 등)을 학습하게 됩니다. 이러한 패턴 인식 능력은 단순히 '고양이'와 '개'를 구분하는 것을 넘어, '사물' 자체를 인식하는 데 필요한 기본적인 시각적 특징을 포괄합니다.</li>
+<li>텍스트의 경우도 마찬가지입니다. 방대한 코퍼스로 학습된 언어 모델은 언어의 문법, 구문, 의미론적 관계 등 보편적인 언어 지식을 습득하게 됩니다.</li>
+</ul>
+</li>
+<li><b>가중치 초기화의 우수성:</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>새로운 모델을 처음부터 학습시키려면 보통 가중치를 무작위로 초기화합니다. 하지만 전이 학습에서는 이미 방대한 데이터로 "적절하게" 학습된 가중치를 새로운 모델의 초기값으로 사용합니다.</li>
+<li>이는 마치 이미 길을 잘 아는 사람에게 지름길을 알려주는 것과 같습니다. 무작위 초기화에 비해 훨씬 더 좋은 출발점에서 학습을 시작하므로, 학습 속도가 훨씬 빠르고, 더 좋은 성능에 도달할 가능성이 높습니다.</li>
+</ul>
+</li>
+<li><b>효율적인 학습:</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>새로운 작업에 대해 모델을 파인튜닝할 때, 이미 많은 지식을 담고 있는 초기 레이어의 가중치는 고정하거나, 매우 작은 학습률로 미세 조정하여 기존 지식을 보존합니다. 반면, 작업에 특화된 후기 레이어나 새로 추가된 레이어만 집중적으로 학습시켜 효율성을 극대화합니다.</li>
+</ul>
+</li>
+</ol>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16"><b>"특정 모델에 필요한 데이터셋이 아니라 뭔가 데이터가 비슷해서 좋은 영향을 주는가?"</b></p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">맞습니다. <b>데이터가 비슷해서</b>라는 표현보다는,<span> </span><b>사전 학습된 데이터셋과 새로운 작업의 데이터셋이 공유하는 근본적인 특징과 구조가 있기 때문</b>이라고 이해하는 것이 더 정확합니다. 예를 들어, ImageNet으로 학습된 모델은 다양한 동식물, 사물을 인식하는 능력을 갖추는데, 이 모델을 이용해 의료 이미지(예: X-ray)에서 암 세포를 탐지하는 작업으로 전이 학습할 수 있습니다. 이미 '이미지'라는 공통점이 있고, 이미지 내의 경계선, 질감 등 기본적인 특징 학습은 공유되기 때문입니다.</p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16"><b>악영향을 끼치는 경우는 없는가?</b></p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">물론 있습니다. 이를 <b>부정적 전이(Negative Transfer)</b>라고 합니다.</p>
+<ol style="list-style-type: decimal; color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-list-type="decimal">
+<li><b>도메인 간의 극심한 차이 (Domain Mismatch):</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>사전 학습된 데이터셋과 새로운 작업의 데이터셋 간의 분포나 특징이 너무 달라서 공통점이 거의 없는 경우입니다. 예를 들어, 자연어 처리 모델을 이미지 인식 작업에 전이 학습하려고 한다면, 모델이 학습한 지식이 전혀 도움이 되지 않아 오히려 방해가 될 수 있습니다.</li>
+<li>심지어 같은 이미지 도메인 내에서도, 일반적인 자연 이미지로 학습된 모델을 방사선 사진과 같은 특수한 이미지에 적용할 때, 오히려 모델이 학습한 일반적인 특징들이 특수 이미지의 중요한 특징을 놓치게 만들 수 있습니다.</li>
+</ul>
+</li>
+<li><b>사전 학습된 모델의 과적합 (Overfitting on Source Task):</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>사전 학습된 모델이 원본 데이터셋에 너무 과적합되어 일반화 능력이 떨어지는 경우, 새로운 작업에 전이될 때 오히려 성능 저하를 일으킬 수 있습니다.</li>
+</ul>
+</li>
+<li><b>데이터 부족 문제의 심화 (Reinforcing Bias):</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>사전 학습된 모델에 편향된 데이터가 사용되었다면, 그 편향이 새로운 작업으로 전이되어 오히려 문제를 악화시킬 수 있습니다. 특히 윤리적 AI 관점에서 중요한 문제입니다.</li>
+</ul>
+</li>
+<li><b>불필요한 복잡성 (Unnecessary Complexity):</b>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>때로는 간단한 모델로도 충분히 해결할 수 있는 문제에 너무 크고 복잡한 사전 학습 모델을 가져다 쓰면, 모델이 과도하게 복잡해지고 학습이 비효율적이 될 수 있습니다.</li>
+</ul>
+</li>
+</ol>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16"><b>아무리 데이터셋이 비슷해도 다른 모델임은 분명하잖아.</b></p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">네, 맞습니다. "다른 모델임은 분명"하다는 점이 전이 학습의 핵심이자 파인튜닝의 이유입니다.</p>
+<ul style="list-style-type: disc; color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-list-type="disc">
+<li>전이 학습은 기본 모델이 지식을 **"전이(Transfer)"**하는 것이지, 완전히 똑같은 문제를 푸는 것이 아닙니다.</li>
+<li>그래서 우리는 사전 학습된 모델을 가져와서 새로운 데이터에 맞게 **"미세 조정(Fine-tuning)"**을 합니다. 미세 조정은 주로 모델의 후기 레이어를 새로운 작업의 데이터에 맞게 재학습시키거나, 새로운 분류기(Classification Head)를 추가하여 학습시키는 방식입니다. 이 과정을 통해 기존 모델의 보편적인 지식은 보존하면서, 새로운 작업에 특화된 정보까지 학습하여 최적의 성능을 달성하게 됩니다.</li>
+</ul>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">결론적으로, 전이 학습은 딥러닝 모델의 계층적 특징 학습 능력과 보편적인 지식 추출 능력 덕분에 가능하며, 이를 통해 효율성과 성능 향상을 도모합니다. 하지만 사전 학습된 데이터와 새로운 작업의 데이터 간의 적절한 유사성이 중요하며, 그렇지 않을 경우 오히려 성능 저하(부정적 전이)를 초래할 수 있다는 점을 이해하는 것이 중요합니다</p>
+</div>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">전이 학습에서<span>&nbsp;</span><b>사전 학습된 모델의 가중치를 가져와 사용하는 것이 매우 중요합니다</b><span>.</span><span>&nbsp;</span>이는 전이 학습의 핵심적인 부분이자 효율성과 성능 향상을 가능하게 하는 주된 이유입니다.</p>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">가중치를 가져와 사용하는 것이 중요한 이유는 다음과 같습니다.</p>
+<ul style="list-style-type: disc; color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-list-type="disc">
+<li><b>학습 효율성 증대</b>: 새로운 모델을 처음부터 학습시키려면 가중치를 무작위로 초기화하여 학습을 시작해야 합니다. 하지만 전이 학습에서는 이미 대규모 데이터셋으로 학습된 "적절한" 가중치를 초기값으로 사용하므로, 학습 시작점이 훨씬 좋습니다. 이는 학습 속도를 크게 단축시키고, 더 나은 성능에 도달할 가능성을 높여줍니다<span>.</span></li>
+<li><b>지식 재활용</b>: 사전 학습된 모델의 가중치에는 해당 모델이 방대한 데이터로부터 학습한 일반적인 특징과 패턴에 대한 지식이 담겨 있습니다<span>.</span><span>&nbsp;</span>예를 들어, 이미지 처리 모델의 경우 에지, 코너, 텍스처 등 시각적 정보를 이해하는 데 필요한 보편적인 패턴 인식을 가중치에 담고 있습니다. 이러한 지식을 새로운 작업에 재활용함으로써, 적은 양의 데이터로도 좋은 성능을 얻을 수 있습니다<span>.</span></li>
+<li><b>데이터 부족 문제 해결</b>: 많은 실제 상황에서 충분한 양의 라벨링된 데이터를 확보하기 어려울 수 있습니다. 전이 학습은 이미 대규모 데이터셋으로 훈련된 모델의 가중치를 사용하기 때문에, 새로운 작업에 필요한 데이터 양을 크게 줄일 수 있습니다<span>.</span></li>
+<li><b>성능 향상</b>: 풍부한 데이터로 학습된 강력한 모델의 가중치를 기반으로 새로운 작업을 수행하면, 처음부터 모델을 학습시키는 것보다 일반적으로 더 높은 정확도를 달성할 수 있습니다<span>.</span></li>
+<li><b>복잡성 감소</b>: 대규모 딥러닝 모델을 처음부터 훈련하려면 엄청난 양의 데이터, 컴퓨팅 파워, 시간, 그리고 전문 지식이 필요합니다. 전이 학습은 이미 훈련된 모델의 가중치를 가져와 미세 조정(fine-tuning)하는 방식으로 이러한 장벽을 극복하여, 더 적은 비용으로도 ML을 활용할 수 있게 합니다<span>.</span></li>
+</ul>
+<p style="color: oklch(0.3039 0.04 213.679993); text-align: start;" data-ke-size="size16">따라서, 전이 학습은 사전 훈련된 모델의 가중치에서 시작하여 이를 새로운 작업에 맞게 미세 조정(fine-tuning)함으로써 효율적이고 효과적으로 딥러닝 모델을 구축하는 강력한 방법입니다</p></div>
