@@ -1464,7 +1464,14 @@
       "originalCategory": "Development/System",
       "images": 0,
       "sourceTextSha256": "515dadec46a862f4630431d7a0f86dafdce4384b45d4d15c3edb70055db01a62",
-      "importedTextSha256": "515dadec46a862f4630431d7a0f86dafdce4384b45d4d15c3edb70055db01a62"
+      "importedTextSha256": "dbd93a592acb0d6e36198ea704873e3257baf82a2f628a15c514d7f29aa17796",
+      "textCorrections": [
+        {
+          "from": "https://github.com/jms-50/live_state_viewer",
+          "to": "https://github.com/jmssup/live_state_viewer",
+          "reason": "User corrected GitHub account to jmssup"
+        }
+      ]
     },
     {
       "id": "129",

@@ -76,7 +76,7 @@ npm run check
 
 배포 주소는 `https://jmssup.github.io`입니다. 기능 브랜치에 코드를 올리는 것과 사이트 배포는 별개이며, Pages 설정 후 `main`에 반영하면 배포됩니다. Pull Request에서는 빌드와 검증만 실행합니다.
 
-소개에 표시한 GitHub는 제공된 프로필에 맞춰 `jms-50`입니다. 호스팅 저장소 계정 `jmssup`과 다른 값이므로, 계정 통일을 원하면 `eleventy.config.js`의 `site.github` 값을 수정합니다.
+프로필의 GitHub 링크와 호스팅 저장소 계정은 모두 `jmssup`을 사용합니다.
 
 ## 확인 범위
 

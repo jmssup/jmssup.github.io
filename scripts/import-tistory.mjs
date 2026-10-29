@@ -113,13 +113,16 @@ async function importPost(url) {
         if (!node.attr('alt')) node.attr('alt', node.closest('figure').find('figcaption').text().trim() || `${title}의 참고 이미지`);
       }
     }
+    const textCorrections = previous.posts.find(post => post.id === id)?.textCorrections || [];
+    let importedHtml = body.html();
+    for (const correction of textCorrections) importedHtml = importedHtml.replaceAll(correction.from, correction.to);
+    const migrated = load(importedHtml);
     const category = categoryFor(originalCategory, title);
-    const description = body.text().replace(/\s+/g, ' ').trim().slice(0, 155);
+    const description = migrated.root().text().replace(/\s+/g, ' ').trim().slice(0, 155);
     const metadata = { title, date, category, originalCategory, source: url, description, layout: 'post.njk', tags: ['post'], permalink: `/posts/tistory/${id}/`, templateEngineOverride: false };
     const frontmatter = Object.entries(metadata).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join('\n');
-    await writeFile(target, stripCdnCredentials(`---\n${frontmatter}\n---\n<div class="tistory-content">${body.html()}</div>\n`));
-    const migrated = load(body.html());
-    report.posts.push({ id, title, source: url, local: metadata.permalink, date, category, originalCategory, images: imageCount, sourceTextSha256: originalTextHash, importedTextSha256: createHash('sha256').update(migrated.root().text()).digest('hex') });
+    await writeFile(target, stripCdnCredentials(`---\n${frontmatter}\n---\n<div class="tistory-content">${importedHtml}</div>\n`));
+    report.posts.push({ id, title, source: url, local: metadata.permalink, date, category, originalCategory, images: imageCount, sourceTextSha256: originalTextHash, importedTextSha256: createHash('sha256').update(migrated.root().text()).digest('hex'), ...(textCorrections.length ? { textCorrections } : {}) });
     links.set(url, metadata.permalink);
     console.log(`[${report.posts.length}/${urls.length}] ${id} ${title}`);
   } catch (error) { report.errors.push({ type: 'post', url, error: error.message }); }
