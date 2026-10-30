@@ -1,0 +1,113 @@
+---
+title: "[Fuzzing101] Exercise 1 (CVE-2019-13288)"
+date: "2026-01-31T23:58:42+09:00"
+category: "ctf"
+originalCategory: "Security/Fuzzing"
+source: "https://myinfosub.tistory.com/88"
+description: "Fuzzing101 을 통해 fuzzing 과정, fuzzer 사용법등에 대하여 익숙해져보려고 한다. Fuzzing101의 Exercise 1 은 CVE-2019-13288이 발생하는 Xpdf 도구를 이용하여 fuzzing을 경험해보는 문제이다. CVE-2019-13288은 조"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/88/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">Fuzzing101 을 통해 fuzzing 과정, fuzzer 사용법등에 대하여 익숙해져보려고 한다.</p>
+<p data-ke-size="size16">Fuzzing101의 Exercise 1 은 CVE-2019-13288이 발생하는 Xpdf 도구를 이용하여 fuzzing을 경험해보는 문제이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">CVE-2019-13288은 조작된 파일을 통해 무한 재귀를 일으킬 수 있는 취약점이다.<span>&nbsp;</span>이는 DoS 공격에 활용될 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">퍼징은 다음과 같은 순서로 진행된다.</p>
+<p data-ke-size="size16">1. 환경 구축</p>
+<p data-ke-size="size16">2. 타겟 계측 및 빌드</p>
+<p data-ke-size="size16">3. 시드 코퍼스 준비</p>
+<p data-ke-size="size16">4. 퍼징 실행</p>
+<p data-ke-size="size16">5. 결과 분석</p>
+<p data-ke-size="size16">6. 보고 및 수정</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">일단 환경 구축부터 해보자.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">나는 현재 mac을 사용해서 공부중이기에 docker를 사용하여 공부하려고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">docker hub에 존재하는 aflplusplus/aflplusplus 이미지를 가져와서 컨테이너를 만든다.</p>
+<pre id="code_1769869047708" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>docker pull aflplusplus/aflplusplus</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후의 컨테이너 실행은 본인이 원하는 이름(--name 사용), 플래그를 지정하여 사용하면 된다.</p>
+<p data-ke-size="size16">특별히 지정해줘야할 플래그는 다음과 같다.</p>
+<pre id="code_1769869348573" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>--security-opt seccomp=unconfined
+--cap-add=SYS_PTRACE</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">이 플래그들은 권한 및 보안에 대한 플래그들로 퍼징을 제대로 수행하기 위해 지정한다.</span></span></p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">--security-opt seccomp=unconfined 는 Docker의 시스템 콜에 대한 감시, 제한을 풀어버리는 플래그 이며 <span style="color: #000000; text-align: start;">-cap-add=SYS_PTRACE 이 플래그는 gdb같은 디버거가 다른 프로세스를 볼 수 있도록 만들어주는 플래그다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">환경을 만들었으니 퍼저에 대한 설정 즉, 타겟 계측을 설정하고 &nbsp;빌드해야 한다.</span></span><span style="color: #000000;"><span style="caret-color: #000000;">다음과 같은 명령어를 사용했다.</span></span></p>
+<pre id="code_1769870304586" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>#LLVM 설정
+export LLVM_CONFIG=$(which llvm-config-15 || which llvm-config)
+#컴파일러 교체 및 설계도 작성
+CC=afl-clang-fast CXX=afl-clang-fast++ ./configure --prefix="/src/exercise1/install"</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">우리가 사용하려는 afl++는 내부적으로 afl-clang-fast 라는 컴파일러를 사용한다.</p>
+<p data-ke-size="size16">afl-clang-fast를 사용하기 위해서는 위의 명령어들을 작성해줘야 한다.</p>
+<p data-ke-size="size16">export ~ 명령어는 afl++가 내부적으로 LLVM 구조를 가지고 있기에 afl++ 에게 사용할 LLVM에 대한 도구들의 위치를 지정해주는 것이고 CC = ~ 명령어는 기본적으로 사용하는 C 컴파일러가 아닌 지정한 컴파일러로의 사용을 의미하며 --prefix ~ 부분은 빌드한 결과를 해당 경로에 저장하라는 의미이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후의 빌드는 다음의 명령어를 사용했다.</p>
+<pre id="code_1769870580384" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>make -j$(nproc)
+make install</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">-j$(nproc) 은 모든 cpu 자원을 동원해 빌드하라는 명령으로 속도를 위해 사용했다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이제 계측 설정 및 빌드를 진행하였기에 퍼저를 실행하면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">다음의 명령어로 실행했다.</p>
+<pre id="code_1769870714483" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>AFL_I_DONT_CARE_ABOUT_MISSING_CRASH_REPORTER=1 AFL_SKIP_CPUFREQ=1 \
+afl-fuzz -i seeds -o out -s 123 -- ./install/bin/pdftotext @@ /dev/null</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">대문자 AFL~~ 부분들은 환경변수 설정이다. 리눅스가 아닌 mac에서 진행하기에 에러무시를 설정한 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">afl-fuzz 는 fuzzing 실행 명령어다.</p>
+<p data-ke-size="size16">-i 는 어떤 디렉토린 내부에 있는 파일들에 대하여 퍼징을 시작할지를 의미한다.</p>
+<p data-ke-size="size16">-o 는 어떤 디렉토리에 결과를 담을지 지정한다.</p>
+<p data-ke-size="size16">-s 는 난수값 설정 플래그이다.&nbsp;</p>
+<p data-ke-size="size16">-- 는 플래그 설정이 끝났음을 의미한다. 이후의 값이 인자로 프로그램에 들어갈 값임을 의미한다.</p>
+<p data-ke-size="size16">./install/bin/pdftotext 는 아까 계측 과정에서 빌드한 프로그램 경로이다.</p>
+<p data-ke-size="size16">@@ 는 퍼저가 변조한 파일 이름을 이 자리에 넣으라는 것을 의미한다.</p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">/dev/null 은 프로그램이 화면에 쏟아내는 수만 줄의 글자들을 쓰레기통(</span>/dev/null<span style="color: #000000; text-align: start;">)에 버려 속도를 높인다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">이후로는 분석을 진행하면 된다.</span></span></p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1096" data-origin-height="708"><span data-url="https://blog.kakaocdn.net/dna/nXIdD/dJMcahiYY31/AAAAAAAAAAAAAAAAAAAAAB20pmIZOvbGuv2qkMlLl7atlFjhpi5iU-D1lxVjd3Bf/img.png" data-phocus="https://blog.kakaocdn.net/dna/nXIdD/dJMcahiYY31/AAAAAAAAAAAAAAAAAAAAAB20pmIZOvbGuv2qkMlLl7atlFjhpi5iU-D1lxVjd3Bf/img.png" data-alt="afl++ 실행 화면, 퍼징 대상: helloworld.pdf"><img src="/assets/tistory/345c277c0641370bda9c.png" loading="lazy" width="492" height="318" data-origin-width="1096" data-origin-height="708" decoding="async" alt="afl++ 실행 화면, 퍼징 대상: helloworld.pdf"></span><figcaption>afl++ 실행 화면, 퍼징 대상: helloworld.pdf</figcaption>
+</figure>
+<p></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">나는 Fuzzing101의 helloworld.pdf를 대상으로 퍼징을 진행했다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">퍼징을 진행하면 발생한 crash와 hang에 대하여 퍼징할때 -o로 지정한 폴더로 문제를 일으킨 파일들이 저장된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">여기서 crash 폴더에 저장된 한 파일을 gdb를 붙여서 분석해보자.</p>
+<pre id="code_1769949713853" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>gdb --args ./install/bin/pdftotext out/default/crashes/id:000000~~ (파일명이 아주 길다.) /dev/null</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">라는 명령어로 gdb를 붙여본다.</p>
+<p data-ke-size="size16">이후 그대로 run을 진행하면 crash, 즉 segmentation fault가 발생한다.</p>
+<p data-ke-size="size16">이후 bt 명령어, frame, list 명령어등 여러 명령어로 문제 함수 찾아본다.</p>
+<p data-ke-size="size16">helloworld.pdf 의 pdftotext에 의한 문제는&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #9fa01c;"><br>Parser::getObj</span><span> (</span><span style="color: #2eaebb;">this</span><span>=0xaaaaaca0df40, </span><span style="color: #2eaebb;">obj</span><span>=0xffffff81ed90, </span><span style="color: #2eaebb;">fileKey</span><span>=0x0, </span><span style="color: #2eaebb;">encAlgorithm</span><span>=cryptRC4, </span><span style="color: #2eaebb;">keyLength</span><span>=0, </span><span style="color: #2eaebb;">objNum</span><span>=2, </span><span style="color: #2eaebb;">objGen</span><span>=0) at </span><span style="color: #2fb41d;">Parser.cc</span><span>:94<br><br></span>여기서 문제가 발생했음을 알 수 있었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">해당 함수의 구체적인 내용은 다음과 같다.</p>
+<pre id="code_1769949690786" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>89	    if (buf1.isEOF())
+90	      error(getPos(), "End of file inside dictionary");
+91	    // stream objects are not allowed inside content streams or
+92	    // object streams
+93	    if (allowStreams &amp;&amp; buf2.isCmd("stream")) {
+94	      if ((str = makeStream(obj, fileKey, encAlgorithm, keyLength,
+95				    objNum, objGen))) {
+96		obj-&gt;initStream(str);
+97	      } else {
+98		obj-&gt;free();</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 코드가 crash를 일으키는, 무한재귀를 일으킨다.</p>
+<p data-ke-size="size16">만약 makeStream 함수가 getObj를 호출하도록 되어있다면 서로 호출하게 되며 무한재귀를 일으키게 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이번에 실습해본 Xpdf에 대한 취약점을 퍼징으로 찾아보는 과정은 퍼저에 대한 기본적인 지식과 사용법을 어느정도 파악할 수 있게 만들어준 것 같다.</p></div>
+

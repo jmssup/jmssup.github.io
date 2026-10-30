@@ -1,0 +1,72 @@
+---
+title: "여러가지 정렬"
+date: "2025-06-09T16:38:10+09:00"
+category: "development"
+originalCategory: "알고리즘"
+source: "https://myinfosub.tistory.com/13"
+description: "특정 조건에 맞추어 데이터를 순서대로 배열하는 과정 보통 숫자의 크거나 작은 순서로 정렬이 행해진다. 비교 정렬 (Comparison Sort) 시간복잡도: O(nlogn) 이라는 한계를 넘지 못한다. 배열의 원소 쌍간의 비교를 이용한다. 선택 정렬 (Selection Sort"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/13/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">특정 조건에 맞추어 데이터를 순서대로 배열하는 과정</p>
+<p data-ke-size="size16">보통 숫자의 크거나 작은 순서로 정렬이 행해진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">비교 정렬 (Comparison Sort)</h3>
+<p data-ke-size="size16">시간복잡도: O(nlogn) 이라는 한계를 넘지 못한다.</p>
+<p data-ke-size="size16">배열의 원소 쌍간의 비교를 이용한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">선택 정렬 (Selection Sort)</h3>
+<p data-ke-size="size16">시간복잡도: O(n^2)&nbsp;</p>
+<p data-ke-size="size16">배열에서 아직 정렬되지 않은 부분에서 최소 혹은 최대인 값을 선택하여 정렬된 부분의 바로 오른쪽 원소와 교환한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 style="color: #000000; text-align: start;" data-ke-size="size23">삽입 정렬 (Insertion Sort)</h3>
+<p data-ke-size="size16">시간복잡도: 최선의 경우 O(n) / 최악의 경우 및 평균 O(n^2)</p>
+<p data-ke-size="size16">정렬된 부분과 정렬 안된 부분으로 구간을 나누어 정렬 안된 부분의 가장 왼쪽 원소를 정렬된 부분의 알맞은 위치에 삽입하여 정렬한다.</p>
+<p data-ke-size="size16">입력이 거의 정렬된 경우, 입력 크기가 작은 경우에 우수한 성능을 보인다.</p>
+<p data-ke-size="size16">순환 호출을 하지 않으며 프로그램이 간단하다.</p>
+<p data-ke-size="size16">실질적으로는 성능 향상을 위해 합병 정렬이나 퀵 정렬과 함께 사용되는 경우가 많다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1349" data-origin-height="179"><span data-url="https://blog.kakaocdn.net/dna/lH7VY/btsOtNdkaVY/AAAAAAAAAAAAAAAAAAAAAH-Tw63suOqCtRVnco55IlC3Owqa1sQ4z2bhL2FElPwY/img.png" data-phocus="https://blog.kakaocdn.net/dna/lH7VY/btsOtNdkaVY/AAAAAAAAAAAAAAAAAAAAAH-Tw63suOqCtRVnco55IlC3Owqa1sQ4z2bhL2FElPwY/img.png"><img src="/assets/tistory/1731f337a7d6f77ee40d.png" loading="lazy" width="490" height="65" data-origin-width="1349" data-origin-height="179" decoding="async" alt="여러가지 정렬의 참고 이미지"></span></figure>
+<p></p>
+<p style="color: #000000; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<h3 style="color: #000000; text-align: start;" data-ke-size="size23">힙 정렬 (Heap Sort)</h3>
+<p data-ke-size="size16">시간복잡도: 모든 상황에서 O(nlogn)</p>
+<p data-ke-size="size16">힙 자료구조를 이용한다.</p>
+<p data-ke-size="size16">배열에 저장된 데이터의 키를 우선순위로 하는 최대 힙을 구성한다.</p>
+<p data-ke-size="size16">루트의 숫자와 힙의 가장 마지막 노드에 있는 숫자를 교환하고 힙 크기를 1 감소시킨다.</p>
+<p data-ke-size="size16">루트로 이동한 숫자로 위배된 힙속성을 downheap 연산으로 복원시킨다.</p>
+<p data-ke-size="size16">이 과정을 반복하여 정렬시킨다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="892" data-origin-height="319"><span data-url="https://blog.kakaocdn.net/dna/bKh0kW/btsOutkQ39o/AAAAAAAAAAAAAAAAAAAAAAzkk91aKFZImXDmgusl1NYHQOKsru0uyvsarwe5EFDS/img.png" data-phocus="https://blog.kakaocdn.net/dna/bKh0kW/btsOutkQ39o/AAAAAAAAAAAAAAAAAAAAAAzkk91aKFZImXDmgusl1NYHQOKsru0uyvsarwe5EFDS/img.png"><img src="/assets/tistory/758884c8672aca5639d1.png" loading="lazy" width="444" height="159" data-origin-width="892" data-origin-height="319" decoding="async" alt="여러가지 정렬의 참고 이미지"></span></figure>
+<p></p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">합병 정렬 (Merge Sort)</h3>
+<p data-ke-size="size16">시간복잡도: O(nlogn)</p>
+<p data-ke-size="size16">순환 호출을 이용하여 크기가 N인 배열일 때 N/2 크기로 배열을 계속 분할하고 다시 합병 정렬을 수행시킨다.</p>
+<p data-ke-size="size16">이후 N/2 크기로 나뉜 각각의 정렬된 부분들을 다시 합병하며 정렬시킨다.</p>
+<p data-ke-size="size16">분할정복</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="781" data-origin-height="791"><span data-url="https://blog.kakaocdn.net/dna/biGA35/btsOsa8QPij/AAAAAAAAAAAAAAAAAAAAAGMD0VHQMqk_lAWCCEhmEEEIN3o4AFdhRXHec40IcSDL/img.png" data-phocus="https://blog.kakaocdn.net/dna/biGA35/btsOsa8QPij/AAAAAAAAAAAAAAAAAAAAAGMD0VHQMqk_lAWCCEhmEEEIN3o4AFdhRXHec40IcSDL/img.png"><img src="/assets/tistory/5737820f660f933237af.png" loading="lazy" width="238" height="241" data-origin-width="781" data-origin-height="791" decoding="async" alt="여러가지 정렬의 참고 이미지"></span></figure>
+<p></p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">퀵 정렬 (Quick Sort)</h3>
+<p data-ke-size="size16">시간복잡도: 최선의 경우 및 평균 O(nlogn) / 최악의 경우 O(n^2)</p>
+<p data-ke-size="size16">입력의 맨 왼쪽 원소(피벗, pivot) 을 기준으로 피벗보다 작은 원소들과 크원소들을 각각 피벗의 좌우로 분할하고 좌우 부분을 각각 순환으로 정렬시킨다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="834" data-origin-height="388"><span data-url="https://blog.kakaocdn.net/dna/WeFtJ/btsOudQvxOT/AAAAAAAAAAAAAAAAAAAAABG8ILmh5oFgPrmvNjndZDbN8Q34uPno8H5cTTokRY-9/img.png" data-phocus="https://blog.kakaocdn.net/dna/WeFtJ/btsOudQvxOT/AAAAAAAAAAAAAAAAAAAAABG8ILmh5oFgPrmvNjndZDbN8Q34uPno8H5cTTokRY-9/img.png"><img src="/assets/tistory/7f8f3d7d05239154c993.png" loading="lazy" width="478" height="222" data-origin-width="834" data-origin-height="388" decoding="async" alt="여러가지 정렬의 참고 이미지"></span></figure>
+<p></p>
+<p data-ke-size="size16">최선의 경우는 피벗이 매번 입력을 1/2씩 분할을 할 경우이고</p>
+<p data-ke-size="size16">최악의 경우는 피벗이 매번 작거나 가장 큰 경우다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">퀵 정렬은 평균적으로 빠른 수행 시간을 가지며 보조 메모리를 사용하지 않는다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">최악의 경우 수행 시간이 O(n^2) 이기에 성능향상을 위한 여러 방법들을 같이 사용한다.</p>
+<p data-ke-size="size16">순환 호출을 사용하기에 입력이 작은 크기일 때 삽입 정렬을 호출해 성능을 향상시킨다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">피벗의 값에 따라 분할되는 두 영역의 크기가 결정되기에 영역의 크기가 한쪽으로 쏠리는것을 방지하기 위해 원소들 중 중간값을 피벗으로 사용한다. (Median-of-Three 방법, low mid high 중 mid를 피벗으로)</p>
+<p data-ke-size="size16">9개의 원소를 선택하여 이들을 3개씩 하나의 그룹으로 여겨 각 그룹에서 중간 값을 선택하고 선택된 3개의 중간값중 중간값을 피벗으로 사용하는 방법도 있다. (Median-of-Medians)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">안정한 정렬 (Stable Sort)</h3>
+<p data-ke-size="size16">안정한 정렬이란 중복된 원소값에 대하여 앞서 있던 원소가 정렬후에도 앞서있는 경우 안정한 정렬이라고 한다.</p>
+<p data-ke-size="size16">대표적인 안정한 정렬 알고리즘으로는 삽입정렬(Insertion Sort), 합병정렬(Merge Sort) 가 있다.</p>
+<p data-ke-size="size16">&nbsp;</p></div>
+

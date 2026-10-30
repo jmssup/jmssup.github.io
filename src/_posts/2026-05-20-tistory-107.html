@@ -1,0 +1,19 @@
+---
+title: "Remote-SSH 환경의 확장 설치 위치 문제로 인한 Pylance 자동 완성 실패"
+date: "2026-05-20T13:41:45+09:00"
+category: "writing"
+originalCategory: "분류하기 애매한 지식, 경험"
+source: "https://myinfosub.tistory.com/107"
+description: "mac에서 gram 노트북에 Remote-SSH 환경으로 사용하고 있는데 VScode 에디터 화면에서 Python의 자동 완성이 진행되지 않는 문제가 발생하였으나 원래는 그냥 함수 이름을 외워서 사용하는 방식으로 큰 문제 없이 사용하고 있었다. 그런데 한동안 pwntools의 "
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/107/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">mac에서 gram 노트북에 Remote-SSH 환경으로 사용하고 있는데 VScode 에디터 화면에서 Python의 자동 완성이 진행되지 않는 문제가 발생하였으나 원래는 그냥 함수 이름을 외워서 사용하는 방식으로 큰 문제 없이 사용하고 있었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그런데 한동안 pwntools의 사용을 하지 않고 있다가 다시 사용하려고 하니 함수자체를 외워서 사용하는 것의 한계를 느껴 그냥 문제점을 해결하고자 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그래서 문제점이 뭔지 설정 파일의 설정이 빠져있는건지 찾아본 결과 그냥 SSH 연결 환경에서의 VScode에 확장 프로그램이 설치되어 있지않아서 자동완성, 타입추론등의 도움이 발생하지 않았던 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그냥 extension 설치하니까 바로 해결되었다.</p></div>

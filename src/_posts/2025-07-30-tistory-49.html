@@ -1,0 +1,51 @@
+---
+title: "return address overwrite"
+date: "2025-07-30T21:04:23+09:00"
+category: "ctf"
+originalCategory: "Security/Pwnable"
+source: "https://myinfosub.tistory.com/49"
+description: "사용자가 프로그램을 실행하고자 하면 컴퓨터는 해당 프로그램에 대한 기계어(바이너리)를 읽고 프로그램을 실행한다.보통의 프로그램들은 코드로 이루어져 있으며 그 코드들은 대부분이 함수의 형태를 이루는 경우가 많다. 컴퓨터는 각 함수를 실행시킬 때 해당 함수를 부른 위치로 돌아가야하"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/49/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">사용자가 프로그램을 실행하고자 하면 컴퓨터는 해당 프로그램에 대한 기계어(바이너리)를 읽고 프로그램을 실행한다.<br>보통의 프로그램들은 코드로 이루어져 있으며 그 코드들은 대부분이 함수의 형태를 이루는 경우가 많다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">컴퓨터는 각 함수를 실행시킬 때 해당 함수를 부른 위치로 돌아가야하기에 해당 함수를 부른 위치를 저장하게 되는데 이를 retrun address(반환주소) 라고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">함수가 실행이 되면 스택프레임이 생기게 되고 이 스택프레임에 return address가 저장된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 retrun address를 조작할 수 있게 되면 여러 공격이 가능해진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">예를 들어 다음과 같은 C코드로 프로그램이 실행된다고 하자.</p>
+<pre id="code_1753873764889" class="cpp" data-ke-language="cpp" data-ke-type="codeblock"><code>int main(int argc, char *argv[]) {
+
+    char buf[0x80];
+
+    initialize();
+    
+    printf("buf = (%p)\n", buf);
+    scanf("%141s", buf);
+
+    return 0;
+}</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">C의 scanf의 경우 사용자의 입력이 범위를 넘어가도 그대로 메모리에 값을 저장하는 함수이다.</p>
+<p data-ke-size="size16">이러한 scanf의 특성상 retrun address를 조작하는게 매우 쉬워지는 함수이다.</p>
+<p data-ke-size="size16">위의 코드에서 공격자가 buf 로부터 main 함수의 return address까지의 거리를 알고 있다고 가정하자.</p>
+<p data-ke-size="size16">이 때 buf 로부터 retrun address 까지의 거리를 통상 offset 이라고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">scanf 로 입력을 받을 때 공격자가 offset 만큼의 무의미한 데이터에 이동을 원하는 주소값을 더해주면 main 함수의 스택프레임에 저장된 return address가 공격자가 추가한 주소로 덮어써지게 되고 이로 인해 해당 코드를 짠 프로그래머의 의도와 다른 조작이 가능해지게 된다.&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이렇다보니 offset을 구하는게 매우 중요하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">offset의 경우 공격대상의 기계어 파일이 존재하는경우 IDA나 디버거 툴을 이용하여 쉽게 구할 수 있다.</p>
+<p data-ke-size="size16">툴을 이용해 기계어 파일을 분석하는 경우 return address를 조작하려는 함수가 스택프레임을 어떻게 구성하고 이에대한 retrun address 까지의 차이 즉, offset을 계산하는지 분석해주면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">만약 기계어 파일이 존재하지 않다면 고유 패턴을 가진 데이터를 보내서 return address를 파악하는 동적분석을 진행할 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 고유 패턴을 가진 데이터 예를 들어 'AaaaBaaaCaaaD...' 이런식으로 특정 규칙을 가진 데이터를 프로그램에 입력하게 되면 return address 영역까지 침범하여 덮어 쓰게 되고 이를 읽은 컴퓨터가 잘못된 주소로 점프하게 되어 충돌이 일어나며 이 오류에 대한 메세지(어떤 패턴으로 인하여 오류가 났는지 혹은 어떤 주소에서 오류가 났는지)를 통해 offset을 계산하는 방식으로 접근할 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">만약 오류에 대한 메세지가 정보량이 적어 offset 계산이 힘들다면 데이터의 길이를 조작하여 어느정도의 크기에서 오류가나는지 잘못된 주소로의 점프가 어떤 크기의 데이터에서 일어나는지를 통해 offset을 알아낼 수 있다.</p></div>

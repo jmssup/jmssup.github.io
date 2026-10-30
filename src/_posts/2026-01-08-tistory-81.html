@@ -1,0 +1,89 @@
+---
+title: "모듈시스템"
+date: "2026-01-08T00:03:33+09:00"
+category: "development"
+originalCategory: "Rust"
+source: "https://myinfosub.tistory.com/81"
+description: "rust의 모듈 시스템에 대한 정리 cargo는 파일의 이름, 위치를 통해 빌드, 컴파일하는 파일이 라이브러리 크레이트인지 바이너리 크레이트인지 구분한다. src/lib.rs 는 라이브러리 크레이트로 src/main.rs 는 프로젝트 이름을 갖는 크레이트로 src/bin/*.r"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/81/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">rust의 모듈 시스템에 대한 정리</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">cargo는 파일의 이름, 위치를 통해 빌드, 컴파일하는 파일이 라이브러리 크레이트인지 바이너리 크레이트인지 구분한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">src/lib.rs 는 라이브러리 크레이트로</p>
+<p data-ke-size="size16">src/main.rs 는 프로젝트 이름을 갖는 크레이트로</p>
+<p data-ke-size="size16">src/bin/*.rs 는 *.rs 각 파일의 이름을 가지는 크레이트로</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">더불어 Cargo.toml 파일에 지정하여 수동제어도 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">crate:: , crate root 부터 탐색</p>
+<p data-ke-size="size16">super::, 부모 모듈 탐색</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">rust는 부모가 자식을 mod 키워드로 선언해줘야 한다.&nbsp;</p>
+<p data-ke-size="size16">pub mod로 자식을 선언하면 선언을 한 해당 부모를 통해 자식에 접근 가능해진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">mod로 선언된 자식에서는 부모의 자원에 접근 가능하지만 부모에서 자식의 자원에 접근하는 것은 기본적으로 불가능하다.</p>
+<p data-ke-size="size16">이는 자식에서 pub를 붙여 선언한 자원들에 대해서만 부모가 접근 가능하도록 만들 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">pub mod 로 자식을 공개시키는 것과 해당 자식의 자원에 접근하는 것은 별개의 과정이다. 해당 자식의 자원에 접근하기 위해서는 자식의 코드에서 pub가 붙은 자원에만 접근 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Before</p>
+<pre id="code_1767789337819" class="javascript" data-ke-language="javascript" data-ke-type="codeblock"><code>mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 절대 경로
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 상대 경로
+    front_of_house::hosting::add_to_waitlist();
+}</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">After</p>
+<pre id="code_1767790740579" class="javascript" data-ke-language="javascript" data-ke-type="codeblock"><code>mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 절대 경로
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 상대 경로
+    front_of_house::hosting::add_to_waitlist();
+}</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">구조체와 열거형에도 pub를 붙여 공개 가능한데 주의할 점이 있다.</p>
+<p data-ke-size="size16">만약 구조체의 공개를 위해 pub struct 만 사용하면 필드에는 접근이 불가능하다.</p>
+<p data-ke-size="size16">구조체의 필드에도 각각 pub를 이용하여 공개/비공개 설정이 가능하다.</p>
+<p data-ke-size="size16">반대로 열거형은 pub enum 만 사용해도 각각의 베리언트(값) 들에 접근 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">use는 단축경로를 생성하는 것, 심볼릭 링크를 만드는 거라고 보면 된다.</p>
+<p data-ke-size="size16">C++의 namespace와 비슷하니 설명 생략</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">pub use라는게 존재한다.</p>
+<p data-ke-size="size16">그냥 use만 사용하면 해당 스코프에서만 사용하는 축약어가 되는 것이기에 만약 자식 모듈에서 같은 축약어를 사용하도록 만드려면 pub use를 사용해야한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">use에 중첩구문을 사용할 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Before</p>
+<pre id="code_1767797956560" class="javascript" data-ke-language="javascript" data-ke-type="codeblock"><code>// --생략--
+use std::cmp::Ordering;
+use std::io;
+use std::io::Write;
+// --생략--</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">After</p>
+<pre id="code_1767797980610" class="javascript" data-ke-language="javascript" data-ke-type="codeblock"><code>// --생략--
+use std::{cmp::Ordering, io::{self, Write}};
+// --생략--</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">use std::io::*; 처럼 * 을 붙여 공개된 모든 자원을 가져오는게 가능하다.</p></div>

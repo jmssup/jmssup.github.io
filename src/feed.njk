@@ -1,6 +1,0 @@
----
-permalink: /feed.xml
-eleventyExcludeFromCollections: true
----
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>ssup — 정명섭의 기록</title><subtitle>{{ site.description | xmlEscape | safe }}</subtitle><link href="{{ site.url }}/feed.xml" rel="self"/><link href="{{ site.url }}"/><id>{{ site.url }}/</id><updated>{% if collections.posts.length %}{{ collections.posts[0].date | isoDate }}{% else %}2026-10-29T00:00:00Z{% endif %}</updated><author><name>정명섭</name></author>{% for post in collections.posts | limit(30) %}<entry><title>{{ post.data.title | xmlEscape | safe }}</title><link href="{{ post.url | absolute }}"/><id>{{ post.url | absolute }}</id><updated>{{ post.date | isoDate }}</updated><summary>{{ post.data.description | xmlEscape | safe }}</summary></entry>{% endfor %}</feed>

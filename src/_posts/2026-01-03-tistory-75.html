@@ -1,0 +1,66 @@
+---
+title: "프로그래밍 언어 체계"
+date: "2026-01-03T20:48:30+09:00"
+category: "development"
+originalCategory: "컴파일러, 계산이론, 언어"
+source: "https://myinfosub.tistory.com/75"
+description: "Ocaml 에 대한 자료를 보면서 정리했던 내용을 보니 프로그래밍 언어를 구성할 때 필요한 체계를 배우는 것과 동일하다고 판단되어 아래와 같이 정리한다. (AI 한테 물어보거나 따로 검색했던 내용을 다시 AI한테 정리해달라고 한 것임, Ocaml 내용이 좀 들어가 있을 수 있음"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/75/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p style="color: #000000; text-align: start;" data-path-to-node="2" data-ke-size="size16">Ocaml 에 대한 자료를 보면서 정리했던 내용을 보니 프로그래밍 언어를 구성할 때 필요한 체계를 배우는 것과 동일하다고 판단되어 아래와 같이 정리한다. (AI 한테 물어보거나 따로 검색했던 내용을 다시 AI한테 정리해달라고 한 것임, Ocaml 내용이 좀 들어가 있을 수 있음)</p>
+<p style="color: #000000; text-align: start;" data-path-to-node="2" data-ke-size="size16"><br>1. 일급 값 (First-class Values)</p>
+<p style="color: #000000; text-align: start;" data-path-to-node="3" data-ke-size="size16">언어 내에서 함수와 같은 요소가 얼마나 자유로운 권리를 누리는지를 나타내는 개념이다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="4" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="4,0,0">First-class (1급):</b><span>&nbsp;</span>변수에 저장 가능하고, 함수의 인자로 전달할 수 있으며, 함수의 결과로 반환될 수 있는 상태이다. (예: OCaml, JavaScript, Rust의 함수)</li>
+<li><b data-index-in-node="0" data-path-to-node="4,1,0">Second-class (2급):</b><span>&nbsp;</span>인자로 넘길 수는 있지만, 함수에서 결과값으로 반환할 수는 없는 제한된 상태이다. (예: 고전 C의 함수)</li>
+<li><b data-index-in-node="0" data-path-to-node="4,2,0">Third-class (3급):</b><span>&nbsp;</span>이름만 존재할 뿐, 프로그램 실행 중에 값처럼 주고받는 것이 불가능한 상태이다. (예: 라벨, 예약어)</li>
+</ul>
+<hr data-path-to-node="5" data-ke-style="style1">
+<h2 style="color: #000000; text-align: start;" data-path-to-node="6" data-ke-size="size26">2. 타입 시스템 (Type System)</h2>
+<p style="color: #000000; text-align: start;" data-path-to-node="7" data-ke-size="size16">데이터의 타입을 검사하는 시점과 그 엄격함에 관한 분류이다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="8" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="8,0,0">정적 타이핑 (Static Typing):</b><span>&nbsp;</span>컴파일 시점에 모든 타입을 결정한다. 실행 전 오류를 발견할 수 있어 안전하다. (예: OCaml, Rust)</li>
+<li><b data-index-in-node="0" data-path-to-node="8,1,0">동적 타이핑 (Dynamic Typing):</b><span>&nbsp;</span>실행 시점에 타입을 확인한다. 유연하지만 실행 중 타입 에러가 발생할 위험이 있다. (예: Python, JavaScript)</li>
+<li><b data-index-in-node="0" data-path-to-node="8,2,0">강력한 타입 (Strongly Typed):</b><span>&nbsp;</span>타입 간의 암시적 변환을 엄격히 금지한다. (예: OCaml)</li>
+<li><b data-index-in-node="0" data-path-to-node="8,3,0">약한 타입 (Weakly Typed):</b><span>&nbsp;</span>언어가 상황에 맞게 타입을 자동으로 변환하여 연산을 수행한다. (예: JavaScript)</li>
+</ul>
+<hr data-path-to-node="9" data-ke-style="style1">
+<h2 style="color: #000000; text-align: start;" data-path-to-node="10" data-ke-size="size26">3. 식(Expression)과 문(Statement)</h2>
+<p style="color: #000000; text-align: start;" data-path-to-node="11" data-ke-size="size16">코드가 실행된 후 무엇을 남기는지에 따른 구분이다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="12" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="12,0,0">식 (Expression):</b><span>&nbsp;</span>계산을 거쳐 반드시 하나의 **값(Value)**을 내놓는 코드이다. OCaml은 거의 모든 것이 식이다.</li>
+<li><b data-index-in-node="0" data-path-to-node="12,1,0">문 (Statement):</b><span>&nbsp;</span>컴퓨터에게 동작을 지시할 뿐, 그 자체가 값을 가지지는 않는 코드이다.</li>
+<li><b data-index-in-node="0" data-path-to-node="12,2,0">특징:</b><span>&nbsp;</span>OCaml에서는<span>&nbsp;</span>if-then-else조차 식이기 때문에 결과값을 반환한다.</li>
+</ul>
+<hr data-path-to-node="13" data-ke-style="style1">
+<h2 style="color: #000000; text-align: start;" data-path-to-node="14" data-ke-size="size26">4. 커링과 부분 적용 (Currying &amp; Partial Application)</h2>
+<p style="color: #000000; text-align: start;" data-path-to-node="15" data-ke-size="size16">함수가 인자를 처리하는 독특한 논리적 구조이다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="16" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="16,0,0">커링 (Currying):</b><span>&nbsp;</span>여러 개의 인자를 받는 함수를 인자 하나만 받는 함수들의 연속적인 체인으로 변환하는 것이다.</li>
+<li><b data-index-in-node="0" data-path-to-node="16,1,0">부분 적용 (Partial Application):</b><span>&nbsp;</span>인자를 일부만 전달하여, 남은 인자를 기다리는 새로운 함수를 만들어내는 기법이다.</li>
+<li><b data-index-in-node="0" data-path-to-node="16,2,0">핵심:</b><span>&nbsp;</span>OCaml에서<span>&nbsp;</span>sum x y는 사실<span>&nbsp;</span>(sum x) y와 같이 순차적으로 계산된다.</li>
+</ul>
+<hr data-path-to-node="17" data-ke-style="style1">
+<h2 style="color: #000000; text-align: start;" data-path-to-node="18" data-ke-size="size26">5. 동일성 비교 (Equality)</h2>
+<p style="color: #000000; text-align: start;" data-path-to-node="19" data-ke-size="size16">두 데이터가 '같음'을 판별하는 두 가지 기준이다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="20" data-ke-list-type="disc">
+<li><b data-index-in-node="0" data-path-to-node="20,0,0">구조적 동일성 (Structural Equality):</b><span>&nbsp;</span>데이터의 내부 내용물과 구조가 일치하는지 확인한다.</li>
+<li><b data-index-in-node="0" data-path-to-node="20,1,0">물리적 동일성 (Physical Equality):</b><span>&nbsp;</span>두 데이터가 메모리상의 같은 주소를 가리키는 실제 '동일한 물건'인지 확인한다.</li>
+</ul>
+<hr data-path-to-node="21" data-ke-style="style1">
+<h2 style="color: #000000; text-align: start;" data-path-to-node="22" data-ke-size="size26">6. 셰도잉 (Shadowing)</h2>
+<p style="color: #000000; text-align: start;" data-path-to-node="23" data-ke-size="size16">동일한 이름의 변수를 다시 정의할 때 발생하는 현상이다.</p>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="24" data-ke-list-type="disc">
+<li>기존 변수의 값을 바꾸는 것이 아니라, 이름이 같은<span>&nbsp;</span><b data-index-in-node="29" data-path-to-node="24,0,0">새로운 변수를 하나 더 만드는 것</b>이다.</li>
+<li>기존 변수는 사라지지 않고 새 변수에 의해 잠시 '가려질' 뿐이며, 새 변수의 유효 범위가 끝나면 다시 나타날 수 있다.</li>
+</ul>
+<hr data-path-to-node="25" data-ke-style="style1">
+<h2 style="color: #000000; text-align: start;" data-path-to-node="26" data-ke-size="size26">7. 와일드카드 (Wildcard,<span>&nbsp;</span>_ )</h2>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-path-to-node="27" data-ke-list-type="disc">
+<li>특정 값이 들어올 자리는 필요하지만, 그 값을<span>&nbsp;</span><b data-index-in-node="26" data-path-to-node="27,0,0">사용할 의사가 없을 때</b><span>&nbsp;</span>사용하는 기호이다.</li>
+<li>변수 이름이 아니므로 값을 저장할 수 없고, 나중에 불러와서 사용할 수도 없다.</li>
+</ul>
+<hr data-path-to-node="28" data-ke-style="style1"></div>

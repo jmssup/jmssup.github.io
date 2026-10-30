@@ -1,0 +1,23 @@
+---
+title: "[Dreamhack] basic_exploitation_002"
+date: "2026-01-26T22:16:43+09:00"
+category: "ctf"
+originalCategory: "Security/Pwnable"
+source: "https://myinfosub.tistory.com/86"
+description: "간단한설명 읽어들인 값을 그대로 printf 함수로 전달한다. 이에 대하여 FSB 가 적용 가능해지며, NO PIE 이기에 주소값이 동일한 점을 이용해 return 주소를 get_shell 함수의 주소로 바꿔야 한다. FSB를 이용하기위해 pwntools의 fmtstr_payl"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/86/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">간단한설명</p>
+<p data-ke-size="size16">읽어들인 값을 그대로 printf 함수로 전달한다.</p>
+<p data-ke-size="size16">이에 대하여 FSB 가 적용 가능해지며, NO PIE 이기에 주소값이 동일한 점을 이용해 return 주소를 get_shell 함수의 주소로 바꿔야 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">FSB를 이용하기위해 pwntools의 fmtstr_payload 함수를 활용하였다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">FSB를 직접 exploit하기 위해 손수 작성하면 %n을 위한 계산을 직접해야 하지만 fmtstr_payload 함수는 이를 대신해준다.</p>
+<p data-ke-size="size16">FSB를 직접 작성한다치면 %n을 적용할 앞선 %c를 통한 문자 개수와 내가 활용하려는 인자가 몇번째인지를 직접적으로 계산하며 payload를 작성해야함에 주의해야한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">dreamhack 주소</p>
+<p data-ke-size="size16"><a href="https://dreamhack.io/wargame/writeups/42150" target="_blank" rel="noopener&nbsp;noreferrer">https://dreamhack.io/wargame/writeups/42150</a></p></div>

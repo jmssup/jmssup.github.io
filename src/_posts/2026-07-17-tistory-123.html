@@ -1,0 +1,54 @@
+---
+title: "%Temp%"
+date: "2026-07-17T07:18:42+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/123"
+description: "대학교에 지원해주는 보안사업단의 프로그램을 통해 산학프로젝트를 진행하고 있다. 현재 랩실 학부연구생으로 있으면서, 프로젝트 담당 지도교수님도 랩실 지도교수님이다보니 이런 저런 도움을 받아서 프로젝트 실습 환경에 도움이 될만한 VMware 용 vmdk파일, ovf 파일을 받았다."
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/123/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">대학교에 지원해주는 보안사업단의 프로그램을 통해 산학프로젝트를 진행하고 있다. <span style="color: #333333; text-align: start;">현재 랩실 학부연구생으로 있으면서, 프로젝트 담당 지도교수님도 랩실 지도교수님이다보니 이런 저런 도움을 받아서 프로젝트 실습 환경에 도움이 될만한 VMware 용 vmdk파일, ovf 파일을 받았다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">1차 문제는 내가 현재 주로 사용하는 랩탑인 Macbook Air 15는 aarch64 체제이고 제공받은 ovf의 명세는 x86-64이다.</p>
+<p data-ke-size="size16">그래서 내가 현재 기숙사에 올려두고 사용 중인 gram 노트북을 사용하려고 했다.</p>
+<p data-ke-size="size16">여차저차 해서 Macbook에 있는 60gb에 달하는 파일을 gram으로 넘기기는 했다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">1차 문제는 해결 했으나 2차 문제로 용량 문제가 생겼다.</p>
+<p data-ke-size="size16">이 용량 문제를 해결하려다 보니 windows에 관련한 여러 툴들, LG 관련한 여러 툴들이 존재하며, 어느 곳에서 용량을 차지하고 있는지 파악할 수 있었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그래서 찾게된 공간중 하나가 Temp 폴더이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>Temp 폴더란?</b></h2>
+<p data-ke-size="size16">통상 windows 환경에서 win + R 키를 누르면 나오는 검색 창을 이용하여 %Temp% 를 입력하면 나오는 폴더가 temp 폴더 공간이다.</p>
+<p data-ke-size="size16">이 temp 폴더가 존재하는 이유는 이름 그대로 임시 공간으로의 사용을 위함이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Temp 폴더는 임시 공간으로써 이런 저런 프로그램들이 설치되거나 실행될 때 필요한 계산 혹은 임시적인 압축 해제가 필요한 경우 해당 Temp 폴더를 이용하여 필요한 데이터들을 풀어놓고 이후 해당 폴더를 참조하여 실질적으로 필요한 프로그램으로 빌딩하는데 사용한다.</p>
+<p data-ke-size="size16">이러한 작업은 임시 백업 공간으로도 활용되기 용이하여 임시 백업 공간으로도 활용된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">문제는 이 임시 공간이라는 특성 때문에 오류 혹은 PC의 셧다운과 같은 강제종료 등의 사유로 인해 Temp에 데이터를 남겨두고 작업을 끝마치지 않거나 설치된 프로그램을 제거할 때 프로그램 자체의 제거 기능이 미비한 경우 Temp 폴더 내부의 데이터를 삭제하지 않고 남겨둔다.&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그렇다 보니 필요없는 데이터가 쌓이기 쉬운 공간이며 주기적인 청소가 필요한 공간이기도 하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 공간을 청소하는 방법은 여러 방법이 있는데 1차적으로는 그냥 긁어서 다 삭제시켜버리는 방법이 있다.</p>
+<p data-ke-size="size16">하지만 이 방법은 매번 신경써줘야 하기에 귀찮은 방법이며, 찾아보니 <b>저장소 설정</b>을 통하여 <b>저장 공간 센스</b> 라는 것을 키면 내가 원하는 기간 동안 사용하지 않은 Temp 내부의 폴더는 삭제해준다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">또한 Temp 폴더만이 아닌 다른 곳에서 벌어지는 공간 누수를 <b>디스크 정리 도구</b>라는 도구가 찾아주고 정리하는데 도움을 준다.</p>
+<p data-ke-size="size16"><br>다만 디스크 정리 도구를 이용한 Temp 정리 및 다른 누수 공간에 대한 정리는 위의 <b>저장 공간 센스 </b>옵션처럼&nbsp;Temp 폴더 내부에서 7일 이상 지난 사용하지 않는 파일만 제거를 진행해준다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">그렇다 보니 그보다 짧은 기간에 사용흔적이 있는 경우 제거를 진행하지 않는다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">일단, 나는 최대한 많은 용량 확보가 목표라 사용 기간 상관없는 삭제를 위해 수동으로 제거를 진행했다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">정리를 진행하고서 대략 50? 60? gb정도 되는 공간을 확보하게 되었고, 바로 프로젝트 진행으로 넘어갔다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">글을 쓰며 Temp 공간에 대하여 생각해보다가 임시공간이며 프로그램 자체가 접근 가능한 폴더라면 공격경로로 활용되기 용이한 폴더이지 않나? 라는 생각이 들었고, 검색해보니 확실히 공격하기 용이한 공간이라는 것을 알게 되었다. Linux에도 /var/tmp 로 비슷한 공간이 있음도 알게 되었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Linux의 tmp는 재부팅시 자동으로 지워준다는 장점이 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Temp, /var/tmp 가 공격경로로 활용되기 용이한 이유는 폴더 자체에 대한 권한이 느슨한 편이라는게 문제이다. 해당 공간 자체가 프로그램이 접근 가능하며 Read, Write, Execution 가능한 공간으로 권한이 열려 있다보니 malware를 설치하거나 바이러스 프로그램이 사용하기 용이한 공간임도 알게 되었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">뭔가 보안 관련하여 기본적으로 알아둬야하는 정보 같기는 한데 지금 알게 돼서 좀 머쓱하기도 하다.</p>
+<p data-ke-size="size16">지금이라도 알았으니까 다행인듯싶다.</p></div>

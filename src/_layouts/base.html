@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+  <meta name="color-scheme" content="dark">
+  <title>{% if page.title %}{{ page.title | escape }} · {% endif %}ssup — 정명섭의 기록</title>
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:title" content="{{ page.title | default: 'ssup — 정명섭의 기록' | escape }}">
+  <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/atom+xml" title="ssup RSS" href="/feed.xml">
+  <link rel="stylesheet" href="/assets/terminal.css">
+  <script src="/assets/terminal.js" type="module"></script>
+</head>
+<body>
+  {% include terminal.html %}
+  {{ content }}
+  <script id="shell-data" type="application/json">{"categories":{{ site.data.categories | jsonify }},"owner":{{ site.author | jsonify }},"github":{{ site.github | jsonify }},"tistory":{{ site.tistory | jsonify }}}</script>
+</body>
+</html>

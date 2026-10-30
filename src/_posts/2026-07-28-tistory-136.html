@@ -1,0 +1,32 @@
+---
+title: "#2 동아리 CTF 사이트 개발일지"
+date: "2026-07-28T13:55:27+09:00"
+category: "development"
+originalCategory: "Development/Web"
+source: "https://myinfosub.tistory.com/136"
+description: "기존에는 가지고 있는 mac 환경에서의 빌드를 꾀할려 했으나 기존 목표인 다양한 문제에 대한 제공, 특히 동아리 교육 겸 이벤트 개최가 사이트의 주 활용처가 될 것으로 생각하기에 이를 위해서는 x86-64환경의 컴퓨터에서 사이트를 구축하는 것이 용이할 것으로 판단하였다. git"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/136/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">기존에는 가지고 있는 mac 환경에서의 빌드를 꾀할려 했으나 기존 목표인 다양한 문제에 대한 제공, 특히 동아리 교육 겸 이벤트 개최가 사이트의 주 활용처가 될 것으로 생각하기에 이를 위해서는 x86-64환경의 컴퓨터에서 사이트를 구축하는 것이 용이할 것으로 판단하였다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">github에 mac에서 개발한 코드를 올리고 동아리 리눅스 서버에서 pull해와서 동작시킬까 한다. 아마 이 과정에서 github의 CI/CD용 action도 건드릴거 같다</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">현재 상정하는 구조는 많은 인원이 참여하는 사이트가 아니기에 최대한 런칭을 빠르게 진행하고 추후에 수정하는 방향으로 지속하고자 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">현재 생각는 Task는 CTFd-whale 플러그인을 붙이고, 동아리 도메인을 이용해 서브도메인으로 사이트를 올리면 되지않을까 싶다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">아래는 작성하며 정리해본 Task이다.</p>
+<p data-ke-size="size16">Task 1. CTFd-whale</p>
+<p data-ke-size="size16">Task 2. UI 수정</p>
+<p data-ke-size="size16">Task 3. 웹 서버 프록시 설정(Nginx)</p>
+<p data-ke-size="size16">Task 4. 동아리 서버까지 자동으로 올라가도록 만들기 (CI/CD를 위한 발판)</p>
+<p data-ke-size="size16">Task 5. 도메인 연결(sub domain을 이용)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Task1 을 진행하였다.</p>
+<p data-ke-size="size16">mac에서 개발하기 위한 첫 단추로 CTFd 부터 mac환경에 가져온다.</p>
+<p data-ke-size="size16">개발은 mac에서 개발 이후 github 업로드, 동아리 서버에서 pull하여 적용하는 구조이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">CTFd-whale 플러그인을 적용시켰다. FRP 프록시를 이용하여 설정하였다.</p></div>

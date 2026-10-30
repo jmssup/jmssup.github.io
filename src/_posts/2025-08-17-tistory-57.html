@@ -1,0 +1,56 @@
+---
+title: "SOP (Same Origin Policy)"
+date: "2025-08-17T21:57:52+09:00"
+category: "development"
+originalCategory: "Security/Web"
+source: "https://myinfosub.tistory.com/57"
+description: "우리가 사이트를 이용할 때 한 번 로그인을 하고 잠시 사이트를 닫았다가 다시 열어도 로그인 상태가 유지되는 것을 자주 볼 수 있다. 이는 쿠키와 세션을 통해 클라이언트와 서버에서 사용자에 대한 데이터를 저장하고 관리하기에 가능하다. 쿠키 정보는 웹 브라우저 내부에 보관된다. 브"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/57/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">우리가 사이트를 이용할 때 한 번 로그인을 하고 잠시 사이트를 닫았다가 다시 열어도 로그인 상태가 유지되는 것을 자주 볼 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이는 쿠키와 세션을 통해 클라이언트와 서버에서 사용자에 대한 데이터를 저장하고 관리하기에 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">쿠키 정보는 웹 브라우저 내부에 보관된다. 브라우저는 이용자가 웹 서비스에 접속하면 해당 웹 서비스에서 사용하는 쿠키를 HTTP 요청에 포함시켜 전달한다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">이러한 상황은 사이트에 직접 접속하는 것에만 한정돼있지 않고 웹 리소스를 통해 간접적으로 다른 사이트에 접근할 때도 쿠키를 함께 전송한다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">이 때문에 악성사이트가 클라이언트의 권한으로 대상 사이트에 HTTP 요청을 보내고 HTTP 응답 정보를 획득하는 코드를 실행할 수 있다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이러한 문제를 방지하기위해 <b>동일 출저 정책, Same Origin Policy (SOP)&nbsp;</b>가 탄생하게 됐다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 SOP는 클라이언트 사이드 웹 보안에 있어 중요한 요소이다.</p>
+<p data-ke-size="size16">로 클라이언트 사이드 공격은 SOP를 우회하기 위한 공격들이라고 보면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">SOP는 브라우저가 가져온 정보인 Origin을 구분하는 것으로 시작한다.</p>
+<p data-ke-size="size16">Origin은 프로토콜(Scheme, Protocol), 포트(Port), 호스트(Host)로 구성된다.</p>
+<p data-ke-size="size16">이 세가지 구성요소가 일치해야 동일한 오리진 이라고 한다.</p>
+<p data-ke-size="size16">이 세가지 구성요소가 일치하는 경우를 Same Origin이라고 얘기하고 다른 경우를 Cross Origin 이라고 얘기한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">SOP는 Cross Origin이 아닌 Same Origin 일 때만 정보를 읽을 수 있도록 만들어주는 보안 정책이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">SOP는 클라이언트 사이드 웹 보안에서 중요한 부분이지만 이미지나 자바스크립트, CSS 등의 리소스를 불러오는 &lt;img&gt;, &lt;style&gt;, &lt;script&gt; 등의 태그는 SOP의 영향을 받지않는다는 특징을 가지고 있으며 웹 서비스에서 다른 출처의 데이터를 처리해야하는 즉, SOP를 완화해야 하는 경우도 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">예를 들어 특정 포털 사이트 A가 존재할 때 이 A에 속한 각 사이트들의 Host가 달라 브라우저가 각 사이트의 Origin이 다르다고 인식한다고 하자.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 경우 이용자의 특정 A-1번 사이트에 있는 정보를 A-2번 사이트에 출력해주려고 하면 개발자는 A-2번 사이트에서 출력하고자 하는 A-1번으로 리소스를 요청해야한다.</p>
+<p data-ke-size="size16">이 때 Origin이 다르기에 SOP를 적용받지 않고 리소스를 공유할 방법이 필요하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이러한 상황에 사용하는 방법을 <b>교차 출처 리소스 공유(Cross Origin Resource Sharing, CORS)&nbsp;</b>라고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">CORS는 HTTP 헤더를 기반으로 Cross Origin 간에 리소르를 공유하도록 하는 방법이다.</p>
+<p data-ke-size="size16">발신하는 사이트에서 CORS 헤더를 설정해 요청하면 수신하는 사이트에서 헤더를 구분하여 정해진 규칙에 맞게 데이터를 가져가도록 설정한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">CORS는 수신하는 사이트, 서버측에서 발신한 곳이 어디인지 체크하고 정보를 넘겨주는 서버 중심 통제체제인 만큼 안전한 방식이라고 볼 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">CORS와는 다르게 Cross Origin의 데이터를 얻는 방법으로는 JSONP가 존재한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">SOP는 이미지나 자바스크립트, CSS등의 리소스는 외부 출처에 대하여 접근을 허용하기에 &lt;script&gt; 태그로 Cross Origin의 데이터를 불러오는 방식을 JSONP 라고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&lt;script&gt; 태그 내에서는 데이터를 자바스크립트의 코드로 인시갛기에 Callback 함수를 활용해야한다.</p>
+<p data-ke-size="size16">Cross Origin에 요청을 하면 callback 파라미터에 어떤 함수로 받아오는 데이터를 핸들링할지 넘겨주면 대상 서버는 전달된 callback으로 데이터를 감싸 응답한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 JSONP 방식은 오래된 방식이며 CORS에 비하여 검증절차가 없다시피하기에 보안에 취약하다.</p>
+<p data-ke-size="size16">따라서 현재에는 CORS 방식을 주로 사용한다.</p></div>

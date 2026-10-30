@@ -3,3 +3,9 @@ _site/
 .cache/
 .DS_Store
 .serena/
+.bundle/
+vendor/
+.jekyll-cache/
+.jekyll-metadata
+src/.jekyll-cache/
+src/.jekyll-metadata

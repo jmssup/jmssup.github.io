@@ -1,0 +1,48 @@
+---
+title: "#2 topeet i.MX 8m mini 보드, OP-TEE에 secp256k1 포팅하기"
+date: "2026-09-07T10:15:58+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/147"
+description: "현재 구조는 기존 optee에서 제공하는 기본 hello_world 프로그램의 구조 및 코드를 기반으로 하여 secp256k1을 붙이는 방식으로 진행하고자 한다. OP-TEE 내부 구조를 분석하다가 다음을 알게 되었다. ECDSA: ECC를 활용한 서명 알고리즘, ECC를 기반"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/147/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16"><span style="color: #333333; text-align: start;">현재 구조는 기존 optee에서 제공하는 기본 hello_world 프로그램의 구조 및 코드를 기반으로 하여 secp256k1을 붙이는 방식으로 진행하고자 한다.</span><span style="color: #333333; text-align: start;"></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">OP-TEE 내부 구조를 분석하다가 다음을 알게 되었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">ECDSA: ECC를 활용한 서명 알고리즘, ECC를 기반으로 서명 생성 및 서명 검증을 하는 알고리즘이다. 무결성이 보장되도록 한다.</p>
+<p data-ke-size="size16">현재 진행중인 이 프로젝트에 사용되는 OP-TEE 4.2 버전도 ECDSA를 지원한다. 이 프로젝트에서는 ECDSA에 secp256k1을 함께 사용한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">OP-TEE에 secp256r1이 지원된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">secp256r1은 <span style="color: #000000; text-align: start;">표준 시스템에서 널리 쓰이는 범용 ECC 곡선이다. 우리가 사용하려는 secp256k1보다 좀 더 수학적으로 복잡도가 높다.</span></p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">또한 전자지갑에 통용적으로 사용되는 타원 곡선은 secp256k1이다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">그래서 secp256k1을 포팅하는 것이다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">현재 TASK</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">1. </span></span><span style="color: #000000;"><span style="caret-color: #000000;">secp256k1을 OP-TEE API의 지원 곡선 목록에 추가</span></span></p>
+<p data-ke-size="size16">2. CAAM, RPMB 활성화하기 (현재 알고있는 지식에 의하면 활성화시 OP-TEE가 자동으로 가속기를 선택해 사용하는 것으로 알고 있음)</p>
+<p data-ke-size="size16">3. secp256k1 연산을 수행하는 TA 함수 작성</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">단 libsecp256k1와 CAAM 드라이버가 자동으로 매핑되지 않음. 직접 매핑해줘야할 수고가 발생함.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">먼저 TA 함수 작성을 우선으로 진행하고자 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">초기로 구현하고자 함수들은 다음과 같다.</p>
+<p data-ke-size="size16">key generator</p>
+<p data-ke-size="size16">sign</p>
+<p data-ke-size="size16">get public key</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">OP-TEE에는 CA와 TA간의 데이터 전달을 위한 포멧이 존재하며 이를 위해 코드상으로는 param 배열로 주고 받으며 타입 점검도 함께 진행한다. 이를 신경 쓰며 전달할 데이터를 잘 정의해서 함수를 만들어줘야함.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위에 구현이 필요한 함수들을 구현하여 크로스컴파일한 뒤 보드에 올리는 과정까지 진행했다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">보드에 올리는 과정에서 tee-supplicant라는 tee를 위한 데몬 프로세스가 존재함을 알게 되었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이제 위에 작성했던 TASK 중 CAAM, RPMB 활성화 및 연결을 진행하고자 한다.</p>
+<p data-ke-size="size16">이에 대한 과정은 다음 글에 작성..</p></div>

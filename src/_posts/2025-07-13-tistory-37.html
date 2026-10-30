@@ -1,0 +1,140 @@
+---
+title: "GDB와 pwndbg"
+date: "2025-07-13T21:27:02+09:00"
+category: "ctf"
+originalCategory: "Security/Pwnable"
+source: "https://myinfosub.tistory.com/37"
+description: "GDB 는 GNU Debugger 의 약자로 리눅스의 대표적인 디버거 중 하나이다. GNU란 GNU는 \" GNU'x Not Unix! \" 의 재귀 약자이다. 리처드 스톨먼이라는 개발자가 1983년 시작한 자유 소프트웨어 프로젝트로 사용자가 자유롭게 실행, 복사, 수정, 배포할 "
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/37/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">GDB 는 GNU Debugger 의 약자로 리눅스의 대표적인 디버거 중 하나이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">GNU란</h2>
+<p data-ke-size="size16">GNU는 " GNU'x Not Unix! " 의 재귀 약자이다.</p>
+<p data-ke-size="size16">리처드 스톨먼이라는 개발자가 1983년 시작한 <b>자유 소프트웨어 프로젝트</b>로 사용자가 <span style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;">자유롭게 실행, 복사, 수정, 배포할 수 있는 완전히 자유로운 운영 체제를 만드는 것이 목표였다.</span></p>
+<p data-ke-size="size16">GNU라는 용어는 이 프로젝트로 만들어낸 소프트웨어들의 집합(운영 체제 구성 요소들)을 지칭하기도 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">주요 특징</p>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li><b>자유 소프트웨어</b>: GNU 프로젝트의 소프트웨어는 누구나 자유롭게 사용할 수 있으며 소스 코드도 공개되어 있어 수정과 배포가 가능하다.</li>
+<li><b>유닉스 호환</b>: GNU는 유닉스와 비슷한 구조를 가지고 있지만 유닉스의 코드를 전혀 포함하지 않고 완전히 새롭게 개발되었다.</li>
+<li><b>GPL 라이선스</b>: 대부분의 GNU 소프트웨어는 GNU 일반 공중 사용 허가서(GPL)로 배포되어 자유 소프트웨어의 확산을 촉진한다.</li>
+<li><b>운영 체제의 구성</b>: GNU는 커널(운영 체제의 핵심)과 다양한 유틸리티, 개발 도구, 라이브러리 등으로 구성된다. 원래는 자체 커널(Hurd)을 개발했으나 현재는 리눅스 커널과 결합해 'GNU/Linux'로 널리 사용된다.</li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">디버거란</h2>
+<p data-ke-size="size18"><span style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;">소프트웨어나 하드웨어 프로그램의 실행 과정을 개발자가 직접 관찰하고 오류(버그)를 찾아내어 수정할 수 있도록 돕는&nbsp;</span><b>특수한 도구</b><span style="color: #333333; font-size: 16px; letter-spacing: 0px;">이다.&nbsp;</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">디버거의 주요 기능</p>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li><b>중단점(브레이크포인트) 설정</b><br>코드의 특정 위치에서 프로그램 실행을 일시 정지시켜 그 시점의 상태를 분석할 수 있다<span>.</span></li>
+<li><b>단계별 실행(싱글 스텝)</b><br>한 줄씩 코드를 실행하며 변수 값이나 흐름을 추적할 수 있다.</li>
+<li><b>변수 및 메모리 상태 확인</b><br>실행 중인 프로그램의 변수 값, 메모리 상태 등을 실시간으로 확인하거나 변경할 수 있다<span>.</span></li>
+<li><b>함수 진입/탈출 추적</b><br>함수 내부로 들어가거나 함수 실행을 마치고 호출한 위치로 돌아가는 과정을 단계별로 볼 수 있습니다.</li>
+<li><b>실행 흐름 제어</b><br>프로그램을 원하는 위치에서 멈추거나 특정 조건에서만 멈추게 할 수 있다.</li>
+</ul>
+<p data-ke-size="size16">디버거를 사용하는 이유</p>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li><b>버그의 원인 파악</b><br>프로그램이 예상과 다르게 동작할 때 디버거를 이용해 문제의 원인을 정확히 찾아낼 수 있다<span>.</span></li>
+<li><b>효율적인 오류 수정</b><br>코드의 흐름과 변수 값을 직접 확인하면서 오류 발생 지점을 빠르고 정확하게 수정할 수 있다.</li>
+<li><b>프로그램 이해도 향상</b><br>초보자도 디버거를 사용하면 코드의 동작 원리를 쉽게 파악할 수 있다<span>.</span></li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><span>GDB (GNU Debugger)</span></h2>
+<p data-ke-size="size16">GDB는 오픈소스로 개발되어 무료로 설치가능하고 오랜 역사를 가진 만큼 다양한 플러그인들이 개발되어 있다.</p>
+<p data-ke-size="size16">GDB의 플러그인 중 바이너리 분석 용도로 널리 사용되는 플러그인들은 다음과 같다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>gef</li>
+<li>peda</li>
+<li>pwngdb</li>
+<li>pwndbg</li>
+</ul>
+<p data-ke-size="size16">GDB의 특징</p>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li><b>명령줄 기반</b>: GDB는 기본적으로 터미널에서 명령어로 조작하는 CLI(Command Line Interface) 디버거이다. 별도의 GUI가 없지만 다양한 프론트엔드(예: DDD, Eclipse, VSCode 등)와 연동할 수 있다<span>.</span></li>
+<li><b>다양한 언어 지원</b>: C, C++, Fortran, Ada, Go, Rust 등 여러 언어를 지원한다<span>.</span></li>
+<li><b>플랫폼 호환성</b>: 리눅스, 유닉스, 윈도우 등 다양한 운영체제와 아키텍처(ARM, RISC-V, MIPS 등)에서 동작한다<span>.</span></li>
+<li><b>원격 디버깅</b>: 네트워크나 시리얼 포트를 통해 임베디드 시스템 등 원격 장비의 디버깅이 가능하다<span>.</span></li>
+<li><b>리버서블 디버깅</b>: 실행을 되돌려가며 디버깅할 수 있는 기능을 제공한다<span>.</span></li>
+<li><b>스크립트 지원</b>: Python, Guile 등으로 확장 및 자동화가 가능하다<span>.</span></li>
+<li><b>강력한 브레이크포인트/워치포인트</b>: 특정 조건에서만 멈추거나 메모리/변수의 변화를 감지해 멈출 수 있습니다<span>.</span></li>
+</ul>
+<p data-ke-size="size16"><b>장점</b></p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>오픈소스이며, 다양한 플랫폼/아키텍처 지원</li>
+<li>원격 디버깅, 리버서블 디버깅 등 임베디드/저수준 개발에 강점</li>
+<li>커뮤니티와 문서가 풍부하여 확장성 높음<b></b></li>
+</ul>
+<p data-ke-size="size16"><b>단점</b></p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>기본적으로 GUI가 없어 초보자에게 진입장벽이 있음</li>
+<li>Visual Studio Debugger 등 최신 GUI 디버거에 비해 사용 편의성은 떨어질 수 있음</li>
+<li>"Edit and Continue"(코드 수정 후 즉시 재실행)와 같은 고급 기능은 제한적</li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">pwndbg와 사용법</h2>
+<p data-ke-size="size16">pwndbg는 gdb에 속한 디버거이다.</p>
+<p data-ke-size="size16">linux에서 다음 명령어를 사용하면 gdb가 설치된다.</p>
+<pre id="code_1752405628131" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>sudo apt-get install gdb</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후 pwndbg는 다음 명령어로 설치 가능하다.</p>
+<pre id="code_1752405715876" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>git clone https://github.com/pwndbg/pwndbg
+cd pwndbg
+./setup.sh</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후에 gdb를 입력해서 pwndbg&gt; 로 입력창이 바뀌면 성공적으로 설치된 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">file</h4>
+<p data-ke-size="size16">gdb를 실행하고 디버깅을 진행할 바이너리을 gdb와 연결하려면 file 명령어를 사용하면 된다.</p>
+<pre id="code_1752405964413" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>file ./example_file</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">처음 gdb를 실행할 때 gdb ./example_file 이런식으로 인자에 디버깅할 바이너리를 넘겨줘도 동일한 기능을 수행한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 방법은 gdb로 바이너리를 가져와서 실행시키는 방법이지만 이미 실행중인 프로세스에 디버깅을 진행하려는 경우도 존재한다.</p>
+<p data-ke-size="size16">이를 위해서는 gdb -p &lt;PID&gt; 로 실행중인 프로세스의 PID 값을 넘겨주면 실행중인 프로세스의 디버깅이 가능해진다.</p>
+<p data-ke-size="size16">(PID(Process IDentifier)란 각 프로세스에 대하여 운영체제가 붙여주는 고유한 숫자 ID이다.)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">run</h4>
+<p data-ke-size="size16">GDB에서 프로그램을 실행하는 명령어이다. run &lt;프로그램 인자&gt; 로 인자를 넘겨서 실행시킬 수 도 있으며 r 만 입력하여 사용할 수 도 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">break와 continue</h4>
+<p data-ke-size="size16">run 만 진행하면 단순하게 프로그램을 실행하는 것과 다른 점이 없다. 디버깅을 위해서는 프로그램의 구체적인 정보들이 필요하다.</p>
+<p data-ke-size="size16">그래서 대다수의 디버거에는 break 와 continue 명령어가 존재한다.</p>
+<p data-ke-size="size16">break 는 특정 주소에 중단점(breakpoint)를 설정하는 기능이고 continue 는 중단된 프로그램을 다시 실행시키는 명령어이다.</p>
+<p data-ke-size="size16">b와 c로 단축명령어가 존재한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">break 는 함수명과 주소를 이용하여 걸 수 있다.</p>
+<p data-ke-size="size16">b main 이라고 명령어를 사용하면 main 함수에 중단점을 걸겠다는 의미이고 b *0x401010. 을 사용하면 0x401010 주소에 중단점을 걸겠다는 의미이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후 프로그램을 진행시키고 싶다면 continue 또는 c를 입력해주면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">entry 와 start</h4>
+<p data-ke-size="size16">리눅스 ELF의 헤더 중 진입점(Entry Point, EP)이라는 필드가 존재한다. 운영체제는 ELF를 실행할 때 진입점의 명령어부터 프로그램을 실행한다.</p>
+<p data-ke-size="size16">GDB에서 entry 명령어를 사용하면 이 진입점부터 프로그램을 분석할 수 있게 해준다.</p>
+<p data-ke-size="size16">이 entry와 유사하지만 main 부터 분석할 수 있도록 start 라는 명령어가 존재한다.</p>
+<p data-ke-size="size16">entry가 ELF의 EP부터 분석할 수 있게 해준다면 start는 main 의 위치에서 부터 분석할 수 있게 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h4 data-ke-size="size20">ni 와 si 그리고 finish</h4>
+<p data-ke-size="size16">Breakpoint 에 도달했다면 그 지점부터는 명령어를 한 줄 씩 분석해야 한다. 이 때 사용하는 명령어로 ni와 si가 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">ni와 si는 둘 다 명령어를 한 줄 씩 실행한다.</p>
+<p data-ke-size="size16">ni와 si의 차이점은 ni는 함수의 내부로 안들어가지만 si는 들어간다는 차이점이 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">si로 함수 내부에 들어가고 필요한 부분에 대한 분석이 끝나고서 빠져나가야 되는 상황일 때 함수의 규모가 너무 크다면 finish 명령어를 사용하여 함수의 끝까지 실행 시킬 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">이 외의 다양한 명령어들</h2>
+<p data-ke-size="size16">GDB에서 명령어들을 보고 싶으면 help 를 사용하여 다양한 명령어들에 대한 사용법을 파악하는게 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">info: 레지스터의 값 혹은 중단점들을 확인할 수 있다.</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">disassemble: 함수이름을 인자로 전달하면 해당 함수가 반환될 때 까지 디스어셈블한 결과를 보여준다. u, nearpc, pdisass 라는 명령어로 가독성 좋게 결과를 출력받을 수 있다.</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">x (examine): 특정 주소에서 원하는 길이만큼의 데이터를 원하는 형식으로 인코딩하여 볼 수 있다.</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">telescope: 특정 주소의 메모리가 참조하고 있는 주소를 재귀적으로 탐색하여 값을 보여준다.</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">vmmap: 가상 메모리의 레이아웃을 보여주는 명령어이다. 매핑된 영역이라면 해당 파일의 경로까지 보여준다.&nbsp;</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">backtrace: 콜 스택을 확인할 수 있는 명령어이다.</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">dump memory: 프로세스의 메모리를 파일 형태로 저장하는 명령어 dump memory &lt;파일명&gt; &lt;시작주소&gt; &lt;끝주소&gt; 형식으로 사용한다.</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">context: ctx로 사용가능, 메모리들의 상태를 보기 쉽게 알려주는 명령어로 레지스터들의 상태, rip 부터 디스어셈블된 결과, rsp 부터 스택의 값들, 현재 rip에 도달할 때 까지의 경로(BackTrace)를 알려준다</span></div>
+<div style="background-color: #ffffff; color: #c2c5ca; text-align: left;" data-v-4adf96d4=""><span style="color: #000000;" data-v-4adf96d4="">set: 프로세스의 메모리 상태를 변경할 수 있는 명령어이다. set &lt;주소 or 레지스터&gt; = &lt;변경할 값&gt; 의 형식으로 사용가능하다. 레지스터를 지정할 때는 &amp;rax 이런식으로 &amp;를 붙여야한다. 주소의 경우 자료형을 붙여줘야 한다. *(unsigned int *)0x400000</span><span style="color: #000000;" data-v-4adf96d4=""></span></div></div>

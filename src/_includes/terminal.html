@@ -1,0 +1,25 @@
+<main class="shell" data-terminal aria-label="ssup 블로그 터미널">
+  <div class="shell-session"><span><span class="session-dot" aria-hidden="true"></span>ssup / public archive</span><span>{{ site.posts | size }} records <span class="session-divider">/</span> UTF-8</span></div>
+  <div class="shell-screen" data-terminal-screen tabindex="0" role="region" aria-label="터미널 출력">
+    <div class="shell-welcome">
+      <h1 class="sr-only">ssup — 정명섭의 기록</h1>
+      <pre class="shell-ascii" aria-hidden="true"> ___ ___ _   _ _ __
+/ __/ __| | | | '_ \
+\__ \__ \ |_| | |_) |
+|___/___/\__,_| .__/
+              |_|</pre>
+      <p class="shell-tagline">만들고, 탐구하고, 기록합니다.</p>
+      <p class="shell-muted">정명섭의 개발 · 보안 · 연구 기록</p>
+      <p class="shell-start"><button type="button" data-terminal-command="help">help</button> 명령어 안내 <span>·</span> <button type="button" data-terminal-command="about">about</button> 소개 <span>·</span> <button type="button" data-terminal-command="grep OP-TEE /">grep OP-TEE /</button> 검색</p>
+    </div>
+    <div data-terminal-output></div>
+  </div>
+  <form class="shell-form" data-terminal-form autocomplete="off">
+    <label for="shell-input" class="shell-prompt"><span>guest@ssup</span>:<span data-terminal-cwd>~</span>$</label>
+    <input id="shell-input" name="command" aria-label="터미널 명령어" aria-describedby="shell-keyboard" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="help" maxlength="500" disabled>
+    <button type="submit" aria-label="명령 실행" disabled>↵</button>
+  </form>
+  <div class="shell-statusbar" id="shell-keyboard"><span><kbd>Tab</kbd> 자동완성 <i>·</i> <kbd>↑↓</kbd> 명령 기록 <i>·</i> <kbd>Esc</kbd> 입력 해제</span><span data-terminal-count>connecting…</span></div>
+  <p class="sr-only" role="status" data-terminal-status></p>
+  <noscript><p class="shell-noscript">이 블로그는 명령어로 탐색합니다. JavaScript를 켠 뒤 새로고침해 주세요.</p></noscript>
+</main>

@@ -1,0 +1,10 @@
+---
+layout: base
+---
+{% assign item = site.data.categories | where: "id", page.category | first %}
+<template data-document>
+  <article>
+    <header class="article-header"><h1>{{ page.title | escape }}</h1><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time><span>{{ item.name }}</span>{% if page.source %}<a href="{{ page.source | escape }}">원문</a>{% endif %}</header>
+    <div class="prose">{{ content }}</div>
+  </article>
+</template>

@@ -1,0 +1,91 @@
+---
+title: "2025.08.03"
+date: "2025-08-03T22:16:40+09:00"
+category: "development"
+originalCategory: "알고리즘"
+source: "https://myinfosub.tistory.com/52"
+description: "적절하게 숫자를 정의하기 문제에 대한 풀이 문제 정의 먼저 해결하고자 하는 문제는 다음과 같다. 입력: 길이가 N인 수열 a와 최대 허용 '변경' 횟수인 정수 M이 주어진다. 과정: 1부터 4까지의 숫자로 이루어진 새로운 길이 N의 수열을 생성한다. 규칙 1 (유사도): 새로운"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/52/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">적절하게 숫자를 정의하기 문제에 대한 풀이</p>
+<h2 style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size26">문제 정의</h2>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">먼저 해결하고자 하는 문제는 다음과 같다.</p>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li><b>입력:</b><span>&nbsp;</span>길이가<span>&nbsp;</span>N인 수열<span>&nbsp;</span>a와 최대 허용 '변경' 횟수인 정수<span>&nbsp;</span>M이 주어진다.</li>
+<li><b>과정:</b><span>&nbsp;</span>1부터 4까지의 숫자로 이루어진 새로운 길이<span>&nbsp;</span>N의 수열을 생성한다.</li>
+<li><b>규칙 1 (유사도):</b><span>&nbsp;</span>새로운 수열의<span>&nbsp;</span>i번째 원소가 기존 수열<span>&nbsp;</span>a의<span>&nbsp;</span>i번째 원소와 같을 때마다 유사도 점수가 1씩 증가한다.</li>
+<li><b>규칙 2 (변경):</b><span>&nbsp;</span>새로 생성한 수열에서, 인접한 두 숫자가 서로 다를 경우 '변경'이 1회 발생한 것으로 간주한다.</li>
+<li><b>목표:</b><span>&nbsp;</span>총 '변경' 횟수가<span>&nbsp;</span>M을 초과하지 않는 선에서 얻을 수 있는<span>&nbsp;</span><b>최대 유사도</b>를 계산하는 것이다.</li>
+</ul>
+<h2 style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size26">DP를 이용한 기본 접근</h2>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">이 문제의 상태를 정의하기 위해 3차원 DP 테이블을 설정할 수 있다.</p>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">dp[i][j][k]<span>&nbsp;</span>=<span>&nbsp;</span><b>i번째 원소까지 고려</b>했고, 누적 **변경 횟수가<span>&nbsp;</span>j**이며,<span>&nbsp;</span>i번째에<span>&nbsp;</span><b>숫자<span>&nbsp;</span>k를 배치</b>했을 때 얻을 수 있는<span>&nbsp;</span><b>최대의 유사도</b>.</p>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">이 DP 테이블을 채우기 위한 점화식은<span>&nbsp;</span>i-1번째 상태로부터<span>&nbsp;</span>i번째 상태를 계산하는 방식으로 구성된다.<span>&nbsp;</span>i번째에 숫자<span>&nbsp;</span>k를 배치하는 선택은 두 가지 경우로 나뉜다.</p>
+<ol style="list-style-type: decimal; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="decimal">
+<li><b>변경이 발생하지 않은 경우:</b><span>&nbsp;</span>i-1번째 숫자 역시<span>&nbsp;</span>k여야 한다. 따라서 변경 횟수는<span>&nbsp;</span>j로 동일하며,<span>&nbsp;</span>dp[i-1][j][k]<span>&nbsp;</span>값에서 상태가 전이된다.</li>
+<li><b>변경이 발생한 경우:</b><span>&nbsp;</span>i-1번째 숫자는<span>&nbsp;</span>k가 아닌 다른 숫자<span>&nbsp;</span>l이어야 한다. 이 경우<span>&nbsp;</span>i번째에서 변경이 발생했으므로,<span>&nbsp;</span>i-1번째까지의 변경 횟수는<span>&nbsp;</span>j-1이었을 것이다. 따라서<span>&nbsp;</span>dp[i-1][j-1][l]<span>&nbsp;</span>(단,<span>&nbsp;</span>l != k) 값들 중 최댓값에서 상태가 전이된다.</li>
+</ol>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">이 점화식을 코드로 구현하면<span>&nbsp;</span>i<span>&nbsp;</span>(위치),<span>&nbsp;</span>j<span>&nbsp;</span>(변경 횟수),<span>&nbsp;</span>k<span>&nbsp;</span>(현재 숫자),<span>&nbsp;</span>l<span>&nbsp;</span>(이전 숫자)에 대한 4중 반복문이 구성되어, 시간 복잡도는<span>&nbsp;</span>O(N * M * K²)가 된다. N과 M이 클 경우 이는 비효율적인 접근이다.</p>
+<h2 style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size26">병목 현상 분석과 최적화</h2>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">위 기본 접근법의 성능 저하를 일으키는 주된 원인은<span>&nbsp;</span><b>Case 2</b>에서<span>&nbsp;</span>k가 아닌 모든<span>&nbsp;</span>l에 대해<span>&nbsp;</span>dp[i-1][j-1][l]의 최댓값을 구하는 내부 루프다. 이 계산은 매<span>&nbsp;</span>k마다 반복적으로 수행되므로 상당한 비효율을 초래한다.</p>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">이러한 병목을 해결하는 것이 문제의 핵심이며, 이는 마치 시스템 해킹에서 공격 성공을 위해 정확한<span>&nbsp;</span>offset을 계산하는 과정과 유사하다. 불필요한 연산을 줄이고 핵심적인 값을 빠르게 찾아내야 한다.</p>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">이를 위해<span>&nbsp;</span><b>접두사/접미사 최댓값 (Prefix/Suffix Max)</b><span>&nbsp;</span>배열을 도입할 수 있다.<span>&nbsp;</span>k를 제외한<span>&nbsp;</span>l에 대한 최댓값은,<span>&nbsp;</span>1부터<span>&nbsp;</span>k-1까지의 최댓값과<span>&nbsp;</span>k+1부터<span>&nbsp;</span>MAX_K까지의 최댓값 중 더 큰 값과 같다.</p>
+<ul style="list-style-type: disc; background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-list-type="disc">
+<li>prefix_max[x]:<span>&nbsp;</span>l이 1부터<span>&nbsp;</span>x까지일 때<span>&nbsp;</span>dp[i-1][j-1][l]의 최댓값</li>
+<li>suffix_max[x]:<span>&nbsp;</span>l이<span>&nbsp;</span>x부터<span>&nbsp;</span>MAX_K까지일 때<span>&nbsp;</span>dp[i-1][j-1][l]의 최댓값</li>
+</ul>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">이 두 배열을 미리<span>&nbsp;</span>O(K)<span>&nbsp;</span>시간에 계산해두면,<span>&nbsp;</span>k를 제외한 나머지<span>&nbsp;</span>l에 대한 최댓값을<span>&nbsp;</span>max(prefix_max[k-1], suffix_max[k+1])<span>&nbsp;</span>연산을 통해<span>&nbsp;</span>O(1)<span>&nbsp;</span>시간에 조회할 수 있다. 이로써 4중 반복문 구조가 3중으로 개선되고 전체 시간 복잡도는 O(N * M * K)로 크게 향상된다.</p>
+<h2 style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size26">최종 최적화 코드</h2>
+<p style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;" data-ke-size="size16">아래는 접두사/접미사 최댓값 기법을 적용하여 최적화를 완료한 코드다.</p>
+<pre id="code_1754226779680" class="python" data-ke-language="python" data-ke-type="codeblock"><code>import sys
+
+MAX_K = 4
+INT_MIN = -sys.maxsize
+
+n, m = map(int, sys.stdin.readline().split())
+a = [0] + list(map(int, sys.stdin.readline().split()))
+
+dp = [
+    [[INT_MIN for _ in range(MAX_K + 1)] for _ in range(m + 1)]
+    for _ in range(n + 1)
+]
+
+for k in range(1, MAX_K + 1):
+    similarity = 1 if a[1] == k else 0
+    dp[1][0][k] = similarity
+
+for i in range(2, n + 1):
+    for j in range(m + 1):
+        prefix_max = [INT_MIN] * (MAX_K + 2)
+        suffix_max = [INT_MIN] * (MAX_K + 2)
+
+        if j &gt; 0:
+            for l in range(1, MAX_K + 1):
+                prefix_max[l] = max(prefix_max[l - 1], dp[i - 1][j - 1][l])
+            for l in range(MAX_K, 0, -1):
+                suffix_max[l] = max(suffix_max[l + 1], dp[i - 1][j - 1][l])
+
+        for k in range(1, MAX_K + 1):
+            similarity = 1 if a[i] == k else 0
+
+            val1 = INT_MIN
+            if dp[i - 1][j][k] != INT_MIN:
+                val1 = dp[i - 1][j][k] + similarity
+
+            val2 = INT_MIN
+            if j &gt; 0:
+                max_prev_val = max(prefix_max[k - 1], suffix_max[k + 1])
+                if max_prev_val != INT_MIN:
+                    val2 = max_prev_val + similarity
+            
+            dp[i][j][k] = max(val1, val2)
+
+ans = 0
+for j in range(m + 1):
+    for k in range(1, MAX_K + 1):
+        ans = max(ans, dp[n][j][k])
+
+print(ans)</code></pre></div>
