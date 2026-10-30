@@ -1,0 +1,25 @@
+---
+title: "[Dreamhack] Bypass SECCOMP-1"
+date: "2026-02-18T21:26:49+09:00"
+category: "ctf"
+originalCategory: "Security/Pwnable"
+source: "https://myinfosub.tistory.com/99"
+description: "간단한 설명 SECCOMP에 대한 공부를 할 겸 문제를 풀어보았다. 문제 자체는 매우 쉽다. 문제 파일에서 제공하는 c 코드에 적혀있는 거부된 시스템콜이 아닌 다른 우회 가능한 시스템 콜을 찾으면 된다. SECCOMP에 대하여 공부하기 위해 푼 문제인 만큼 SECCOMP를 간략"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/99/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">간단한 설명</p>
+<p data-ke-size="size16">SECCOMP에 대한 공부를 할 겸 문제를 풀어보았다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">문제 자체는 매우 쉽다. 문제 파일에서 제공하는 c 코드에 적혀있는 거부된 시스템콜이 아닌 다른 우회 가능한 시스템 콜을 찾으면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">SECCOMP에 대하여 공부하기 위해 푼 문제인 만큼 SECCOMP를 간략하게 얘기하고자 한다.</p>
+<p data-ke-size="size16">SECCOMP는 sandbox 형태로 linux kernel 수준에서의 시스템 콜 필터링을 위해 사용되는 기술이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">정확한 사용법은 찾아보면 나온다.</p>
+<p data-ke-size="size16">BPF(Berkeley Packet Filter) 에 직접적으로 필터링을 지시하여 특정 시스템 콜을 필터링하는 기술이라고 보면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Dreamhack write-up</p>
+<p data-ke-size="size16"><a href="https://dreamhack.io/wargame/writeups/43401" target="_blank" rel="noopener&nbsp;noreferrer">https://dreamhack.io/wargame/writeups/43401</a></p></div>

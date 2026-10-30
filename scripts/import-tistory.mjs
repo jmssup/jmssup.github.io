@@ -6,11 +6,12 @@ import { stripCdnCredentials } from './public-url.mjs';
 
 const origin = 'https://myinfosub.tistory.com';
 const cache = '.cache/tistory';
-const output = 'src/posts/tistory';
+const output = 'src/_posts';
 const assets = 'src/assets/tistory';
 const reportPath = 'migration/report.json';
 const refresh = process.argv.includes('--refresh');
 const exists = async p => access(p).then(() => true, () => false);
+const postFile = (id, date) => `${output}/${date.slice(0, 10)}-tistory-${id}.html`;
 await Promise.all([cache, output, assets, 'migration'].map(p => mkdir(p, { recursive: true })));
 const previous = await readFile(reportPath, 'utf8').then(JSON.parse, () => ({ posts: [] }));
 const report = { source: origin, importedAt: new Date().toISOString(), posts: [], errors: refresh ? [] : [...(previous.errors || [])], assets: refresh ? [] : [...(previous.assets || [])] };
@@ -74,11 +75,9 @@ console.log(`Found ${urls.length} public posts.`);
 
 async function importPost(url) {
   const id = new URL(url).pathname.slice(1);
-  const target = `${output}/${id}.html`;
-  if (!refresh && await exists(target)) {
-    const old = previous.posts.find(post => post.id === id);
-    if (old) { report.posts.push(old); links.set(url, `/posts/tistory/${id}/`); return; }
-    throw new Error(`${target} already exists without a migration record; refusing to overwrite`);
+  const old = previous.posts.find(post => post.id === id);
+  if (!refresh && old && await exists(postFile(id, old.date))) {
+    report.posts.push(old); links.set(url, `/posts/tistory/${id}/`); return;
   }
   try {
     const html = (await download(url, `${cache}/${id}.html`)).toString();
@@ -88,6 +87,8 @@ async function importPost(url) {
     const originalCategory = $('.hgroup .category').first().text().trim();
     const body = $('.contents_style').first();
     if (!title || !date || !body.length || !body.text().trim()) throw new Error('Missing title/date/article body');
+    const target = postFile(id, date);
+    if (!refresh && await exists(target)) throw new Error(`${target} exists without a matching migration record; refusing to overwrite`);
     const originalTextHash = createHash('sha256').update(body.text()).digest('hex');
     const imageCount = body.find('img').length;
     body.find('script,style,iframe,object,embed,form').remove();
@@ -119,7 +120,7 @@ async function importPost(url) {
     const migrated = load(importedHtml);
     const category = categoryFor(originalCategory, title);
     const description = migrated.root().text().replace(/\s+/g, ' ').trim().slice(0, 155);
-    const metadata = { title, date, category, originalCategory, source: url, description, layout: 'post.njk', tags: ['post'], permalink: `/posts/tistory/${id}/`, templateEngineOverride: false };
+    const metadata = { title, date, category, originalCategory, source: url, description, layout: 'post', tags: ['post'], permalink: `/posts/tistory/${id}/`, render_with_liquid: false };
     const frontmatter = Object.entries(metadata).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join('\n');
     await writeFile(target, stripCdnCredentials(`---\n${frontmatter}\n---\n<div class="tistory-content">${importedHtml}</div>\n`));
     report.posts.push({ id, title, source: url, local: metadata.permalink, date, category, originalCategory, images: imageCount, sourceTextSha256: originalTextHash, importedTextSha256: createHash('sha256').update(migrated.root().text()).digest('hex'), ...(textCorrections.length ? { textCorrections } : {}) });
@@ -133,7 +134,7 @@ await Promise.all(Array.from({ length: 3 }, async () => {
   while (cursor < urls.length) await importPost(urls[cursor++]);
 }));
 for (const post of report.posts) {
-  const filename = `${output}/${post.id}.html`;
+  const filename = postFile(post.id, post.date);
   let text = await readFile(filename, 'utf8');
   text = text.replace(/href="https:\/\/myinfosub\.tistory\.com\/(\d+)(?:\?[^"#]*)?(#[^"]*)?"/g, (match, id, hash = '') => links.has(`${origin}/${id}`) ? `href="${links.get(`${origin}/${id}`)}${hash}"` : match);
   await writeFile(filename, stripCdnCredentials(text));

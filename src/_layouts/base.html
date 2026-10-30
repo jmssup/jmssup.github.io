@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{% if page.title %}{{ page.title | escape }} · {% endif %}ssup — 정명섭의 기록</title>
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:title" content="{{ page.title | default: 'ssup — 정명섭의 기록' | escape }}">
+  <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/atom+xml" title="ssup RSS" href="/feed.xml">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/theme.js"></script>
+  <script src="/assets/site.js" defer></script>
+  {% if page.terminal %}<link rel="stylesheet" href="/assets/terminal.css"><script src="/assets/terminal.js" type="module"></script>{% endif %}
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <header class="header"><div class="header-inner">
+    <a class="wordmark" href="/" aria-label="ssup 홈">ssup<span class="brand-dot">.</span><span class="wordmark-caption">BUILD · BREAK · LEARN</span></a>
+    <nav class="top-nav" aria-label="주 메뉴"><a href="/" {% if page.url == '/' %}aria-current="page"{% endif %}>글 모아보기</a><a href="/about/" {% if page.url == '/about/' %}aria-current="page"{% endif %}>소개</a><a href="{{ site.github }}" target="_blank" rel="noopener">GitHub {% include icon.html name='external' %}</a></nav>
+    <div class="header-actions"><button class="icon-button" data-search-open aria-label="글 검색">{% include icon.html name='search' %}<kbd>/</kbd></button><span class="action-divider"></span><button class="icon-button" data-theme-toggle aria-label="어두운 테마로 전환">{% include icon.html name='moon' class='moon-icon' %}{% include icon.html name='sun' class='sun-icon' %}</button><button class="icon-button mobile-toggle" data-menu-toggle aria-label="카테고리 메뉴 열기" aria-expanded="false" aria-controls="sidebar">{% include icon.html name='menu' %}</button></div>
+  </div></header>
+  <div class="site-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="profile-mark" aria-hidden="true">s<span>_</span></div>
+      <a class="profile-name" href="/about/">정명섭 <span>ssup</span></a>
+      <p class="profile-bio">만들고, 탐구하고,<br>이해한 것을 기록합니다.</p>
+      <p class="profile-affiliation">충남대학교 컴퓨터융합학부</p>
+      <div class="profile-social"><a href="{{ site.github }}" aria-label="GitHub">{% include icon.html name='github' %}</a><a href="/feed.xml" aria-label="RSS 구독">{% include icon.html name='rss' %}</a><a class="tistory-link" href="{{ site.tistory }}" aria-label="기존 티스토리 블로그">T</a></div>
+      <div class="sidebar-rule"></div>
+      <div class="nav-label">EXPLORE <span>06</span></div>
+      <nav class="category-nav" aria-label="카테고리">
+        <a href="/" class="all-posts {% if page.url == '/' %}active{% endif %}">{% include icon.html name='book' %}<span>전체 글</span><span class="nav-count">{{ site.posts | size }}</span></a>
+        {% for item in site.data.categories %}<a href="/categories/{{ item.id }}/" class="{% if page.category == item.id %}active{% endif %}">{% include icon.html name=item.icon %}<span>{{ item.name }}</span><span class="nav-count">{% assign category_posts = site.posts | where: "category", item.id %}{{ category_posts | size }}</span></a>{% endfor %}
+      </nav>
+      <div class="sidebar-note"><span class="status-dot"></span> 작은 발견도, 꾸준히.<span class="note-sub">A personal learning archive.</span></div>
+    </aside>
+    <main id="main" class="main-content">{{ content }}</main>
+  </div>
+  <footer class="footer"><span>© 2026 정명섭. Built with curiosity.</span><div><a href="/about/">About</a><a href="/feed.xml">RSS {% include icon.html name='rss' %}</a><a href="#top" data-back-top>위로 ↑</a></div></footer>
+  <dialog class="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">글 검색</h2><button class="text-button" data-search-close>닫기 <kbd>Esc</kbd></button></div><label class="search-input-wrap">{% include icon.html name='search' %}<input id="search-input" type="search" placeholder="제목, 내용, 카테고리로 검색" autocomplete="off" aria-label="검색어"></label><p class="search-status" role="status">검색어를 입력해 주세요.</p><div class="search-results"></div></dialog>
+</body>
+</html>

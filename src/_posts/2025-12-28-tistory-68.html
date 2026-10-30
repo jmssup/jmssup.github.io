@@ -1,0 +1,33 @@
+---
+title: "세그먼트 트리(Segment Tree)"
+date: "2025-12-28T00:53:52+09:00"
+category: "development"
+originalCategory: "알고리즘"
+source: "https://myinfosub.tistory.com/68"
+description: "segment tree 는 구간 합을 O(log n) 의 시간 복잡도로 구할 수 있도록 만들어주는 자료구조 이다. 이는 알고리즘 문제에서 빠른 구간합 탐색 및 갱신을 위해 사용된다. 원리는 다음과 같다. segment tree는 이름에서 알 수 있듯이 tree 구조이다. bin"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/68/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">segment tree 는 구간 합을 O(log n) 의 시간 복잡도로 구할 수 있도록 만들어주는 자료구조 이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이는 알고리즘 문제에서 빠른 구간합 탐색 및 갱신을 위해 사용된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">원리는 다음과 같다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">segment tree는 이름에서 알 수 있듯이 tree 구조이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">binary tree 구조로 최상위 루트에는 0 ~ n 번까지의 합을 다음 left 와 right 자식에게 자신의 0 ~ n // 2, n // 2 + 1 ~ n 까지의 합을 각각 저장한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이러한 구조를 계속 반복해서 재귀적으로 진행시키면 binary tree 구조로 구간합을 구현하게 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이는 tree 구조의 특성을 사용하여 O(log n) 의 시간 복잡도로 탐색 및 값의 갱신을 가능하게 만들어준다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">구간 합을 탐색할 때는 노드 2개에 대하여 걸쳐있는 경우가 있는데 이는 해당 두 노드에 대한 값을 더하여 구하려는 구간 합을 구할 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">예를 들어 0 ~ 9 까지의 리프노드를 가지는 segment tree 라고 할 때 3~9 의 구간합을 구하려고 한다면 노드들 중 3~4 노드와 5~9 노드를 찾아서 그 두 노드의 값만 더해주면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이는 기존의 누적합 알고리즘을 사용한 방식보다는 느리지만 만약 값의 갱신이 추가되는 경우 누적합은 O(n) 의 시간복잡도로 갱신이 이루어지기에 갱신이라는 추가적인 동작이 생기는 경우 segment tree 가 더욱 빠른 알고리즘 문제 해결을 제공하게 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">또한 이 구조를 이용하여 구간 합에서 확장하여 구간내 최솟값, 최댓값, 곱, XOR 등을 구할 수 있다.</p></div>

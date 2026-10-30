@@ -1,0 +1,122 @@
+---
+title: "해시 (Hash)"
+date: "2025-05-27T14:34:27+09:00"
+category: "development"
+originalCategory: "자료구조"
+source: "https://myinfosub.tistory.com/5"
+description: "해시테이블 해싱으로 Key값을 저장하는 배열이다. 해시함수 해시테이블에 Key 값을 변환하여 저장하기 위한 함수이다. 가장 이상적인 해시 함수는 키들을 균등하게(uniformly) 해시 테이블의 인덱스로 변환하는 함수다. 여기서 균등하게 라는 말의 의미는 키들을 해시 테이블에 "
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/5/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16"><b>해시테이블</b></p>
+<p data-ke-size="size16">해싱으로 Key값을 저장하는 배열이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>해시함수</b></p>
+<p data-ke-size="size16">해시테이블에 Key 값을 변환하여 저장하기 위한 함수이다.</p>
+<p data-ke-size="size16">가장 이상적인 해시 함수는 키들을 균등하게(uniformly) 해시 테이블의 인덱스로 변환하는 함수다.</p>
+<p data-ke-size="size16">여기서 균등하게 라는 말의 의미는 키들을 해시 테이블에 랜덤하게 흩어지도록 저장하는 것을 의미한다.</p>
+<p data-ke-size="size16">일반적으로 키는 부여된 의미나 특성을 가진다. 이러한 키 값의 앞 부분 또는 뒤의 몇자리 만을 이용하여 해시값으로 사용하면 많은 충돌이 발생하기에 해시함수를 사용한다.</p>
+<p data-ke-size="size16">예를 들어 학번을 키값으로 사용하는 경우 학번의 앞자리는 입학년도를 뜻하는 경우가 많기에 이 학번의 앞자리를 사용하면 많은 충돌이 발생하게 되기에 성능이 떨어진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">대표적인 해시함수</p>
+<p data-ke-size="size16">중간 제곱(Mid-square) 함수: 키를 제곱한 후 적절한 크기의 중간 부분 사용</p>
+<p data-ke-size="size16">접기(Folding) 함수: 몇 자리씩 끊어서 만든 숫자들의 합 사용</p>
+<p data-ke-size="size16">나눗셈(Division) 함수: 키를 소수(Prime) M 으로 나눈 나머지를 해시값으로 사용한다. h(key) = key % M</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">해시함수들의 공통점</p>
+<p data-ke-size="size16">키의 모든 자리의 숫자가 함수 계산에 참여한다.</p>
+<p data-ke-size="size16">계산 결과에서 해시 테이블의 크기에 따라 특정 부분만을 해시값으로 활용한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">가장 널리 사용되는 해시 함수는 나눗셈 함수이다.</p>
+<p data-ke-size="size16">이 나눗셈 함수를 주로 사용하는 이유</p>
+<ul style="list-style-type: disc; background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-list-type="disc">
+<li><b>구현이 간단하고 계산이 빠르다</b><br>모듈러 연산은 단 한 번의 연산으로 키 값을 해시 테이블의 인덱스로 변환할 수 있어, 구현이 매우 쉽고 속도가 빠르다<span>.</span></li>
+<li><b>해시 테이블 크기에 맞는 범위로 값을 자동 제한</b><br>모듈러 연산을 사용하면, 결과값이 항상 0부터 (테이블 크기 - 1) 사이의 값으로 제한된다. 이는 해시 테이블의 인덱스 범위와 정확히 일치하므로, 메모리 효율적으로 데이터를 저장할 수 있다<span>.</span></li>
+<li><b>실제 데이터에서 충분히 잘 동작함</b><br>실제로 키 값이 무작위 분포를 가진다면, 모듈러 연산만으로도 해시 값이 고르게 분포되어 충돌이 적게 발생한다<span>.</span></li>
+<li><b>테이블 크기(M) 선택만 잘 하면 균일 분포 가능</b><br>해시 테이블 크기(M)를 소수(prime number)로 설정하면, 키 값의 특정 부분에 치우치지 않고 해시 값이 고르게 분산될 가능성이 높아진다<span>.</span></li>
+</ul>
+<p data-ke-size="size16"><span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;">단, 키 값의 패턴이나 테이블 크기 선택에 따라 충돌이 많아질 수 있으니 실제로는 더 복잡한 해시 함수와 결합해서 사용하기도 한다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16"><b>해싱</b></p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">Key를 간단한 함수로 계산해 변환한 값을 배열의 index로 사용해 저장하는 것이다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">1. 항목의 키 집합 = { k ... }</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">2. 해시함수 hash(k) = index</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">3. 해시테이블 KEY[index] = k</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">4. VALUE[k] = k 의 value</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">의 구조로 단기간에 key 값과 이에 따른 value 값을 찾을 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">자바의 hashCode(): signed int 를 반환한다.</p>
+<p data-ke-size="size16">모든 클래스가 가지고 있다. 일반적으로 이 hashCode()로 해시 함수를 구현한다.&nbsp;<span style="color: #333333; text-align: center;"> </span></p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="501" data-origin-height="74"><span data-url="https://blog.kakaocdn.net/dna/bLv5As/btsOe5kLEF0/AAAAAAAAAAAAAAAAAAAAAPcW0I4pcdLUJ4MV5ZRZ0OuXxr3NxnAFyN5ry46E3t9P/img.png" data-phocus="https://blog.kakaocdn.net/dna/bLv5As/btsOe5kLEF0/AAAAAAAAAAAAAAAAAAAAAPcW0I4pcdLUJ4MV5ZRZ0OuXxr3NxnAFyN5ry46E3t9P/img.png"><img src="/assets/tistory/42616e07db201567c548.png" loading="lazy" width="501" height="74" data-origin-width="501" data-origin-height="74" decoding="async" alt="해시 (Hash)의 참고 이미지"></span></figure>
+<p></p>
+<p data-ke-size="size16"><span style="color: #333333; text-align: start;"><span><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span>M은 해시테이블의 크기이고<span>&nbsp;</span></span>0x7 f f f f f f f 을 &amp; 연산하는 이유는 부호 변경 때문이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>충돌</b></p>
+<p data-ke-size="size16">서로 다른 Key 들이 동일한 해시값을 가질 때 충돌(Collision) 이라고 한다.</p>
+<p data-ke-size="size16">해결법 - 개방 주소 방식, 폐쇄 주소 방식, 재해시</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>개방 주소 방식</b>: 해시테이블 전체를 열린공간으로 가정하여 충돌된 키를 일정한 방식에 따라 찾아낸 empty 원소에 저장하는 방식</p>
+<p data-ke-size="size16">선형조사, 이차조사, 이중해싱이 있다.</p>
+<p data-ke-size="size16"><span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: left;">메모리 효율이 좋고, 캐시 지역성(cache locality)이 우수하여 탐색이 빠르다. 적재율이 낮을 때 매우 빠른 성능을 보인다.</span></p>
+<p data-ke-size="size16"><span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: left;">메모리 효율이 중요한 임베디드 시스템, 캐시, 일부 프로그래밍 언어의 내장 해시 테이블 등에서 사용된다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">- 선형조사: 충돌이 일어난 원소부터 순차적으로 검색하여 처음 발견한 empty 원소에 충돌된 키 저장</p>
+<p data-ke-size="size16">(hash(key) + j) % M, { j = 0, 1, 2, 3 }</p>
+<p data-ke-size="size16">M으로 나누는 이유는 한바퀴 넘어가는 것을 처리하기 위함이다.</p>
+<p data-ke-size="size16">해시테이블의 키들이 빈틈없이 뭉쳐지는 현상이 발생한다. (1차 군집화 라고 부른다)</p>
+<p data-ke-size="size16">군집화는 해시 테이블의 empty 원소가 적을수록 더 심화되며 성능을 극단적으로 저하시킨다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">- 이차조사: 충돌이 일어난 원소로부터 수의 제곱을 검색하여 처음 발견한 empty 원소에 충돌된 키 저장</p>
+<p data-ke-size="size16">선형조사와 근본적으로 동일한 충돌 해결 방법이다.</p>
+<p data-ke-size="size16">(hash(key) + j * j) % M, { j = 0, 1, 2, 3 }</p>
+<p data-ke-size="size16">1차 군집화 문제는 해결되나 같은 해시값을 같는 서로 다른 키들인 동의어(Synonym)가 같은 점프시퀀스(jump sequence)에 따라 empty 원소를 찾아 저장하기에 2차 군집화가 발생한다.</p>
+<p data-ke-size="size16">점프 크기가 j의 제곱만큼 커지기에 배열에 empty 원소가 있어도 저장에 실패하는 경우가 발생하기도 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">- 이중해싱: 2개의 해시 함수를 사용하여 저장하는 방식</p>
+<p data-ke-size="size16">hash(key) 로 키를 해시테이블의 index 로 변환</p>
+<p data-ke-size="size16">dhash(key) 로 충돌 발생 시 다음 위치를 위한 점프 크기를 정함</p>
+<p data-ke-size="size16">(hash(key) + j * dhash(key)) % M, { j = 0, 1, 2, 3 }</p>
+<p data-ke-size="size16">동의어들이 저마다 제 2의 해시 함수를 가져 점프시퀀스가 일정하지 않다.</p>
+<p data-ke-size="size16">모든 종류의 군집화 문제가 해결된다.</p>
+<p data-ke-size="size16">dhash(key)는 점프 크기를 결정하기에 0을 반환하면 안된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>폐쇄 주소 방식</b>: 해시값에 대응되는 곳에만 키를 저장</p>
+<p data-ke-size="size16">충돌이 발생한 키들은 충돌 위치에 저장한다. 대표적으로 체이닝 방법이 있다.</p>
+<p data-ke-size="size16"><span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: left;">구현이 쉽고, 적재율(load factor)이 높아도 성능 저하가 선형적으로 일어난다. 데이터 개수를 미리 알 수 없을 때 유리하다.</span></p>
+<p data-ke-size="size16"><span style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: left;">표준 라이브러리(예: Java의 HashMap, Python의 dict 등)에서 많이 사용된다. 일반적으로 범용적으로 널리 쓰인다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">- 체이닝: 충돌이 일어나면 LinkedList 형태로 연결해준다.</p>
+<p data-ke-size="size16">hash(key) 가 5로 같은 key값 a 와 b 가있을 때 a -&gt; b 의 형태로 각 a,b 를 Node로 만들어 연결해준다.</p>
+<p data-ke-size="size16">ex) hash(key) = 5, 해시테이블 KEY[5]&nbsp; = a, a -&gt; b</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>해시테이블이 거의 꽉 찬 경우 - 재해시</b></p>
+<p data-ke-size="size16">재해시를 진행할 때 체이닝 방식으로 구현돼있다면 새로운 해시테이블의 해시함수는 기존 해시테이블의 해시함수와 다르기에</p>
+<p data-ke-size="size16">각각의 연결돼있는 모든 값들을 새로운 해시테이블의 해시함수를 통과시켜 재연결 시켜야한다.</p>
+<p data-ke-size="size16">재해시의 수행여부는 적재율을 계산하여 결정한다.</p>
+<p data-ke-size="size16">적재율 = (키의수 n) / (테이블 크기 M)</p>
+<p data-ke-size="size16">보통 적재율이 0.75 이상이 되면 테이블 크기를 2배로 확장, 0.25 이하가 되면 테이블을 1/2 로 축소한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>삭제연산에 대하여</b></p>
+<p data-ke-size="size16">기존에 해시테이블에 저장된 값을 삭제한 경우 충돌에 의해 여러 연산을 진행한 값에 대한 탐색 및 삽입이</p>
+<p data-ke-size="size16">정상적으로 이루어지지 않는다. (중간다리가 끊어지는 현상이 발생한다.)</p>
+<p data-ke-size="size16">삭제를 진행한 경우 null로 표시하는게 아닌 다른 방식으로 마킹하여 중간다리임을 표시하여 해결한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>해싱의 성능</b></p>
+<p data-ke-size="size16">선형 조사: 적재율 α가 너무 작으면 해시 테이블에 empty 원소가 너무 많고, α 값이 1.0에 근접할수록 군집화가 심화된다.<br>개방 주소 방식의 해싱: α ≈ 0.5, 즉, M ≈ 2n일 때 좋은 성능이다.<br>체이닝: 테이블크기 M이 항목의 수 n보다 너무 크면 대부분의&nbsp;연결&nbsp;리스트들이&nbsp;empty가&nbsp;되고,&nbsp;M이&nbsp;n보다&nbsp;너무&nbsp;작으면 <br>연결 리스트들의 길이가 너무 길어져 해시 성능 매우 저하된다.</p>
+<p data-ke-size="size16">일반적으로 M이 소수이고, α ≈ 10 정도일 때 좋은 성능이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>동적 해싱</b></p>
+<p data-ke-size="size16">재해시를 사용하지 않고 동적으로 해시테이블의 크기를 조절한다. 대용량의 데이터베이스를 위해 사용된다.</p>
+<p data-ke-size="size16">- 확장 해싱: 디렉터리를 메인 메모리에 저장하고 데이터는 디스크 블록 크기의 버킷 단위로 저장</p>
+<p data-ke-size="size16">버킷: Key를 저장하는 공간</p>
+<p data-ke-size="size16">버킷에 overflow가 발생하면 새 버킷을 만들어 나누어 저장, 이 때 버킷들을 가리키던 디렉터리는 2배로 확장한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">- 선형 해싱: 디렉터리없이 삽입할 때 버킷을 순서대로 추가</p>
+<p data-ke-size="size16">버킷은 삽입되는 Key가 저장되는 버킷과 무관하게 순차적으로 추가한다.</p>
+<p data-ke-size="size16">삽입되는 버킷에 저장공간이 없으면 overflow 체인에 새 키를 임시로 삽입한다.</p>
+<p data-ke-size="size16">체인은 나중에 버킷이 추가되면 overflow 체인의 Key들을 버킷으로 이동한다.</p></div>
+

@@ -1,0 +1,76 @@
+---
+title: "튜링기계"
+date: "2025-06-18T15:18:30+09:00"
+category: "development"
+originalCategory: "컴파일러, 계산이론, 언어"
+source: "https://myinfosub.tistory.com/20"
+description: "Chomsky Hierarchy(촘스키의 분류)에서 Type0 로 분류된다. Type0 ~ Type3의 모든 언어를 인식할 수 있다. 튜링 기계 M = ( Q, ∑, Γ, δ, q0 , B, F ) (1) Q : 상태(state)의 집합 (2) ∑ : 입력기호 집합 , ∑ ⊆ "
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/20/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">Chomsky Hierarchy(촘스키의 분류)에서 Type0 로 분류된다.</p>
+<p data-ke-size="size16">Type0 ~ Type3의 모든 언어를 인식할 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">튜링 기계 M = ( Q, ∑, Γ, δ, q0 ,&nbsp;B,&nbsp;F&nbsp;) <br>(1)&nbsp;Q&nbsp;:&nbsp;상태(state)의&nbsp;집합 <br>(2)&nbsp;∑&nbsp;:&nbsp;입력기호&nbsp;집합&nbsp;,&nbsp;∑&nbsp;⊆&nbsp;(Γ-&nbsp;B) <br>(3)&nbsp;Γ&nbsp;:&nbsp;테이프기호&nbsp;집합 <br>(4)&nbsp;δ&nbsp;:&nbsp;Q&nbsp;×&nbsp;Γ&nbsp;→&nbsp;Q&nbsp;×&nbsp;Γ&nbsp;×&nbsp;{&nbsp;L,&nbsp;R&nbsp;}&nbsp;전이함수 <br>(5)&nbsp;q0&nbsp;∊&nbsp;Q&nbsp;:&nbsp;초기&nbsp;상태 <br>(6)&nbsp;B&nbsp;∊&nbsp;Γ&nbsp;:&nbsp;공백&nbsp;기호(blank&nbsp;symbol) <br>(7)&nbsp;F&nbsp;⊆&nbsp;Q&nbsp;:&nbsp;최종&nbsp;상태&nbsp;집합</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">튜링기계의 저장장소(테이프)는 셀들의 1차원 배열 형태이다.</p>
+<p data-ke-size="size16">각 셀은 하나의 심벌(symbol)을 저장한다.</p>
+<p data-ke-size="size16">이 배열은 양쪽으로 무한히 확장가능하여 무한한 양의 정보를 저장할 수&nbsp; 있다.</p>
+<p data-ke-size="size16">이 테이프에는 헤드가 존재하여 심벌에 대한 읽기-쓰기 의 행위가 가능하도록 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">전이에 대한 동작의 예시</p>
+<p data-ke-size="size16">δ(q0, a) = (q1,&nbsp;d,&nbsp;R)</p>
+<p data-ke-size="size16">q0의 상태일 때 a심벌을 만나면 오른쪽으로 헤드가 이동하며 q0를 q1의 상태로 그리고 a를 d로 바꾼다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">튜링기계는 전이함수가 정의되어 있지않는 경우 종료된다.</p>
+<p data-ke-size="size16">만약 종료시 상태가 최종 상태 집합에 포함된 상태라면 성공적 종료로 판단한다.</p>
+<p data-ke-size="size16">만약 최종 상태 집합에 포함돼있지 않은 상태라면 실패로 판단한다.</p>
+<p data-ke-size="size16">보통 최종상태에서 종료되도록 최종상태에서는 전이함수를 정의하지 않는다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">현대 컴퓨터와 폰노이만 구조와 튜링기계</h3>
+<p data-ke-size="size16">현대 컴퓨터의 구조는 폰노이만 구조를 따라간다.</p>
+<p data-ke-size="size16">그렇다면 이 폰노이만 구조의 바탕이 되는 이론은 무엇인가?</p>
+<p data-ke-size="size16">폰노이만 구조의 바탕이 되는 이론은 튜링기계이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">폰노이만 구조는 튜링기계의 "계산 가능한 모든 것을 처리할 수 있는 기계" 라는 이론적 개념을 실제 하드웨어로 구현한 것이다.</p>
+<p data-ke-size="size16">이 폰노이만 구조는 현대 컴퓨터의 표준 아키텍쳐로 모든 범용 컴퓨터가 이 구조를 따라간다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<table style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start; border-collapse: collapse; width: 100%;" border="1" data-ke-align="alignLeft">
+<tbody>
+<tr>
+<td style="width: 17.907%;" rowspan="2">&nbsp;</td>
+<td style="width: 43.6047%;" rowspan="2">튜링기계 (이론)</td>
+<td style="width: 38.3721%;" rowspan="2">폰 노이만 구조 (구현)</td>
+</tr>
+<tr>
+<td style="width: 17.907%;">모델</td>
+<td style="width: 43.6047%;">추상적 계산 모델</td>
+<td style="width: 38.3721%;">실제 하드웨어 아키텍처</td>
+</tr>
+<tr>
+<td style="width: 17.907%;">프로그램</td>
+<td style="width: 43.6047%;">테이프에 기록</td>
+<td style="width: 38.3721%;">메모리에 저장</td>
+</tr>
+<tr>
+<td style="width: 17.907%;">계산 원리</td>
+<td style="width: 43.6047%;">상태 전이, 규칙표</td>
+<td style="width: 38.3721%;">명령어 해석, 순차 실행</td>
+</tr>
+<tr>
+<td style="width: 17.907%;">범용성</td>
+<td style="width: 43.6047%;">보편 튜링머신 가능</td>
+<td style="width: 38.3721%;">범용 컴퓨터 구현</td>
+</tr>
+<tr>
+<td style="width: 17.907%;">핵심 개념</td>
+<td style="width: 43.6047%;">계산 가능성, 프로그램 내장</td>
+<td style="width: 38.3721%;">프로그램 내장, 범용성</td>
+</tr>
+</tbody>
+</table>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">결론적으로 폰노이만 구조는 튜링기계 이론을 바탕으로 발전한 현대 컴퓨터의 핵심 구조이다.</p></div>

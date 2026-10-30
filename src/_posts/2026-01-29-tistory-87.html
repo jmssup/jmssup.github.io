@@ -1,0 +1,63 @@
+---
+title: "meltdown에 대하여..."
+date: "2026-01-29T23:04:55+09:00"
+category: "ctf"
+originalCategory: "Security/Pwnable"
+source: "https://myinfosub.tistory.com/87"
+description: "meltdown에 대하여... 한줄 요약: CPU가 데이터를 캐시에 저장하는 루틴에 의해 발생되는 취약점 이 취약점의 핵심은 CPU의 코드에 대한 실행 및 메모리 접근이 비순차적이며 커널메모리와 실행되는 코드의 메모리가 함께 존재한다는 점이다. 그래서 뭐가 취약한 것인지 코드와"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/87/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">meltdown에 대하여...&nbsp;</p>
+<p data-ke-size="size16">한줄 요약: CPU가 데이터를 캐시에 저장하는 루틴에 의해 발생되는 취약점</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 취약점의 핵심은 CPU의 코드에 대한 실행 및 메모리 접근이 비순차적이며 커널메모리와 실행되는 코드의 메모리가 함께 존재한다는 점이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그래서 뭐가 취약한 것인지 코드와 함께 얘기하겠다.</p>
+<pre id="code_1769692940971" class="bash" data-ke-language="bash" data-ke-type="codeblock"><code>; rcx = kernel address      #1
+; rbx = probe array         #2
+retry:			    #3
+mov al, byte [rcx]	    #4
+shl rax, 0xc		    #5
+jz retry		    #6
+mov rbx, qword [rbx + rax]  #7</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위의 코드가 컴퓨터에서 실행되며 해커가 rcx에 들어있는 값을 알아내려고 한다고 하자.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">일단 4번째 명령어 (mov al, ...) 명령어가 실행된다고 하자.</p>
+<p data-ke-size="size16">4번째 명령어는 커널 메모리에 접근하는 명령어이기에 실행이후 예외가 발생하며 결과를 프로그램으로 내보내지않고 프로그램을 종료시킨다.</p>
+<p data-ke-size="size16">하지만 CPU는 4번째 명령어에서 오류가나는 것을 즉각적으로 파악하지 못한다. 이에 의해 일단 5~7번째 명령어를 먼저 실행시켜 성능을 보장하려고 한다. (실행 결과가 보이지는 않는다)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">5번째 명령어에서 rax에 2^12 = 4,096 을 곱한다. 이는 rcx 값을 페이지 테이블 단위로 격리 하려는 처리이다.&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후 7번째 줄로 넘어가면 rbx+rax 에 접근하여 해당 위치에 있는 값을 rbx에 저장한다.</p>
+<p data-ke-size="size16">이러한 행위는 rbx를 내 프로세스의 0번째 주소 라고 하면 rbx + rax가 rax번째 페이지의 위치를 의미한다고 볼 수 있다.</p>
+<p data-ke-size="size16">이는 7번째 명령어가 실행되면서<b> rax번재 페이지를 L1 캐시에 로드해놓음</b>을 의미하기도 한다.</p>
+<p data-ke-size="size16">바로 이 <b>캐시에 로드해놓는 것이 이 meltdown 취약점의 핵심</b>이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">요약하자면</p>
+<p data-ke-size="size16">rcx가 rax에 저장은 되어있고 이후 rbx+rax를 실행시켜놓았기 때문에 CPU에 존재하는 L1 캐시에 일단 rcx에 대한 정보가 올라가 있는 상태가 된다. 아무리 예외가 발생하여 프로그램이 종료되거나 하더라도 L1 캐시에 정보가 존재한다는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이후 해커는 rcx값을 찾기 위해 0~255 개의 페이지가 존재한다고 할 때 총 256 개의 페이지에 한 번씩 접근하며 시간을 측정한다.</p>
+<p data-ke-size="size16">이 때 어느 특정 페이지가 빠르게 접근 가능하다면 L1캐시에 존재함을 의미하고 rcx에 대한 정보도 유출되게 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">KPTI (Kernel Page Table Isolation)</p>
+<p data-ke-size="size16">meltdown에 대한 정보만 공부하고 이에 대한 해결법은 나중에 공부할 생각이었는데 meltdown에 대한 생각을 하던 도중 커널메모리의 가상메모리에서 피지컬메모리로 매핑되는 구조 즉, 가상메모리가 존재한다는 사실이 문제라고 생각했다. 그래서 이에 대하여 커널메모리의 가상메모리 매핑 구조를 없애면 해결이 되는가에 대하여 찾아보려고 하니 바로 meltdown의 문제 해결에 사용된 방식이 내 의문점과 맞닿아있음을 알게 되었다. 그 방법이 KPTI 이다. 더 찾아보니 KASIER(Kernel Address Isolation to have Side-channel Efficiently Removed)라는 기술을 기반으로 만들었다고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">모드 스위칭이 일어날때( 사용자 모드 -&gt; 커널모드 ) 이 때 원래는 권한비트만 살짝 바꿔버리면서 메모리에 대한 접근을 바꿨었는데</p>
+<p data-ke-size="size16">이 KPTI를 적용시키면서 이제는 모드 스위칭이 일어날 때 메모리 테이블 자체를 함께 스위칭 하는 방식으로 바뀌었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 KPTI는 메모리 테이블을 계속해서 변경해야 하는 방식이기에 TLB를 지속해서 flush 하고 채우는 구조라 속도가 매우 느리다.</p>
+<p data-ke-size="size16">TLB를 지속해서 flush하는 이유는 기존의 정보가 남아있으면 잘못된 데이터를 가지고 연산이 이뤄질 수 도 있고 정보 유출가능성도 생기기에 flush한다고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그래서 성능저하를 최소화 하기 위해 PCID라는 기술이 나오게 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">PCID (Process Context Identifiers)</p>
+<p data-ke-size="size16">TLB에 VPN(Virtual Page Number)이 겹쳐도 구분가능한 tag를 추가하여 기존의 TLB flush가 아닌 순차적 교체로 교체 비용을 줄이는방식이다.</p>
+<p data-ke-size="size16">PCID 자체는 meltdown에 대한 방어 기술이 아니며 KPTI의 성능개선을 위한 기술이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">+ 갑자기 웬 TLB 얘기? 라는 생각이 들 수 있으나 근본적으로 L1 캐시에 정보가 존재하기 위해서는 유저모드에서 TLB를 거쳐서 L1 캐시까지 데이터가 로드되는 과정이 생겨야 meltdown attack 이 효과를 본다. 이 TLB단에서 KPTI로 막는 방식이 곧 L1 캐시에 대한 meltdown, cache side channel attack을 막는 방식이라고 볼 수 있다.</p></div>

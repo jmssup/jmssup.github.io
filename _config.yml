@@ -1,0 +1,22 @@
+source: src
+destination: _site
+title: ssup
+author: 정명섭
+url: https://jmssup.github.io
+baseurl: ""
+github: https://github.com/jmssup
+tistory: https://myinfosub.tistory.com
+description: 개발과 보안, 그리고 연구. 직접 해보고 이해한 것들을 기록합니다.
+timezone: Asia/Seoul
+lang: ko
+permalink: /posts/:title/
+strict_front_matter: true
+liquid:
+  error_mode: strict
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      render_with_liquid: false

@@ -1,0 +1,71 @@
+---
+title: "Android 운영체제에 대하여"
+date: "2025-06-01T11:32:34+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/9"
+description: "Android 운영체제는 Linux 커널 기반이다. Linux 커널 기반이라는 것이 iOS와 대비되는 Android의 가장 큰 특징인 자유로움을 갖게 해준다. 하지만 Android 운영체제와 Linux는 명백히 다르다. Linux를 기반으로 만든 것일 뿐 Android에 필요한"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/9/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">Android 운영체제는 Linux 커널 기반이다.</p>
+<p data-ke-size="size16">Linux 커널 기반이라는 것이 iOS와 대비되는 Android의 가장 큰 특징인 자유로움을 갖게 해준다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">하지만 Android 운영체제와 Linux는 명백히 다르다.</p>
+<p data-ke-size="size16">Linux를 기반으로 만든 것일 뿐 Android에 필요한 기능들로 수정되고 추가되어 있다.</p>
+<p data-ke-size="size16">비유하자면</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>Linux는 엔진,</li>
+<li>Ubuntu나 Fedora는 일반 자동차,</li>
+<li>Android는 그 엔진을 활용해 만든 전기 스쿠터</li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Android 운영체제의 가장 큰 특징은 운영체제단의 핵심 코드를 오픈소스로 공개해놓은 것이다.</p>
+<p data-ke-size="size16">이를 AOSP 라고 부르는데 (Android Open Source Project) 대략적으로 아래와 같이 구성돼있다.</p>
+<table style="border-collapse: collapse; width: 100%; height: 147px;" border="1" data-end="824" data-start="465" data-ke-align="alignLeft">
+<tbody>
+<tr style="height: 21px;" data-end="544" data-start="501">
+<td style="height: 21px;" data-col-size="sm" data-end="516" data-start="501"><b>Linux 커널</b></td>
+<td style="height: 21px;" data-end="544" data-start="516" data-col-size="sm">안드로이드용으로 수정된 Linux 커널 소스</td>
+</tr>
+<tr style="height: 21px;" data-end="590" data-start="545">
+<td style="height: 21px;" data-col-size="sm" data-end="573" data-start="545"><b>Android Runtime (ART)</b></td>
+<td style="height: 21px;" data-end="590" data-start="573" data-col-size="sm">앱(Java/Kotlin)을 실행하는 가상 머신</td>
+</tr>
+<tr style="height: 21px;" data-end="645" data-start="591">
+<td style="height: 21px;" data-col-size="sm" data-end="607" data-start="591"><b>Framework</b></td>
+<td style="height: 21px;" data-end="645" data-start="607" data-col-size="sm">앱이 사용할 수 있는 시스템 API (예: 카메라, 위치 등)</td>
+</tr>
+<tr style="height: 21px;" data-end="694" data-start="646">
+<td style="height: 21px;" data-col-size="sm" data-end="659" data-start="646"><b>System Apps</b></td>
+<td style="height: 21px;" data-end="694" data-start="659" data-col-size="sm">전화, 메시지, 설정, 런처 등 기본 앱의 오픈소스 버전</td>
+</tr>
+<tr style="height: 21px;" data-end="753" data-start="695">
+<td style="height: 21px;" data-col-size="sm" data-end="711" data-start="695"><b>Build System</b></td>
+<td style="height: 21px;" data-end="753" data-start="711" data-col-size="sm">전체 Android를 빌드하기 위한 도구 (Make/Bazel 기반)</td>
+</tr>
+<tr style="height: 21px;" data-end="824" data-start="754">
+<td style="height: 21px;" data-col-size="sm" data-end="793" data-start="754"><b>HAL (Hardware Abstraction Layer)</b></td>
+<td style="height: 21px;" data-end="824" data-start="793" data-col-size="sm">하드웨어 제조사들이 구현해야 하는 인터페이스 계층</td>
+</tr>
+<tr style="height: 21px;">
+<td style="height: 21px;"><b>Native C/C++ Libraries</b></td>
+<td style="height: 21px;">OpenGL, WebKit, libc 등 네이티브 라이브러리</td>
+</tr>
+</tbody>
+</table>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">AOSP의 특징</p>
+<ul style="list-style-type: disc;" data-end="1577" data-start="1418" data-ke-list-type="disc">
+<li data-end="1453" data-start="1418">누구나 소스코드를 내려받고 빌드, 수정, 재배포 가능</li>
+<li data-end="1499" data-start="1454">커스텀 Android OS 개발의 기반 (예: 삼성 One UI, 커스텀 롬)</li>
+<li data-end="1577" data-start="1500">Git 저장소로 관리됨 (<a data-end="1576" data-start="1516">android.googlesource.com)</a></li>
+</ul>
+<p data-ke-size="size16">AOSP에 없는 것들</p>
+<ul style="list-style-type: disc;" data-end="1577" data-start="1418" data-ke-list-type="disc">
+<li data-end="1662" data-start="1603">AOSP에는 Google 앱(Gmail, Play Store, Maps 등)이 포함되어 있지 않습니다.</li>
+<li data-end="1732" data-start="1663">Google Mobile Services (GMS)도 <b>비공개 라이선스</b>에 속하며, <b>AOSP에 포함되지 않음</b>.</li>
+<li data-end="1779" data-start="1733">그래서 AOSP만 가지고 만든 Android OS는 Play 스토어가 없습니다.</li>
+</ul></div>

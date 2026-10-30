@@ -1,0 +1,58 @@
+---
+title: "unwrap류 함수들"
+date: "2026-07-23T03:35:20+09:00"
+category: "development"
+originalCategory: "Rust"
+source: "https://myinfosub.tistory.com/130"
+description: "unwrap, unwrap_or, unwrap_or_else ~~ 등의 함수에 대한 설명 중 의아한게 있어 찾아본거를 정리해본다. 특히 unwrap_or_else에서 기본값 계산이 큰 경우 unwrap_or_else가 효율이 좋다 라는 말이 있기에 찾아보게 되었다. 일단 각 함"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/130/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">unwrap, unwrap_or, unwrap_or_else ~~ 등의 함수에 대한 설명 중 의아한게 있어 찾아본거를 정리해본다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">특히 unwrap_or_else에서 기본값 계산이 큰 경우 unwrap_or_else가 효율이 좋다 라는 말이 있기에 찾아보게 되었다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">일단 각 함수별 동작의 차이는 다음과 같다.</p>
+<p></p><figure class="imageblock alignCenter" data-ke-mobilestyle="widthOrigin" data-origin-width="1310" data-origin-height="588"><span data-url="https://blog.kakaocdn.net/dna/pVEkR/dJMcagTSQfy/AAAAAAAAAAAAAAAAAAAAACUMerGFlPwKgD0t8qKbq0zbiC6AWEJhgn72BLLsLbQq/img.png" data-phocus="https://blog.kakaocdn.net/dna/pVEkR/dJMcagTSQfy/AAAAAAAAAAAAAAAAAAAAACUMerGFlPwKgD0t8qKbq0zbiC6AWEJhgn72BLLsLbQq/img.png"><img src="/assets/tistory/702eeb812cca4fbf5825.png" loading="lazy" width="1310" height="588" data-origin-width="1310" data-origin-height="588" decoding="async" alt="unwrap류 함수들의 참고 이미지"></span></figure>
+<p></p>
+<div style="color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 20px; font-weight: 600; margin: 24px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp="" data-animation-nesting="">1.<span>&nbsp;</span>unwrap()</div>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 12px 0px 16px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgUEAA" data-ved="2ahUKEwjSn5XC8-aVAxUmiysGHaXANcQQ-7AUeggIAggBCBQQAA" data-sfc-cb="" data-sfc-root="ep" data-ke-list-type="disc">
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgUEAE" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>동작</b>:<span>&nbsp;</span>Some(T)이면<span>&nbsp;</span>T를 꺼내고,<span>&nbsp;</span>None이면 프로그램을 즉시 패닉(강제 종료)시킵니다.</span></li>
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgUEAI" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>주의</b>: 프로토타입이나 값이 무조건 존재한다고 확신하는 경우가 아니라면, 실무 코드에서는 사용을 지양하는 것이 좋습니다.</span><span><span>&nbsp;</span></span></li>
+</ul>
+<div style="color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 20px; font-weight: 600; margin: 24px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp="" data-animation-nesting="">2.<span>&nbsp;</span>unwrap_or(default)</div>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 12px 0px 16px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgVEAA" data-ved="2ahUKEwjSn5XC8-aVAxUmiysGHaXANcQQ-7AUeggIAggBCBUQAA" data-sfc-cb="" data-sfc-root="ep" data-ke-list-type="disc">
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgVEAE" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>동작</b>: 값이 있으면 값을 꺼내고,<span>&nbsp;</span>None이면 인자로 넘겨준 기본값을 대신 반환합니다.</span></li>
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgVEAI" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>특징</b>:<span>&nbsp;</span>None이 아니더라도 인자로 전달된 기본값을 항상 평가(연산)하므로, 연산 비용이 비싼 함수를 인자로 넘기면 성능이 저하될 수 있습니다.</span><span><span>&nbsp;</span></span></li>
+</ul>
+<div style="color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 20px; font-weight: 600; margin: 24px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp="" data-animation-nesting="">3.<span>&nbsp;</span>unwrap_or_else(|| ...)</div>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 12px 0px 16px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgWEAA" data-ved="2ahUKEwjSn5XC8-aVAxUmiysGHaXANcQQ-7AUeggIAggBCBYQAA" data-sfc-cb="" data-sfc-root="ep" data-ke-list-type="disc">
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgWEAE" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>동작</b>: 값이 없으면 클로저(익명 함수)를 실행하여 반환된 값을 기본값으로 사용합니다.</span></li>
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgWEAI" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>특징</b>: 값이 있을 때는 클로저가 실행되지 않으므로, 기본값을 생성하는 비용이 클 때 성능상 매우 유리합니다.</span><span><span>&nbsp;</span></span></li>
+</ul>
+<div style="color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 20px; font-weight: 600; margin: 24px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp="" data-animation-nesting="">4.<span>&nbsp;</span>unwrap_or_default()</div>
+<ul style="list-style-type: disc; color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 12px 0px 16px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgXEAA" data-ved="2ahUKEwjSn5XC8-aVAxUmiysGHaXANcQQ-7AUeggIAggBCBcQAA" data-sfc-cb="" data-sfc-root="ep" data-ke-list-type="disc">
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgXEAE" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>동작</b>: 값이 없으면 해당 타입의 기본값(Default)을 반환합니다. 예를 들어<span>&nbsp;</span>Option&lt;String&gt;이면 빈 문자열<span>&nbsp;</span>"",<span>&nbsp;</span>Option&lt;i32&gt;이면<span>&nbsp;</span>0을 반환합니다.</span></li>
+<li data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px 0px 12px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-hveid="CAIIAQgXEAI" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><span data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-complete="true" data-sfc-cb="" data-sfc-root="ep" data-sfc-cp=""><b>특징</b>: 인자를 전달할 필요가 없어 코드가 간결해집니다.</span></li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;" data-copy-service-computed-style="font-family: sans-serif; font-size: 16px; font-weight: 400; margin: 0px; text-decoration: none; border-bottom: 0px rgb(10, 10, 10);" data-processed="true" data-subtree="aimfl">여기서 '기본값을 계산하는 데 드는 비용'이란<span>&nbsp;</span></span><b>"값이 없을 때를 대비해 준비하는 변수나 함수가 컴퓨터의 메모리나 CPU를 얼마나 많이 사용하는가"&nbsp;</b>라고 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">왜 unwrap_or은 함수를 호출하기만 해도 default 인자의 값을 계산하고, unwrap_or_else는 || 인자의 값을 계산하지 않는 이유는 지연평가로 인해 발생한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">프로그래밍 언어 개론 수업에서 알게 된 지식을 곁들여 보자면</p>
+<p data-ke-size="size16">프로그래밍 언어를 해석하고 이를 실행을 위한 핵심만 추출하여 Evaluation을 진행하는데 이 때 연산이 필요한 경우 이 연산을 실질적으로 필요할 때 진행(Lazy) 혹은 연산이 필요함을 알게되자마자 진행(Eager) 두가지로 나뉜다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이에 대하여 Rust 언어는</p>
+<p data-ke-size="size16">1. 함수의 인자</p>
+<p data-ke-size="size16">2. 클로져 함수가 인자 -&gt; Lazy Evaluation</p>
+<p data-ke-size="size16">3. 이외의 경우 -&gt; Eager Evaluation</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">으로 처리하는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">그래서 위의 기본값 계산이 많을 경우 Lazy Evaluation으로 동작하는 unwrap_or_else가 더 효율적이라고 얘기하는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">위 내용을 정리하며 unwrap_or 의 기본값 자체의 연산이 적은 경우 클로져 함수의 사용 자체가 오히려 더 비효율적일 수 있다고 생각했는데 실상 컴파일러의 최적화로 인해 큰 차이가 없다고 한다. unwrap_or_else 만 사용해도 괜찮은 듯 싶다.</p></div>
+

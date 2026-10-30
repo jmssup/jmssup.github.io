@@ -1,0 +1,128 @@
+---
+title: "B-트리 및 2-3트리"
+date: "2025-05-29T12:24:46+09:00"
+category: "development"
+originalCategory: "자료구조"
+source: "https://myinfosub.tistory.com/7"
+description: "B-트리 다수의 키를 가진 노드로 구성된 다방향 탐색이 가능한 균형 트리 대용량의 데이터를 위해 고안돼 주로 데이터베이스에 사용된다. 특징 노드에 수백, 수천 개의 Key를 저장해 트리의 높이를 낮춘다. 납작한 모양으로.. 어떠한 경우에도 트리의 균형이 유지되기에 항상 탐색에 "
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/7/"
+render_with_liquid: false
+---
+<div class="tistory-content"><h3 data-ke-size="size23">B-트리</h3>
+<p data-ke-size="size16">다수의 키를 가진 노드로 구성된 다방향 탐색이 가능한 균형 트리</p>
+<p data-ke-size="size16">대용량의 데이터를 위해 고안돼 주로 데이터베이스에 사용된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>특징</b></p>
+<p data-ke-size="size16">노드에 수백, 수천 개의 Key를 저장해 트리의 높이를 낮춘다. 납작한 모양으로..</p>
+<p data-ke-size="size16">어떠한 경우에도 트리의 균형이 유지되기에 항상 탐색에 있어 최악의 경우 O(logN) 을 가진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">차수가 M인 B-트리는 다방향 탐색 트리로서</p>
+<p data-ke-size="size16">1. 모든 잎이 같은 동일한 깊이를 가진다.</p>
+<p data-ke-size="size16">2. 각 노드(루트 제외)의 Key의 수는 M/2 이상 M 이하이다. (M이 홀수인경우 M/2 + 1 로 올림을 진행)</p>
+<p data-ke-size="size16">3. 루트의 자식 수는 2 이상이다.&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>탐색 연산</b></p>
+<p data-ke-size="size16">루트부터 탐색을 시작한다.</p>
+<p data-ke-size="size16">각 노드에서 이진 탐색을 수행하여 탐색한다.</p>
+<p data-ke-size="size16">적절한 서브트리를 선택해나아가는 과정이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>삽입 연산</b></p>
+<p data-ke-size="size16">탐색과 동일한 과정으로 새로운 키가 저장될 위치를 찾는다.</p>
+<p data-ke-size="size16">잎에 새 키를 저장할 공간이 있다면 노드의 키들이 정렬 상태를 유지하도록 새 키를 삽입한다.</p>
+<p data-ke-size="size16">잎이 M-1개의 키를 가지고 있으면 M-1개의 키와 새 키중에 중간값이 되는 키를 부모로 올리고 M-1개의 키를 1/2씩 나눠 별도의 노드에 저장한다. (분리 연산)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>삭제 연산</b></p>
+<p data-end="62" data-start="35" data-ke-size="size16">삭제는 항상 잎에서 이루어진다.</p>
+<p data-end="124" data-start="64" data-ke-size="size16">삭제할 키가 내부 노드에 있으면, 중위 선행자나 중위 후속자를 삭제할 키와 교환한 후에 이파리에서 삭제를 수행한다.</p>
+<p data-end="171" data-start="126" data-ke-size="size16">이동 연산과&nbsp;통합연산을 사용하여 B-트리의 조건을 만족시키며 삭제한다.</p>
+<p data-end="305" data-start="173" data-ke-size="size16">&nbsp;</p>
+<p data-end="305" data-start="173" data-ke-size="size16"><b>이동 연산</b></p>
+<p data-end="305" data-start="173" data-ke-size="size16">이파리에서 키가 삭제된 후에 키의 수가 M/2-1보다 작으면, 자식 수가 M/2보다 작게 되어 B-트리 조건을 위반. 이때 노드의 좌우의 형제 중에서 도움을 줄 수 있는 노드로부터 1개의 키를 부모를 통해 이동한다.</p>
+<p data-end="305" data-start="173" data-ke-size="size16">&nbsp;</p>
+<p data-end="305" data-start="173" data-ke-size="size16"><b>통합연산</b></p>
+<p data-end="305" data-start="173" data-ke-size="size16">키가 삭제된 후 underflow가 발생한 노드 x에 대해 이동 연산이 불가능한 경우, 노드 x와 그의 형제를 1개의 노드로 토앟ㅂ하고, 노드 x와 형제의 분기점 역할을 하던 부모의 키를 통합된 노드로 끌어내리는 연산이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">//삽입-분리, 삭제-이동-통합</p>
+<h3 data-ke-size="size23">2-3 트리</h3>
+<p data-ke-size="size16">차수가 3인 B-트리이다.</p>
+<p data-ke-size="size16">내부 노드의 차수가 2 or 3인 균형 탐색 트리이다.</p>
+<p data-ke-size="size16">2-노드는 1개의 Key를 3-노드는 2개의 Key를 가진다. (Key 값들의 대소비교를 통해 자식 노드를 결정)</p>
+<p data-ke-size="size16">루트로부터 잎까지 경로의 길이가 같다. (모든 잎이 같은 층에 있는 완전 균형 트리)</p>
+<p data-ke-size="size16">2-노드들로만 구성되면 포화 이진 트리와 동일한 형태를 가진다.</p>
+<p data-ke-size="size16">트리의 높이는 가장 높을 때가 log₂(n + 1) 낮을 때가 log₃(n) 이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">중위 순회와 유사한 방법으로 순회를 진행한다.</p>
+<p data-ke-size="size16">중위 순회를 수행하면 정렬된 Key 순서로 탐색가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>탐색 연산</b></p>
+<p data-ke-size="size16">이진 트리 탐색 과 동일하게 Key값의 비교를 통해 탐색을 진행한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>삽입 연산</b></p>
+<p data-ke-size="size16">탐색과 동일한 과정으로 삽입돼야할 잎을 찾는다.</p>
+<p data-ke-size="size16">잎이 2-노드이면 그 노드에 새 Key를 삽입하여 종료한다.</p>
+<p data-ke-size="size16">잎이 3-노드이면 이 노드에 있는 2개의 Key와 새 Key를 비교해 <b>중간값이 되는 Key를 부모로 올려 보내고 </b><b>남은 2개의 Key를 각각 별도의 노드에 저장한다.</b> (분리 연산)&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>분리 연산</b></p>
+<p data-ke-size="size16">부모로 올려보내진 Key는 부모가 2-노드이면 부모에 저장하고 삽입 연산을 종료한다.</p>
+<p data-ke-size="size16">부모가 3-노드이면 분리연산을 수행한다.</p>
+<p data-ke-size="size16">루트까지 올라가면서 수행 될 수 있다.</p>
+<p data-ke-size="size16">만약 루트에서 분리연산이 일어나면 2-3트리의 높이가 1 증가한다. (최악의 경우)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>삭제 연산</b></p>
+<p data-ke-size="size16">항상 잎에서 삭제가 이루어진다.</p>
+<p data-ke-size="size16">삭제할 Key가 있는 노드가 잎이 아닌 경우 이진 탐색 트리와 유사하게 중위 선행자 or 중위 후속자와 교환한 후 잎에서</p>
+<p data-ke-size="size16">삭제를 수행한다.&nbsp;</p>
+<p data-ke-size="size16">이동(Transfer) 연산과 통합(Fusion) 연산 사용</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>이동 연산</b></p>
+<p data-ke-size="size16">Key가 삭제돼 노드가 empty면 이 노드의 형제와 부모의 도움을 받아 1개의 Key를 empty 노드로 이동한다.</p>
+<p data-ke-size="size16">형제는 반드시 3-노드여야 한다.</p>
+<p data-ke-size="size16">3-노드가 empty 노드의 왼쪽 or 오른쪽 형제라면 2개의 Key중에 큰 Key or 작은 Key를 부모로 올리고 부모의 Key를 empty 노드로 보낸다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>통합 연산</b></p>
+<p data-ke-size="size16">노드가 empty인데 이동 연산이 불가능한 경우에 사용한다. (삭제되는 노드의 형제중 3-노드가 없는 경우)</p>
+<p data-ke-size="size16">empty노드와 그의 형제를 1개의 노드로 통합하고 empty노드와 그 형제의 분기점 역할인 부모의 Key를 통합된 노드로 끌어내려 저장한다.</p>
+<p data-ke-size="size16"><b>통합 연산과 분리연산은 상호 역(Reverse) 연산 관계를 가진다.</b></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>삭제 연산 알고리즘</b></p>
+<p data-ke-size="size16">1. 삭제할 Key k가 있는 노드 x를 탐색</p>
+<p data-ke-size="size16">2. 만약 x가 잎이면, k를 노드 x에서 삭제하고 empty인지 확인 empty가 아니면 종료 empty라면 3-노드가 형제로 있으면 이동연산 아니면 통합연산 수행</p>
+<p data-ke-size="size16">3. 만약 x가 잎이 아니면 k의 중위 선행자가 있는 노드 y와 중위 후속자가 있는 노드 z를 찾는다.</p>
+<p data-ke-size="size16">4. 만약 y 또는 z에서 이동연산이 가능하면 k와 이동연산이 가능한 Key를 서로 교환하고 이동연산을 수행하고 k를 삭제한다.</p>
+<p data-ke-size="size16">5. 만약 y와 z 둘다 이동 연산이 불가능 하면 y or z 중 하나를 선택하여 k와 선택한 노드의 Key를 교환하고 k를 삭제한다. 이후 통합연산을 수행한다. (통합 연산이 루트 방향으로 연속적으로 이루어질 수 있다)&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>2-3-4 트리</b></p>
+<p data-ke-size="size16">2-3 트리에서 확장된 차수가 4인 B-트리이다.</p>
+<p data-ke-size="size16">2-3 트리보다 높이가 낮다. 그만큼 빠른 탐색, 삽입, 삭제연산이 가능하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23">B-트리의 확장</h3>
+<h3 data-ke-size="size23">B+트리</h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">실세계에서 가장 널리 활용되는 B-트리이다.</p>
+<p data-ke-size="size16">키만을 가진 B-트리로 잎에 키와 관련된 정보를 저장한다.</p>
+<p data-ke-size="size16">키로 구성된 B-트리는 탐색, 삽입, 삭제 연산을 위해 관련된 잎을 빠르게 찾을 수 있도록 안내하는 역할만 수행한다.</p>
+<p data-ke-size="size16">B+트리는 전체 레코드를 순차적으로 접근할 수 있도록 잎들은 연결리스트로 구현한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><b>B-트리의 성능</b></p>
+<p data-ke-size="size16">삽입, 삭제 연산의 수행 시간은 B-트리의 높이에 비례한다. 차수가 M이고 키의 개수가 n인 B-트리의 최대 높이는 각 노드가 M/2개의 자식의 수를 가지고 있을 때 O(log_{M/2} n) 이다.</p>
+<p data-ke-size="size16">B-트리는 키들의 비교횟수보다 디스크와 메인메모리 사이의 블록 이동(Transfer) 수를 최소화하는게 중요하다.</p>
+<p data-ke-size="size16">B-트리의 최고성능을 위해서는 1개의 노드가 1개의 디스크페이지에 맞도록 차수 M을 정한다.</p>
+<p data-ke-size="size16">- 실제로 B-트리들은 M의 크기를 수백에서 수천으로 사용한다.</p>
+<p data-ke-size="size16"><br>-----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">B-트리에서 "키들의 비교 횟수보다 디스크와 메인 메모리 사이의 블록 이동(Transfer) 수를 최소화해야 한다"는 말은<span>&nbsp;</span><b>하드웨어의 물리적 특성 차이</b>에서 비롯된 핵심 성능 원리를 의미합니다.</p>
+<h2 id="io" style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size26">디스크 I/O와 메모리 접근 속도의 극명한 차이</h2>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">현대 컴퓨터 시스템에서 메모리와 디스크 간의 접근 속도 차이는 매우 극적이다<span>.</span><span>&nbsp;</span>메모리와 SSD, HDD는 약 십에서 수십배의 성능 차이가 발생하고 있으며 특히 HDD의 경우 메모리 대비 수천 배에서 수만 배까지 느릴 수 있다. 이러한 차이는 물리적 디스크 헤드의 이동과 회전 지연 때문에 발생한다.</p>
+<h2 id="b" style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size26">B-트리의 구조적 최적화 전략</h2>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">B-트리는 이러한 하드웨어 특성을 고려하여 설계된 자료구조이다.<span>&nbsp;</span><b>한 노드에 여러 개의 키를 저장</b>함으로써 디스크 접근 횟수를 최소화한다<span>.</span><span>&nbsp;</span>예를 들어 이진 트리에서는 하나의 값을 찾기 위해 여러 번의 노드 방문이 필요하지만 B-트리는 한 번의 디스크 접근으로 여러 개의 키를 동시에 메모리로 가져올 수 있다.</p>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">구체적으로 살펴보면 이진 트리는 11을 검색하기 위해 5번의 검색이 필요하지만 B-트리는 1번의 검색으로 찾을 수 있다<span>.</span><span>&nbsp;</span>이는<span>&nbsp;</span><b>각 노드에 여러 키를 가질 수 있고, 리프 노드까지의 경로가 균형 이진 트리보다 짧기 때문</b>이다.</p>
+<h2 id="" style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size26">페이지 단위 데이터 처리의 효율성</h2>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">데이터베이스에서는 보통<span>&nbsp;</span><b>페이지 단위로 하나의 노드가 저장</b>되는데 한 노드에 여러 데이터가 들어있어 페이지를 조회하는 횟수를 최소화할 수 있어 디스크 접근을 줄일 수 있다<span>.</span><span>&nbsp;</span>이는 운영체제가 데이터를 블록 단위로 처리하는 특성과도 일치한다.</p>
+<h2 id="" style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size26">키 크기와 트리 깊이의 관계</h2>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">인덱스 키 크기가 작을수록 한 페이지에 더 많은 키를 담을 수 있다<span>.</span><span>&nbsp;</span>예를 들어 키가 16바이트일 때는 한 페이지에 약 585개의 키를 담을 수 있고 트리 깊이가 3이라면 최대 585³개로 2억 개의 키 저장이 가능하다. 반면 키가 32바이트일 때는 페이지당 키 개수가 줄어들어 전체적으로 커버할 수 있는 키는 372³개로 5천만 개 수준으로 감소한다.</p>
+<h2 id="" style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size26">성능 최적화의 핵심 원리</h2>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">결국 B-트리의 성능 최적화는<span>&nbsp;</span><b>디스크 I/O 감소 → 검색 성능 향상 → 전체 DB 성능 최적화</b>로 이어진다<span>.</span><span>&nbsp;</span>키 비교 연산은 CPU에서 수행되는 매우 빠른 작업이지만 디스크에서 데이터를 읽어오는 I/O 작업은 상대적으로 매우 느린 작업이다. 따라서 몇 번의 추가적인 키 비교를 하더라도 디스크 접근 횟수를 줄이는 것이 전체 성능에 훨씬 더 큰 영향을 미친다.</p>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">&nbsp;</p>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">이처럼 디스크 I/O 에 접근하는 것이 느리기에 B-트리를 사용하는 것과 비슷한 맥락으로 알고리즘 코딩테스트에서 I/O 최적화가 있다.</p>
+<p style="background-color: oklch(0.99 0.004 106.471); color: oklch(0.304 0.04 213.681); text-align: start;" data-ke-size="size16">규모와 맥락면에서 차이가 있지만 I/O 최적화 또한 운영체제에 요청하는 시스템 호출을 최소화 하는게 핵심이다.</p></div>

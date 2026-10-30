@@ -21,7 +21,7 @@ for (const post of migration.posts) {
   assert(!signedCdnParameters.test(html), `Signed CDN credentials in post ${post.id}`);
   const $ = load(html);
   assert.equal($('.article-header h1').text(), post.title);
-  assert.equal($('.article-header time').attr('datetime'), new Date(post.date).toISOString());
+  assert.equal(new Date($('.article-header time').attr('datetime')).toISOString(), new Date(post.date).toISOString());
   assert.equal($('.tistory-content img').length, post.images, `Image count changed in ${post.id}`);
   let originalText = $('.tistory-content').text();
   assert.equal(createHash('sha256').update(originalText).digest('hex'), post.importedTextSha256, `Imported text changed in ${post.id}`);
@@ -72,3 +72,4 @@ assert.equal(load(await readFile('_site/sitemap.xml', 'utf8'), { xml: true })('u
 console.log(`PASS: ${migration.imported} articles retain their titles, dates, body text and image counts, allowing recorded corrections.`);
 console.log(`PASS: 6 categories, ${htmlFiles.length} HTML pages, all internal links, local assets, search, Atom feed and sitemap.`);
 if (migration.errors.length) console.log(`NOTE: ${migration.errors.length} remote images returned errors during migration; see migration/README.md.`);
+await import('./check-terminal.mjs');

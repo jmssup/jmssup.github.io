@@ -1,0 +1,44 @@
+---
+title: "#1 topeet i.MX 8m mini 보드, OP-TEE에 secp256k1 포팅하기"
+date: "2026-08-24T09:21:24+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/146"
+description: "교내 산학프로잭트로 전자지갑을 TEE 환경 내부에서 실행하는 기술을 개발하는 중이다. 현재 작업환경으로 topeet i.Mx 8m mini 보드에 ubuntu20desk 버전으로 linux가 올라가있는 상태이다. OP-TEE도 함께 빌드 되어있는 상태이긴 하지만 버전이나 관련 "
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/146/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">교내 산학프로잭트로 전자지갑을 TEE 환경 내부에서 실행하는 기술을 개발하는 중이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">현재 작업환경으로 topeet i.Mx 8m mini 보드에 ubuntu20desk 버전으로 linux가 올라가있는 상태이다.</p>
+<p data-ke-size="size16">OP-TEE도 함께 빌드 되어있는 상태이긴 하지만 버전이나 관련 정보들을 정확히 파악하지 않은 상태이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">최종 Task는 secp256k1 연산에 필요한 정보들 및 연산 과정을 TA 내부의 작업으로 포팅하는 것이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">아이디어 자체는 꽤나 흔한 아이디어라 일단 산학프로젝트의 제출물을 목표로 최대한 진행하고 거기에 덧붙여서 추가 진행하는 것이 목표다. 지금 생각으로는 secp256k1 오픈소스가 C언어로 작성되어 있기에 &nbsp;Rust로의 마이그레이션을 진행하면 메모리 안전성을 더 높이는게 가능하지 않을까 싶긴 하다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">내부로 secp256k1을 넣게 되면 i.MX 8M Mini CAAM<span>의</span> HW TRNG(<span>난수</span> <span>생성</span>) <span>및</span> HUK <span>기반</span> <span>시드</span> Sealing(<span>암호화</span> <span>저장</span>) 기능을 연동하여 연산을 진행하면 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이를 위해서 지금 알아야 하는 정보는 위에서 모른다고 얘기했던 OP-TEE 버전 및 CAAM 드라이버의 존재유무이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">보드에 linux를 직접올리고 op-tee도 함께 빌드하고 정보를 모르는 이유는 보드에 대한 환경 및 관련 빌드 스크립트 등의 정보를 연구실에서 선행 연구자의 자료를 그대로 이어받다보니 인계가 잘 안된 부분이 있다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">버전 및 관련 드라이버 존재 유무는 금방 알아볼 수 있는 정보이기에 큰 문제는 없을 것으로 예상된다.</p>
+<p data-ke-size="size16">그래서 현재 Task는 CAAM RNG 드라이버와 op-tee간 연동이 되어 있는지 확인이 된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">보드와 내 mac북을 usb로 연결하고 screen 명령어로 터미널 접속을 시도함.</p>
+<p data-ke-size="size16">screen 명령어 사용하니 "<span style="color: #000000; text-align: start;">sorry could not find pty" 라는 메세지와 함께 연결이 되지 않음.</span></p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">내 터미널은 tty로 정상적이기에 screen 세션이 점유된 상태라 연결이 안되는 것을 알게 됨.</span></span><span style="color: #000000;"><span style="caret-color: #000000;">기존 screen 세션을 screen <span style="color: #000000; text-align: start;">-S </span>[session number] -X quit로 해결함.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000;"><span style="caret-color: #000000;">CAAM 드라이버에 대한 확인을 codex를 이용하여 진행함. </span></span><span style="color: #000000;"><span style="caret-color: #000000;">codex를 VMware 내부에 설치하여 진행함. 설치하고 인증을 진행할 때 --device-auth 옵션을 이용하면 cli만 열리는 환경에서 codex에 대하여 login 및 인증을 외부 device를 통해 진행 가능해진다.</span></span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16"><span style="color: #000000; text-align: start;">새롭게 RPMB라는 것을 알게 되었다. RPMB란 보안 전용 하드웨어 파티션이다. 즉, 이번 프로젝트에서는 TEE API를 호출하기 위한 파티션, 계층으로 이해하면 된다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 RPMB가 비활성화 되어 있다. 키 저장을 RPMB가 아닌 REE 파일시스템 기반 Secure Storage를 사용하는 상태이<span style="color: #000000; text-align: start;">다.</span></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">CAAM 드라이버 존재가 확인 되었다.</p>
+<p data-ke-size="size16">다만 CAAM의 사용이 secp256k1에 대한 연산 속도 향상이 진행되는지는 확정이 아니기에 해당 드라이버를 키고 끈 상태에 대하여 실험해 봐야 한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이제 secp256k1를 TA 내부로 포팅하는 작업을 진행하면 된다.</p></div>

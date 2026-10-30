@@ -1,0 +1,33 @@
+---
+title: "컴퓨터 시스템"
+date: "2025-09-08T15:39:09+09:00"
+category: "development"
+originalCategory: "Security/System"
+source: "https://myinfosub.tistory.com/62"
+description: "컴퓨터 시스템의 본질 컴퓨터 시스템이란 컴퓨터의 하드웨어와 소프트웨어를 통칭하는 말이다. 컴퓨터의 모든 정보는 비트, 바이트로 저장된다. 하지만 현대 컴퓨터의 프로그램들은 프로그래머가 직접적으로 비트, 바이트를 사용하거나 저수준 언어인 어셈블리를 사용하여 프로그램을 작성하지 않"
+layout: "post"
+tags: ["post"]
+permalink: "/posts/tistory/62/"
+render_with_liquid: false
+---
+<div class="tistory-content"><p data-ke-size="size16">컴퓨터 시스템의 본질</p>
+<p data-ke-size="size16">컴퓨터 시스템이란 컴퓨터의 하드웨어와 소프트웨어를 통칭하는 말이다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">컴퓨터의 모든 정보는 비트, 바이트로 저장된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">하지만 현대 컴퓨터의 프로그램들은 프로그래머가 직접적으로 비트, 바이트를 사용하거나 저수준 언어인 어셈블리를 사용하여 프로그램을 작성하지 않고 고수준 언어인 C, Python, Java 등의 언어로 프로그램을 작성한다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 고수준 언어로 작성된 text 파일들은 컴파일 과정을 통해 비트와 바이트로 변환되어 컴퓨터의 메모리에 로드되고 CPU에 의해 실행된다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">기본적인 컴파일 과정 ( hello.c 파일에 대한 컴파일 )</p>
+<p data-ke-size="size16">전처리기를 통해 파일에 대한 전처리 과정을 진행한다. ( hello.c &gt;&gt; hello.i )</p>
+<p data-ke-size="size16">컴파일러를 거치면 어셈블리 언어로 된 코드를 만든다. ( hello.i &gt;&gt; hello.s )</p>
+<p data-ke-size="size16">어셈블러를 거치면 바이너리파일을 만든다. ( hello.s &gt;&gt; hello.o )</p>
+<p data-ke-size="size16">링커를 거치면서 실행가능한 파일이 만들어진다. ( hello.o &gt;&gt; hello )</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">C/C++ 의 컴파일 과정은 기본적인 컴파일 과정을 따른다. OS, CPU에 맞춰서 어셈블리, 바이너리파일에 대하여 해석하는 방법이 다르기에 호환성이 떨어진다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">Python, Java 등의 컴파일 과정 컴파일러에 의해 코드가 번역될 때 byte 파일이라는 가상머신(Virtual machine)이 해석할 수 있는 코드로 변환하여 OS, CPU에 맞춰서 가상머신이 바이트 코드를 해석해 호환성을 높인다.</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">컴파일 과정에 대한 이해는 프로그램의 디버깅에 많은 도움이 된다.</p>
+<p data-ke-size="size16">&nbsp;</p></div>

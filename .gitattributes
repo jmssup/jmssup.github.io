@@ -1,3 +1,3 @@
 # Preserve imported article/code whitespace and original media bytes.
-src/posts/tistory/*.html -text -whitespace
+src/_posts/*.html -text -whitespace
 src/assets/tistory/* -text -whitespace
