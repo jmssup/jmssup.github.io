@@ -23,7 +23,13 @@ for (const post of migration.posts) {
   assert.equal($('.article-header h1').text(), post.title);
   assert.equal($('.article-header time').attr('datetime'), new Date(post.date).toISOString());
   assert.equal($('.tistory-content img').length, post.images, `Image count changed in ${post.id}`);
-  const textHash = createHash('sha256').update($('.tistory-content').text()).digest('hex');
+  let originalText = $('.tistory-content').text();
+  assert.equal(createHash('sha256').update(originalText).digest('hex'), post.importedTextSha256, `Imported text changed in ${post.id}`);
+  for (const correction of [...(post.textCorrections || [])].reverse()) {
+    assert(originalText.includes(correction.to), `Missing recorded correction in ${post.id}`);
+    originalText = originalText.replaceAll(correction.to, correction.from);
+  }
+  const textHash = createHash('sha256').update(originalText).digest('hex');
   assert.equal(textHash, post.sourceTextSha256, `Body text changed in ${post.id}`);
   assert.equal($('.tistory-content script,.tistory-content iframe,.tistory-content form').length, 0);
   const result = search.find(item => item.url === post.local);
@@ -63,6 +69,6 @@ for (const file of htmlFiles) {
 assert.deepEqual(missing, [], 'Broken internal links or missing local assets');
 assert.equal(load(await readFile('_site/feed.xml', 'utf8'), { xml: true })('feed entry').length, Math.min(30, search.length));
 assert.equal(load(await readFile('_site/sitemap.xml', 'utf8'), { xml: true })('url').length, search.length + 8);
-console.log(`PASS: ${migration.imported} articles retain their titles, dates, body text and image counts.`);
+console.log(`PASS: ${migration.imported} articles retain their titles, dates, body text and image counts, allowing recorded corrections.`);
 console.log(`PASS: 6 categories, ${htmlFiles.length} HTML pages, all internal links, local assets, search, Atom feed and sitemap.`);
 if (migration.errors.length) console.log(`NOTE: ${migration.errors.length} remote images returned errors during migration; see migration/README.md.`);
