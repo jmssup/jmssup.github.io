@@ -1,5 +1,0 @@
-<div class="post-list">
-{% for post in include.posts %}{% assign item = site.data.categories | where: "id", post.category | first %}
-<article class="post-row" data-post-row><div class="post-row-content"><div class="post-meta-line"><a class="category-label {{ item.color }}" href="/categories/{{ item.id }}/">{{ item.name }}</a>{% if post.originalCategory %}<span class="meta-separator">/</span><span class="original-category">{{ post.originalCategory | escape }}</span>{% endif %}</div><h3><a href="{{ post.url }}">{{ post.title | escape }}</a></h3><p class="post-excerpt">{{ post.description | escape }}</p><div class="post-details"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time><span>·</span><span>{{ post.content | reading_time }}분 읽기</span>{% if post.source %}<span class="imported-label">Tistory archive</span>{% endif %}</div></div><a class="post-arrow" href="{{ post.url }}" tabindex="-1" aria-hidden="true">{% include icon.html name='arrow' %}</a></article>
-{% endfor %}
-</div>

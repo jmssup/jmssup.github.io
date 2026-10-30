@@ -1,14 +1,3 @@
 ---
 layout: base
-terminal: true
 ---
-<section class="hero hero--terminal">
-  <div class="eyebrow"><span class="status-dot"></span> NOTES FROM MY WORKBENCH</div>
-  <h1>호기심에서 시작해,<br><span>기록으로 남깁니다.</span><span class="hero-asterisk" aria-hidden="true">✳</span></h1>
-  <p class="hero-description">개발과 보안, 그리고 연구.<br>직접 해보고 이해한 것들을 차곡차곡 쌓아가는 공간입니다.</p>
-  <div class="hero-bottom"><a class="intro-link" href="/about/">어떤 사람인가요 {% include icon.html name='arrow' %}</a><span class="hero-index">{{ site.posts | size }} RECORDS & COUNTING</span></div>
-  <svg class="hero-art" viewBox="0 0 190 170" fill="none" aria-hidden="true"><rect x="19" y="36" width="131" height="103" rx="8" transform="rotate(-12 19 36)"/><rect x="42" y="17" width="131" height="103" rx="8" transform="rotate(10 42 17)"/><path d="m78 64-13 12 13 13m39-19 13 12-13 13m-15-37-9 43"/><circle cx="157" cy="137" r="19"/><path d="M157 128v18m-9-9h18"/></svg>
-</section>
-{% include terminal.html %}
-<section class="topics-section" aria-labelledby="topics-title"><div class="section-heading"><h2 id="topics-title">탐구하는 주제들<span class="section-number">06</span></h2><span class="section-aside">관심이 기록이 되는 곳</span></div><div class="topic-grid">{% for item in site.data.categories %}<a class="topic-card {{ item.color }}" href="/categories/{{ item.id }}/"><span class="topic-icon">{% include icon.html name=item.icon %}</span><div><h3>{{ item.name }}</h3><span>{% assign category_posts = site.posts | where: "category", item.id %}{{ category_posts | size }}개의 기록</span></div><span class="topic-arrow">↗</span></a>{% endfor %}</div></section>
-<section class="latest-section" id="latest" aria-labelledby="latest-title"><div class="section-heading latest-heading"><h2 id="latest-title">최근 기록<span class="section-number">{{ site.posts | size }}</span></h2><div class="list-controls"><label class="sr-only" for="post-filter">카테고리 필터</label><select id="post-filter"><option value="all">전체 카테고리</option>{% for item in site.data.categories %}<option value="{{ item.id }}">{{ item.name }}</option>{% endfor %}</select><span class="sort-label">최신순 ↓</span></div></div><div data-filter-list>{% assign posts = site.posts %}{% include post-list.html posts=posts %}</div><p class="empty-filter" hidden>이 카테고리에는 아직 글이 없습니다.</p><button class="load-more" data-load-more>기록 더 보기 <span>↓</span></button><noscript><p>모든 글을 아래 목록에서 확인할 수 있습니다.</p></noscript></section>

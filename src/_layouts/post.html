@@ -2,4 +2,9 @@
 layout: base
 ---
 {% assign item = site.data.categories | where: "id", page.category | first %}
-<article class="article"><header class="article-header"><a class="category-label {{ item.color }}" href="/categories/{{ item.id }}/">{{ item.name }}</a><h1>{{ page.title | escape }}</h1><div class="post-details"><span>정명섭</span><span>·</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time><span>·</span><span>{{ content | reading_time }}분 읽기</span></div>{% if page.source %}<div class="source-note">티스토리에서 옮긴 기록입니다.{% if page.originalCategory %} <span>원래 분류: {{ page.originalCategory | escape }}</span>{% endif %}<a href="{{ page.source | escape }}" target="_blank" rel="noopener">원문 보기 {% include icon.html name='external' %}</a></div>{% endif %}</header><div class="prose">{{ content }}</div><div class="article-end"><span class="brand-dot">✳</span><p>배운 것은 기록하고, 기록한 것은 다시 연결합니다.</p><a class="intro-link" href="/categories/{{ item.id }}/">{{ item.name }}의 다른 기록 {% include icon.html name='arrow' %}</a></div></article>
+<template data-document>
+  <article>
+    <header class="article-header"><h1>{{ page.title | escape }}</h1><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time><span>{{ item.name }}</span>{% if page.source %}<a href="{{ page.source | escape }}">원문</a>{% endif %}</header>
+    <div class="prose">{{ content }}</div>
+  </article>
+</template>

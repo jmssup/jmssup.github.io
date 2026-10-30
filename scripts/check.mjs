@@ -19,7 +19,8 @@ for (const post of migration.posts) {
   assert(categories.some(c => c.id === post.category));
   const html = await readFile(path.join(root, post.local, 'index.html'), 'utf8');
   assert(!signedCdnParameters.test(html), `Signed CDN credentials in post ${post.id}`);
-  const $ = load(html);
+  const page = load(html);
+  const $ = load(page('template[data-document]').html() || '');
   assert.equal($('.article-header h1').text(), post.title);
   assert.equal(new Date($('.article-header time').attr('datetime')).toISOString(), new Date(post.date).toISOString());
   assert.equal($('.tistory-content img').length, post.images, `Image count changed in ${post.id}`);
@@ -37,10 +38,9 @@ for (const post of migration.posts) {
 }
 for (const category of categories) {
   const $ = load(await readFile(`_site/categories/${category.id}/index.html`, 'utf8'));
-  assert.equal($('.page-header h1').text(), category.name);
   const count = search.filter(p => p.category === category.name).length;
-  assert.equal($('.post-row').length, count);
-  if (!count) assert.equal($('.empty-state').length, 1);
+  assert.equal($('template[data-category]').attr('data-category'), category.id);
+  assert.equal(Number($('template[data-category]').attr('data-count')), count);
 }
 const htmlFiles = [];
 async function walk(directory) {
@@ -54,8 +54,14 @@ await walk(root);
 const missing = [];
 for (const file of htmlFiles) {
   const $ = load(await readFile(file, 'utf8'));
-  for (const element of $('[href],[src]').toArray()) {
-    const reference = $(element).attr('href') || $(element).attr('src');
+  assert.equal($('[data-terminal]').length, 1, `Missing CLI shell: ${file}`);
+  assert.equal($('.header,.sidebar,.hero,.topic-card,.post-row,.search-dialog,.footer').length, 0, `Old blog interface: ${file}`);
+  assert.equal($('link[rel="stylesheet"]').attr('href'), '/assets/terminal.css');
+  const config = JSON.parse($('#shell-data').text());
+  assert.deepEqual(config.categories, categories);
+  const scopes = [$, ...$('template[data-document]').toArray().map(element => load($(element).html() || ''))];
+  for (const scope of scopes) for (const element of scope('[href],[src]').toArray()) {
+    const reference = scope(element).attr('href') || scope(element).attr('src');
     if (!reference?.startsWith('/') || reference.startsWith('//')) continue;
     const relative = decodeURIComponent(reference.split(/[?#]/)[0]);
     const target = path.resolve(root, '.' + relative);
@@ -70,6 +76,6 @@ assert.deepEqual(missing, [], 'Broken internal links or missing local assets');
 assert.equal(load(await readFile('_site/feed.xml', 'utf8'), { xml: true })('feed entry').length, Math.min(30, search.length));
 assert.equal(load(await readFile('_site/sitemap.xml', 'utf8'), { xml: true })('url').length, search.length + 8);
 console.log(`PASS: ${migration.imported} articles retain their titles, dates, body text and image counts, allowing recorded corrections.`);
-console.log(`PASS: 6 categories, ${htmlFiles.length} HTML pages, all internal links, local assets, search, Atom feed and sitemap.`);
+console.log(`PASS: 6 categories, ${htmlFiles.length} CLI-only HTML pages, all internal links, local assets, search, Atom feed and sitemap.`);
 if (migration.errors.length) console.log(`NOTE: ${migration.errors.length} remote images returned errors during migration; see migration/README.md.`);
 await import('./check-terminal.mjs');
