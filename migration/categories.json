@@ -1,0 +1,569 @@
+{
+  "reviewedAt": "2026-10-31",
+  "policy": {
+    "development": "직접 구현한 프로젝트·알고리즘 코드와 구체적인 개발 진행 기록",
+    "ctf": "CTF·워게임의 개별 문제 풀이·풀이 시도와 Fuzzing101 실습",
+    "bug-bounty": "버그 바운티 프로그램 참여·실제 취약점 발견 및 제보 기록",
+    "writing": "개념·원리 설명, 도구 사용법, 환경 설정, 일반 학습 계획·회고",
+    "research": "논문 탐색·분석, 명시적인 논문 연구 주제와 학술활동 기록",
+    "achievements": "공모전 참가·수상, 자격증 취득·준비 기록"
+  },
+  "posts": {
+    "1": {
+      "category": "writing",
+      "reason": "정수 모듈러 연산의 기본 성질과 계산법 설명"
+    },
+    "2": {
+      "category": "writing",
+      "reason": "형식 언어·계산 이론의 개념 설명"
+    },
+    "3": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "4": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "5": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "6": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "7": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "8": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "9": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "10": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "11": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "12": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "13": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "14": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "15": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "16": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "18": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "19": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "20": {
+      "category": "writing",
+      "reason": "형식 언어·계산 이론의 개념 설명"
+    },
+    "21": {
+      "category": "writing",
+      "reason": "도구 사용법·환경 설정·문제 해결 경험"
+    },
+    "22": {
+      "category": "writing",
+      "reason": "언어·웹 기술의 특징과 사용법 설명"
+    },
+    "23": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "24": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "26": {
+      "category": "writing",
+      "reason": "언어·웹 기술의 특징과 사용법 설명"
+    },
+    "27": {
+      "category": "writing",
+      "reason": "언어·웹 기술의 특징과 사용법 설명"
+    },
+    "28": {
+      "category": "writing",
+      "reason": "디지털 포렌식 분야의 일반 개요"
+    },
+    "29": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "30": {
+      "category": "writing",
+      "reason": "LangChain·RAG 개념 설명이며 챗봇 구현 상세는 생략된 수업 정리"
+    },
+    "31": {
+      "category": "writing",
+      "reason": "암호학의 기본 개념과 분류 설명"
+    },
+    "32": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "33": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "34": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "35": {
+      "category": "writing",
+      "reason": "pwntools API와 통신 함수의 사용법"
+    },
+    "36": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "37": {
+      "category": "writing",
+      "reason": "GDB·pwndbg 디버거의 개념과 사용법"
+    },
+    "38": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "39": {
+      "category": "writing",
+      "reason": "셸코드·ORW·execve의 원리와 작성법 설명"
+    },
+    "40": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "41": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "42": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "43": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "44": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "45": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "46": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "47": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "48": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "49": {
+      "category": "writing",
+      "reason": "반환 주소 덮어쓰기의 일반 원리와 예제 설명"
+    },
+    "50": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "51": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "52": {
+      "category": "development",
+      "reason": "DP 문제의 시간 복잡도를 개선하고 실행 가능한 최종 코드를 구현"
+    },
+    "53": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "54": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "55": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "56": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "57": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "58": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "59": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "60": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "61": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "62": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "63": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "64": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "65": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "66": {
+      "category": "writing",
+      "reason": "Format String Bug의 일반 원리 설명"
+    },
+    "67": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "68": {
+      "category": "writing",
+      "reason": "알고리즘·자료구조의 개념과 동작 원리 설명"
+    },
+    "69": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "70": {
+      "category": "writing",
+      "reason": "언어·웹 기술의 특징과 사용법 설명"
+    },
+    "71": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "72": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "73": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "75": {
+      "category": "writing",
+      "reason": "형식 언어·계산 이론의 개념 설명"
+    },
+    "76": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "77": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "78": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "79": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "80": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "81": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "82": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "83": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "84": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "85": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "86": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "87": {
+      "category": "writing",
+      "reason": "Meltdown 취약점의 구조와 방어 기법 설명"
+    },
+    "88": {
+      "category": "ctf",
+      "reason": "Fuzzing101 개별 취약점 실습 문제 풀이"
+    },
+    "89": {
+      "category": "writing",
+      "reason": "도구 사용법·환경 설정·문제 해결 경험"
+    },
+    "90": {
+      "category": "writing",
+      "reason": "Mac에서 x86-64 바이너리를 분석하는 환경·도구 사용법"
+    },
+    "91": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "92": {
+      "category": "ctf",
+      "reason": "Fuzzing101 개별 취약점 실습 문제 풀이"
+    },
+    "93": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "94": {
+      "category": "ctf",
+      "reason": "Dreamhack rev-basic-4 풀이 및 write-up 작성 기록"
+    },
+    "95": {
+      "category": "ctf",
+      "reason": "Dreamhack FSB 문제 풀이와 write-up 작성 기록"
+    },
+    "96": {
+      "category": "ctf",
+      "reason": "Dreamhack Meltdown 문제를 풀기 위한 조사·풀이 시도 기록"
+    },
+    "97": {
+      "category": "ctf",
+      "reason": "Fuzzing101 Exercise 1 실습 진행 기록"
+    },
+    "98": {
+      "category": "ctf",
+      "reason": "Dreamhack Tcache Poisoning 문제 풀이 기록"
+    },
+    "99": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "100": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "101": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "102": {
+      "category": "ctf",
+      "reason": "실제 Dreamhack 문제에 Stack Pivoting을 적용한 풀이 과정"
+    },
+    "103": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "104": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "105": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "107": {
+      "category": "writing",
+      "reason": "도구 사용법·환경 설정·문제 해결 경험"
+    },
+    "110": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "111": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "112": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "113": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "114": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "115": {
+      "category": "development",
+      "reason": "CTFd 기반 동아리 CTF 서비스의 실제 개발 일지"
+    },
+    "116": {
+      "category": "ctf",
+      "reason": "Dreamhack 개별 워게임 문제 풀이"
+    },
+    "117": {
+      "category": "writing",
+      "reason": "SROP 공격 기법의 일반 원리 설명"
+    },
+    "118": {
+      "category": "writing",
+      "reason": "학습 계획·활동 결과·회고 기록"
+    },
+    "119": {
+      "category": "ctf",
+      "reason": "Dreamhack Cat Jump·Cherry 문제 write-up 작성이 중심인 기록"
+    },
+    "120": {
+      "category": "research",
+      "reason": "TEE 기반 블록체인 오프라인 결제 프로토콜 논문 탐색과 연구 과제 기록"
+    },
+    "121": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "122": {
+      "category": "ctf",
+      "reason": "Dreamhack armop 문제의 ARM 스택·ROP/JOP 풀이 시도 기록"
+    },
+    "123": {
+      "category": "writing",
+      "reason": "프로젝트 VM 실행 중 발생한 저장 공간 문제 해결 경험"
+    },
+    "124": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "125": {
+      "category": "development",
+      "reason": "보드 프로젝트의 Ubuntu 빌드 스크립트 수정·구현 진행 기록"
+    },
+    "126": {
+      "category": "writing",
+      "reason": "시스템·보안·블록체인의 개념과 동작 원리 설명"
+    },
+    "127": {
+      "category": "development",
+      "reason": "i.MX 보드용 Yocto·OP-TEE·Ubuntu 빌드 스크립트 수정 작업"
+    },
+    "128": {
+      "category": "development",
+      "reason": "LiveStateViewer 프로그램의 기능·구조와 개발 진행 기록"
+    },
+    "129": {
+      "category": "development",
+      "reason": "LiveStateViewer와 산학 프로젝트의 개발 진행 일지"
+    },
+    "130": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "131": {
+      "category": "development",
+      "reason": "LiveStateViewer 옵션·SSH 성능 조회 기능의 구현 진행 일지"
+    },
+    "132": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "133": {
+      "category": "development",
+      "reason": "LiveStateViewer의 시스템 정보 출력 기능 구현"
+    },
+    "134": {
+      "category": "writing",
+      "reason": "Rust 언어의 문법·타입·메모리 원리 설명"
+    },
+    "135": {
+      "category": "development",
+      "reason": "LiveStateViewer의 인자 파싱·설정 저장 기능 구현"
+    },
+    "136": {
+      "category": "development",
+      "reason": "동아리 CTF 서비스의 서버 구성·개발·배포 일지"
+    },
+    "139": {
+      "category": "research",
+      "reason": "논문 작성을 목표로 한 한국어 T2I 안전 필터 연구 주제·연구 계획 소개"
+    },
+    "140": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "141": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "142": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "143": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "144": {
+      "category": "writing",
+      "reason": "AI 이론·모델·수업 개념 정리"
+    },
+    "145": {
+      "category": "writing",
+      "reason": "도구 사용법·환경 설정·문제 해결 경험"
+    },
+    "146": {
+      "category": "development",
+      "reason": "OP-TEE 보안 전자지갑을 위한 secp256k1 포팅 개발 일지"
+    },
+    "147": {
+      "category": "development",
+      "reason": "OP-TEE TA에 secp256k1 연산을 결합하는 포팅 개발 일지"
+    }
+  }
+}
