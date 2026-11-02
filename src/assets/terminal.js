@@ -1,4 +1,4 @@
-const commands = ['help', 'ls', 'cd', 'pwd', 'cat', 'grep', 'open', 'about', 'links', 'whoami', 'history', 'clear'];
+const commands = ['help', 'home', 'ls', 'cd', 'pwd', 'cat', 'grep', 'open', 'about', 'links', 'whoami', 'history', 'clear'];
 
 export function parseCommand(line) {
   const words = [];
@@ -98,9 +98,14 @@ export function runCommand(line, state) {
     case undefined: break;
     case 'help':
       say('블로그의 6개 카테고리는 디렉터리, 글은 .md 파일입니다.', 'heading');
-      say('ls [경로]           카테고리 또는 글 목록\ncd [경로]           디렉터리 이동 (.., ~, - 지원)\npwd                 현재 경로\ncat <파일>          본문을 텍스트로 출력\nopen <파일>         이미지·코드 서식을 포함해 터미널에서 읽기\ngrep <검색어> [경로] 글 제목·본문 검색 (따옴표 사용 가능)\nabout               블로그 주인 소개\nlinks               GitHub · Tistory · RSS\nwhoami              현재 사용자\nhistory             이번 방문의 명령 기록\nclear               터미널 화면 비우기');
+      say('home                처음 화면으로 돌아가기\nls [경로]           카테고리 또는 글 목록\ncd [경로]           디렉터리 이동 (.., ~, - 지원)\npwd                 현재 경로\ncat <파일>          본문을 텍스트로 출력\nopen <파일>         이미지·코드 서식을 포함해 터미널에서 읽기\ngrep <검색어> [경로] 글 제목·본문 검색 (따옴표 사용 가능)\nabout               블로그 주인 소개\nlinks               GitHub · Tistory · RSS\nwhoami              현재 사용자\nhistory             이번 방문의 명령 기록\nclear               터미널 화면 비우기');
       lines.push({ text: '시작하기 → ls development', command: 'ls development' });
       break;
+    case 'home':
+      if (args.length) throw new Error('사용법: home');
+      state.previous = state.cwd;
+      state.cwd = '/';
+      return { ...runCommand('ls', state), home: true, location: '/' };
     case 'pwd': say(state.cwd); break;
     case 'ls': {
       const target = resolvePath(args.find(arg => !['-l', '-a', '-la', '-al'].includes(arg)) || '.', state.cwd);
@@ -269,9 +274,14 @@ async function initTerminal(terminal) {
     if (state.history.length > 100) state.history.shift();
     position = state.history.length;
     draft = input.value = '';
+    let result;
     try {
-      const result = runCommand(line, state);
-      if (result.clear) { output.replaceChildren(); terminal.querySelector('.shell-welcome').hidden = true; }
+      result = runCommand(line, state);
+      if (result.home) {
+        output.replaceChildren(entry);
+        terminal.querySelector('.shell-welcome').hidden = false;
+        renderLines(entry, result.lines);
+      } else if (result.clear) { output.replaceChildren(); terminal.querySelector('.shell-welcome').hidden = true; }
       else renderLines(entry, result.lines);
       if (result.read) {
         const body = document.createElement('div');
@@ -299,7 +309,8 @@ async function initTerminal(terminal) {
       if (version !== routeVersion) await restoreRoute();
       else {
         if (focus) input.focus({ preventScroll: true });
-        if (entry.querySelector('.shell-article')) screen.scrollTop = entry.offsetTop - 12;
+        if (result?.home) screen.scrollTop = 0;
+        else if (entry.querySelector('.shell-article')) screen.scrollTop = entry.offsetTop - 12;
         else screen.scrollTop = screen.scrollHeight;
       }
     }

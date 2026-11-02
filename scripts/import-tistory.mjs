@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { stripCdnCredentials } from './public-url.mjs';
+import { categoryFor } from './post-category.mjs';
 
 const origin = 'https://myinfosub.tistory.com';
 const cache = '.cache/tistory';
@@ -36,16 +37,6 @@ async function download(url, destination) {
   throw new Error(`${url}: ${lastError.message}`);
 }
 
-function categoryFor(original, title) {
-  if (/bounty|버그.?바운티/i.test(original)) return 'bug-bounty';
-  if (/Development|Rust|인공지능|알고리즘|자료구조|컴파일러|모각코/i.test(original)) return 'development';
-  if (/CTF|wargame|pwnable|Reversing|Crypto|Forensic|dreamhack|pwn\.college|Fuzzing101/i.test(original + ' ' + title)) return 'ctf';
-  if (/논문|컨퍼런스|ICCE|WISA|학회/i.test(original)) return 'research';
-  if (/공모전|자격증|수상/i.test(original)) return 'achievements';
-  if (/Development|Rust|인공지능|알고리즘|자료구조|컴파일러|모각코|Security\/(System|Web|Blockchain|Fuzzing)/i.test(original)) return 'development';
-  return 'writing';
-}
-
 async function localAsset(url) {
   if (assetDownloads.has(url)) return assetDownloads.get(url);
   const task = (async () => {
@@ -77,7 +68,15 @@ async function importPost(url) {
   const id = new URL(url).pathname.slice(1);
   const old = previous.posts.find(post => post.id === id);
   if (!refresh && old && await exists(postFile(id, old.date))) {
-    report.posts.push(old); links.set(url, `/posts/tistory/${id}/`); return;
+    const category = categoryFor(old.originalCategory, old.title, id);
+    if (category !== old.category) {
+      const target = postFile(id, old.date);
+      const text = await readFile(target, 'utf8');
+      const end = text.indexOf('\n---\n', 4) + 5;
+      if (end <= 5 || !/^category: /m.test(text.slice(0, end))) throw new Error(`Missing category metadata in ${target}`);
+      await writeFile(target, text.slice(0, end).replace(/^category: .*$/m, `category: ${JSON.stringify(category)}`) + text.slice(end));
+    }
+    report.posts.push({ ...old, category }); links.set(url, `/posts/tistory/${id}/`); return;
   }
   try {
     const html = (await download(url, `${cache}/${id}.html`)).toString();
@@ -118,7 +117,7 @@ async function importPost(url) {
     let importedHtml = body.html();
     for (const correction of textCorrections) importedHtml = importedHtml.replaceAll(correction.from, correction.to);
     const migrated = load(importedHtml);
-    const category = categoryFor(originalCategory, title);
+    const category = categoryFor(originalCategory, title, id);
     const description = migrated.root().text().replace(/\s+/g, ' ').trim().slice(0, 155);
     const metadata = { title, date, category, originalCategory, source: url, description, layout: 'post', tags: ['post'], permalink: `/posts/tistory/${id}/`, render_with_liquid: false };
     const frontmatter = Object.entries(metadata).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join('\n');
