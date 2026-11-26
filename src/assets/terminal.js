@@ -1,4 +1,4 @@
-const commands = ['help', 'home', 'ls', 'cd', 'pwd', 'cat', 'grep', 'open', 'about', 'links', 'whoami', 'history', 'clear'];
+const commands = ['help', 'home', 'ls', 'tree', 'cd', 'pwd', 'cat', 'grep', 'open', 'about', 'links', 'whoami', 'history', 'clear'];
 
 export function parseCommand(line) {
   const words = [];
@@ -53,9 +53,14 @@ export function routeForPath(pathname, state) {
   for (const file of [...state.files.values(), ...state.documents.values()]) {
     if (normalize(file.url) === path) return { cwd: file.categoryId ? '/' + file.categoryId : '/', command: `open ${file.path}` };
   }
-  const category = path.match(/^\/categories\/([^/]+)$/)?.[1];
+  const category = path.match(/^\/categories\/(.+)$/)?.[1];
   if (state.directories.has(category)) return { cwd: '/' + category, command: 'ls' };
   return null;
+}
+
+function childDirectories(path, state) {
+  const prefix = path === '/' ? '' : path.slice(1) + '/';
+  return [...state.directories].filter(([id]) => id.startsWith(prefix) && !id.slice(prefix.length).includes('/'));
 }
 
 export function completeCommand(line, state) {
@@ -67,7 +72,8 @@ export function completeCommand(line, state) {
     const slash = token.lastIndexOf('/') + 1;
     const parent = resolvePath(token.slice(0, slash) || '.', state.cwd);
     const fragment = token.slice(slash);
-    const names = parent === '/' ? [...state.directories.keys()].map(id => id + '/') : [];
+    const prefixLength = parent === '/' ? 0 : parent.length;
+    const names = childDirectories(parent, state).map(([id]) => id.slice(prefixLength) + '/');
     if (line.split(' ')[0] !== 'cd') {
       for (const file of state.files.values()) if (file.path.slice(0, file.path.lastIndexOf('/')) === parent) names.push(file.name);
       if (parent === '/') names.push(...[...state.documents.values()].map(file => file.name));
@@ -86,8 +92,9 @@ export function runCommand(line, state) {
   const say = (text, kind = '') => lines.push({ text, kind });
   const path = resolvePath(args[0] || '.', state.cwd);
   const isDirectory = value => value === '/' || state.directories.has(value.slice(1));
-  const fileRows = files => {
-    for (const file of files) lines.push({ text: file.path.slice(1), detail: file.title, command: `open ${file.path}` });
+  const countPosts = id => [...state.files.values()].filter(file => file.categoryId === id || file.categoryId.startsWith(id + '/')).length;
+  const fileRows = (files, fullPath = false) => {
+    for (const file of files) lines.push({ text: fullPath ? file.path.slice(1) : file.name, detail: file.title, command: `open ${file.path}` });
   };
   const fileAt = value => {
     const file = state.files.get(value) || state.documents.get(value);
@@ -97,8 +104,8 @@ export function runCommand(line, state) {
   switch (command) {
     case undefined: break;
     case 'help':
-      say('블로그의 6개 카테고리는 디렉터리, 글은 .md 파일입니다.', 'heading');
-      say('home                처음 화면으로 돌아가기\nls [경로]           카테고리 또는 글 목록\ncd [경로]           디렉터리 이동 (.., ~, - 지원)\npwd                 현재 경로\ncat <파일>          본문을 텍스트로 출력\nopen <파일>         이미지·코드 서식을 포함해 터미널에서 읽기\ngrep <검색어> [경로] 글 제목·본문 검색 (따옴표 사용 가능)\nabout               블로그 주인 소개\nlinks               GitHub · Tistory · RSS\nwhoami              현재 사용자\nhistory             이번 방문의 명령 기록\nclear               터미널 화면 비우기');
+      say('주제와 하위 분류는 디렉터리, 글은 .md 파일입니다.', 'heading');
+      say('home                처음 화면으로 돌아가기\nls [경로]           하위 분류 또는 글 목록\ntree [경로]         분류 목차 전체 보기\ncd [경로]           디렉터리 이동 (.., ~, - 지원)\npwd                 현재 경로\ncat <파일>          본문을 텍스트로 출력\nopen <파일>         이미지·코드 서식을 포함해 터미널에서 읽기\ngrep <검색어> [경로] 글 제목·본문 검색 (따옴표 사용 가능)\nabout               블로그 주인 소개\nlinks               GitHub · Tistory · RSS\nwhoami              현재 사용자\nhistory             이번 방문의 명령 기록\nclear               터미널 화면 비우기');
       lines.push({ text: '시작하기 → ls development', command: 'ls development' });
       break;
     case 'home':
@@ -111,17 +118,27 @@ export function runCommand(line, state) {
       const target = resolvePath(args.find(arg => !['-l', '-a', '-la', '-al'].includes(arg)) || '.', state.cwd);
       if (state.files.has(target) || state.documents.has(target)) fileRows([fileAt(target)]);
       else if (!isDirectory(target)) throw new Error(`${target}: 디렉터리를 찾을 수 없습니다.`);
-      else if (target === '/') {
-        for (const [id, name] of state.directories) {
-          const count = [...state.files.values()].filter(file => file.categoryId === id).length;
-          lines.push({ text: `${id}/`, detail: `${name} · ${count}개의 기록`, command: `ls /${id}` });
+      else {
+        const prefixLength = target === '/' ? 0 : target.length;
+        for (const [id, name] of childDirectories(target, state)) {
+          lines.push({ text: `${id.slice(prefixLength)}/`, detail: `${name} · ${countPosts(id)}개의 기록`, command: `ls /${id}` });
         }
-        fileRows(state.documents.values());
-      } else {
-        const files = [...state.files.values()].filter(file => file.categoryId === target.slice(1));
-        fileRows(files);
-        if (!files.length) say('이 디렉터리에는 아직 기록이 없습니다.', 'muted');
+        if (target === '/') fileRows(state.documents.values());
+        else fileRows([...state.files.values()].filter(file => file.categoryId === target.slice(1)));
+        if (!lines.length) say('이 디렉터리에는 아직 기록이 없습니다.', 'muted');
       }
+      break;
+    }
+    case 'tree': {
+      if (args.length > 1 || !isDirectory(path)) throw new Error('사용법: tree [디렉터리]');
+      say(path, 'heading');
+      const prefix = path === '/' ? '' : path.slice(1) + '/';
+      for (const [id, name] of state.directories) {
+        if (!id.startsWith(prefix)) continue;
+        const parts = id.slice(prefix.length).split('/');
+        lines.push({ text: '  '.repeat(parts.length - 1) + parts.at(-1) + '/', detail: `${name} · ${countPosts(id)}개의 기록`, command: `ls /${id}` });
+      }
+      if (lines.length === 1) say('하위 분류가 없습니다. ls로 글 목록을 확인하세요.', 'muted');
       break;
     }
     case 'cd': {
@@ -148,7 +165,7 @@ export function runCommand(line, state) {
       const query = args[0].toLocaleLowerCase();
       const found = [...state.files.values()].filter(file => (scope === '/' || file.path === scope || file.path.startsWith(scope + '/')) && `${file.title} ${file.text}`.toLocaleLowerCase().includes(query));
       say(`${found.length}개의 기록을 찾았습니다.${found.length > 50 ? ' 처음 50개를 표시합니다. 디렉터리로 범위를 좁혀 보세요.' : ''}`, 'muted');
-      fileRows(found.slice(0, 50));
+      fileRows(found.slice(0, 50), true);
       break;
     }
     case 'whoami':
@@ -184,6 +201,7 @@ function articleView(article, url) {
   const attributes = new Set(['class', 'id', 'href', 'src', 'alt', 'title', 'colspan', 'rowspan', 'start', 'open', 'datetime']);
   for (const element of copy.querySelectorAll('*')) {
     if (!tags.has(element.tagName)) { element.remove(); continue; }
+    if (element.tagName === 'P' && !element.textContent.trim() && !element.id && !element.querySelector('img,[id]')) { element.remove(); continue; }
     for (const attribute of [...element.attributes]) if (!attributes.has(attribute.name)) element.removeAttribute(attribute.name);
     for (const attribute of ['href', 'src']) {
       if (!element.hasAttribute(attribute)) continue;
@@ -226,7 +244,7 @@ async function initTerminal(terminal) {
   function updatePrompt() { cwd.textContent = state.cwd === '/' ? '~' : '~' + state.cwd; }
   function renderLines(parent, lines) {
     for (const line of lines) {
-      const element = document.createElement(line.command ? 'button' : line.href ? 'a' : 'div');
+      const element = document.createElement(line.command ? 'button' : line.href ? 'a' : line.kind === 'heading' && parent.classList.contains('shell-reading') ? 'h1' : 'div');
       element.className = line.command || line.href ? 'shell-item' : `shell-line ${line.kind || ''}`;
       if (line.command) { element.type = 'button'; element.dataset.terminalCommand = line.command; }
       if (line.href) { element.href = line.href; if (element.origin !== location.origin) { element.target = '_blank'; element.rel = 'noopener'; } }
@@ -277,6 +295,7 @@ async function initTerminal(terminal) {
     let result;
     try {
       result = runCommand(line, state);
+      if (result.read) entry.classList.add('shell-reading');
       if (result.home) {
         output.replaceChildren(entry);
         terminal.querySelector('.shell-welcome').hidden = false;
@@ -291,7 +310,11 @@ async function initTerminal(terminal) {
         screen.scrollTop = screen.scrollHeight;
         const article = await readArticle(result.read);
         if (version !== routeVersion) { entry.remove(); return; }
-        if (result.mode === 'rich') body.replaceChildren(articleView(article, result.read.url));
+        if (result.mode === 'rich') {
+          body.replaceChildren(articleView(article, result.read.url));
+          output.replaceChildren(entry);
+          terminal.querySelector('.shell-welcome').hidden = true;
+        }
         else body.textContent = articleText(article);
         if (result.location) document.title = `${result.read.title} · ${homeTitle}`;
       } else if (result.location) document.title = homeTitle;
@@ -321,8 +344,14 @@ async function initTerminal(terminal) {
     state.previous = state.cwd;
     state.cwd = route?.cwd || '/';
     updatePrompt();
-    if (route) await execute(route.command, { focus: false, writeURL: false });
-    else {
+    if (route?.command === 'ls') {
+      output.replaceChildren();
+      terminal.querySelector('.shell-welcome').hidden = route.cwd !== '/';
+    }
+    if (route) {
+      await execute(route.command, { focus: false, writeURL: false });
+      if (route.command === 'ls') screen.scrollTop = 0;
+    } else {
       renderLines(output, [{ text: `404: ${location.pathname} — 기록을 찾을 수 없습니다.`, kind: 'error' }, { text: 'ls /  ← 처음부터 탐색', command: 'ls /' }]);
       status.textContent = '해당 주소의 기록을 찾을 수 없습니다.';
     }
@@ -374,7 +403,7 @@ async function initTerminal(terminal) {
     const config = JSON.parse(document.querySelector('#shell-data').textContent);
     state = createFilesystem(await response.json(), config.categories, config);
     input.disabled = submit.disabled = false;
-    terminal.querySelector('[data-terminal-count]').textContent = `${state.directories.size} directories`;
+    terminal.querySelector('[data-terminal-count]').textContent = `${config.categories.filter(category => !category.id.includes('/')).length}개 주제 · ${state.files.size}개 글`;
     await restoreRoute();
     if (!matchMedia('(pointer: coarse)').matches) input.focus({ preventScroll: true });
   } catch {

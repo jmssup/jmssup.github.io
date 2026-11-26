@@ -1,5 +1,4 @@
 ---
 layout: base
 ---
-{% assign posts = site.posts | where: "category", page.category %}
-<template data-category="{{ page.category }}" data-count="{{ posts | size }}"></template>
+<template data-category="{{ page.category }}" data-count="{{ page.category_count }}"></template>

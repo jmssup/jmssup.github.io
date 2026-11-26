@@ -7,32 +7,44 @@ import { categoryFor } from './post-category.mjs';
 
 const root = path.resolve('_site');
 const categories = JSON.parse(await readFile('src/_data/categories.json', 'utf8'));
-assert.equal(categories.length, 6);
-assert.deepEqual(categories.map(c => c.name), ['개발', 'CTF/Wargame', 'Bug Bounty', '블로그/기술문서', '논문/컨퍼런스', '공모전/자격증']);
+const topics = categories.filter(category => !category.id.includes('/'));
+assert.deepEqual(topics.map(c => c.name), ['컴퓨터과학', '보안', '개발', '인공지능', '모각코', '문제 해결']);
+assert.equal(new Set(categories.map(c => c.id)).size, categories.length);
+for (const category of categories) {
+  assert.match(category.id, /^[a-z0-9-]+(?:\/[a-z0-9-]+)*$/);
+  const ancestors = category.id.split('/').map((_, index, parts) => categories.find(c => c.id === parts.slice(0,index+1).join('/')));
+  assert(ancestors.every(Boolean), `Missing parent category: ${category.id}`);
+  assert.equal(category.label, ancestors.map(c => c.name).join(' / '));
+}
 const migration = JSON.parse(await readFile('migration/report.json', 'utf8'));
 const reviewed = JSON.parse(await readFile('migration/categories.json', 'utf8'));
 for (const assignment of Object.values(reviewed.posts)) {
   assert(categories.some(category => category.id === assignment.category));
   assert(assignment.reason, 'Missing category review reason');
+  const category = categories.find(c => c.id === assignment.category);
+  assert(assignment.vaultNote.startsWith(`40 Blog/${category.vaultPath}/`));
 }
 for (const [original, title, expected] of [
-  ['Security/Crypto', '정수 모듈러 연산', 'writing'],
-  ['Rust', 'Rust 소유권 설명', 'writing'],
-  ['Security/Pwnable', 'GDB 사용법', 'writing'],
-  ['Development/Web', 'CTF 사이트 개발일지', 'development'],
-  ['Security/Pwnable', '[Dreamhack] example', 'ctf'],
-  ['Security/Fuzzing', '[Fuzzing101] Exercise 3', 'ctf'],
-  ['Security', 'CVE 취약점 원리 설명', 'writing'],
-  ['', '버그 바운티 제보 후기', 'bug-bounty'],
-  ['', 'WISA 논문 발표', 'research'],
-  ['', '정보보안기사 합격 후기', 'achievements']
+  ['Security/Crypto', '정수 모듈러 연산', 'security/crypto'],
+  ['Rust', 'Rust 소유권 설명', 'development/rust'],
+  ['Security/Pwnable', 'GDB 사용법', 'security/pwnable'],
+  ['Development/Web', 'CTF 사이트 개발일지', 'development/web'],
+  ['Security/Fuzzing', '[Fuzzing101] Exercise 3', 'security/fuzzing'],
+  ['Security', 'CVE 취약점 원리 설명', 'security'],
+  ['알고리즘', '정렬', 'cs/algorithms'],
+  ['모각코/2026 하계 모각코', '학습 기록', 'study-logs/2026-summer'],
+  ['AI/Diffusion', 'CFG', 'ai/diffusion']
 ]) assert.equal(categoryFor(original, title), expected);
+assert.throws(() => categoryFor('', '분류가 필요한 새 글'), /분류를 검토/);
 const signedCdnParameters = /(?:[?&]|&amp;)(?:credential|signature)=/i;
 assert(!signedCdnParameters.test(await readFile('migration/report.json', 'utf8')), 'Signed CDN credentials in migration report');
 assert.equal(migration.imported, migration.discovered, 'Some discovered posts were not imported');
 assert.equal(migration.errors.filter(e => e.type === 'post').length, 0, 'Failed article import');
 assert.equal(new Set(migration.posts.map(p => p.source)).size, migration.imported);
 const search = JSON.parse(await readFile('_site/search.json', 'utf8'));
+assert.equal(search.length, migration.imported);
+assert.equal(Object.keys(reviewed.posts).length, migration.imported);
+assert.deepEqual(topics.map(c => search.filter(p => p.categoryId === c.id || p.categoryId.startsWith(c.id + '/')).length), [19,52,24,13,28,3]);
 for (const post of migration.posts) {
   assert(categories.some(c => c.id === post.category));
   assert.equal(categoryFor(post.originalCategory, post.title, post.id), post.category, `Category review mismatch: ${post.id}`);
@@ -57,11 +69,11 @@ for (const post of migration.posts) {
   const result = search.find(item => item.url === post.local);
   assert(result && result.title === post.title && result.text, `Post missing from search: ${post.id}`);
   assert.equal(result.categoryId, post.category, `Search category mismatch: ${post.id}`);
-  assert.equal(result.category, categories.find(c => c.id === post.category).name);
+  assert.equal(result.category, categories.find(c => c.id === post.category).label);
 }
 for (const category of categories) {
   const $ = load(await readFile(`_site/categories/${category.id}/index.html`, 'utf8'));
-  const count = search.filter(p => p.category === category.name).length;
+  const count = search.filter(p => p.categoryId === category.id || p.categoryId.startsWith(category.id + '/')).length;
   assert.equal($('template[data-category]').attr('data-category'), category.id);
   assert.equal(Number($('template[data-category]').attr('data-count')), count);
 }
@@ -74,6 +86,7 @@ async function walk(directory) {
   }
 }
 await walk(root);
+assert.equal(htmlFiles.length, search.length + categories.length + 3, 'Missing or stale generated pages');
 const missing = [];
 for (const file of htmlFiles) {
   const $ = load(await readFile(file, 'utf8'));
@@ -97,8 +110,8 @@ for (const file of htmlFiles) {
 }
 assert.deepEqual(missing, [], 'Broken internal links or missing local assets');
 assert.equal(load(await readFile('_site/feed.xml', 'utf8'), { xml: true })('feed entry').length, Math.min(30, search.length));
-assert.equal(load(await readFile('_site/sitemap.xml', 'utf8'), { xml: true })('url').length, search.length + 8);
+assert.equal(load(await readFile('_site/sitemap.xml', 'utf8'), { xml: true })('url').length, search.length + categories.length + 2);
 console.log(`PASS: ${migration.imported} articles retain their titles, dates, body text and image counts, allowing recorded corrections.`);
-console.log(`PASS: 6 categories, ${htmlFiles.length} CLI-only HTML pages, all internal links, local assets, search, Atom feed and sitemap.`);
+console.log(`PASS: ${topics.length} topics, ${categories.length} category directories, ${htmlFiles.length} CLI-only HTML pages, all internal links, local assets, search, Atom feed and sitemap.`);
 if (migration.errors.length) console.log(`NOTE: ${migration.errors.length} remote images returned errors during migration; see migration/README.md.`);
 await import('./check-terminal.mjs');

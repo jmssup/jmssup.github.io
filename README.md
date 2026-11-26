@@ -1,6 +1,6 @@
 # ssup — 정명섭의 기록
 
-화면 전체가 CLI인 Jekyll 4 기반 GitHub Pages 블로그입니다. 방문자는 명령어로 6개 카테고리를 탐색하고 글을 읽습니다. 홈·카테고리·글·소개 주소는 모두 같은 터미널을 사용합니다.
+화면 전체가 CLI인 Jekyll 4 기반 GitHub Pages 블로그입니다. 방문자는 명령어로 6개 주제와 하위 분류를 탐색하고 글을 읽습니다. 홈·카테고리·글·소개 주소는 모두 같은 터미널을 사용합니다.
 
 ## 실행
 
@@ -35,18 +35,18 @@ npm run check
 
 | 표시 이름 | 글의 category 값 |
 | --- | --- |
+| 컴퓨터과학 | `cs` |
+| 보안 | `security` |
 | 개발 | `development` |
-| CTF/Wargame | `ctf` |
-| Bug Bounty | `bug-bounty` |
-| 블로그/기술문서 | `writing` |
-| 논문/컨퍼런스 | `research` |
-| 공모전/자격증 | `achievements` |
+| 인공지능 | `ai` |
+| 모각코 | `study-logs` |
+| 문제 해결 | `troubleshooting` |
 
-`ls /`에서 6개 디렉터리와 글 수를 확인합니다. 비어 있는 디렉터리도 유지하며 글 수는 빌드된 데이터에서 자동 집계합니다. `grep`은 글 제목·본문을 검색합니다. RSS(`/feed.xml`)와 사이트맵도 제공합니다.
+Vault의 `40 Blog` 주제별 목차를 따릅니다. `ls /`는 6개 대분류를, `ls security`는 Pwnable·Reversing·Fuzzing 등 하위 분류를 보여줍니다. `tree /`는 전체 분류 목차를 출력합니다. 대분류의 글 수와 `grep` 검색 범위에는 모든 하위 분류를 포함합니다. RSS(`/feed.xml`)와 사이트맵도 제공합니다.
 
-구현·개발 일지는 개발, 개념·설명·도구 사용법과 일반 학습 회고는 블로그/기술문서로 구분합니다. 실제 CTF·워게임 문제 풀이와 실습은 CTF/Wargame, 논문 탐색·연구 기록은 논문/컨퍼런스에 둡니다. CTF 플랫폼 개발은 개발이며, 일반 보안 개념이나 CVE 해설을 Bug Bounty로 분류하지 않습니다.
+하위 경로를 글의 `category`에 지정합니다. 예를 들어 Rust 글은 `development/rust`, OP-TEE 개발은 `development/embedded`, Dreamhack Pwnable 풀이는 `security/pwnable`, Diffusion 학습은 `ai/diffusion`입니다. 모각코는 시즌별로 분리합니다.
 
-공개 글 139개의 최종 분류와 이유는 `migration/categories.json`, 이동 내역과 개수는 [재분류 보고서](migration/categories.md)에 있습니다. 검토한 분류는 이전 도구에서도 우선 적용됩니다. 이 목록의 분류를 바꾸고 이전 도구를 다시 실행하면 해당 글의 `category`와 이전 보고서를 갱신하며 본문은 보존합니다.
+공개 글 139개의 분류와 대응하는 Vault 공개 노트는 `migration/categories.json`, 전체 목차와 개수는 [분류 보고서](migration/categories.md)에 있습니다. 원문의 Tistory 주소로 대응 관계를 확인했으며 이번 변경에서 본문과 글 주소는 유지합니다. 검토한 분류는 이전 도구에서도 우선 적용합니다. 신규 글의 원래 분류가 알려지지 않은 경우에는 임의 배치하지 않고 분류 검토를 요청합니다.
 
 ## CLI 사용법
 
@@ -55,7 +55,8 @@ CLI에서 카테고리를 디렉터리로 탐색하고 실제 글을 읽습니�
 ```sh
 help
 ls
-cd development
+tree /
+cd development/embedded
 ls
 cat tistory-147.md
 grep "OP-TEE"
@@ -68,7 +69,7 @@ home
 
 `home`은 현재 출력 화면을 정리하고 소개 배너·전체 카테고리가 있는 처음 화면으로 돌아갑니다. 주소와 작업 경로도 `/`로 돌아가며 명령 기록은 유지됩니다.
 
-`src/assets/terminal.js`가 명령을 해석합니다. `/search.json`과 글 HTML을 GET으로 읽으므로 별도 애플리케이션 서버가 필요 없습니다. 방문자의 입력은 운영체제 명령으로 실행되지 않으며 글 수정·발행은 Markdown 편집과 Git으로 관리합니다. 출력은 최근 명령 40개, 명령 기록은 이번 페이지 방문의 최근 100개까지 유지합니다.
+`src/assets/terminal.js`가 명령을 해석합니다. `/search.json`과 글 HTML을 GET으로 읽으므로 별도 애플리케이션 서버가 필요 없습니다. 방문자의 입력은 운영체제 명령으로 실행되지 않으며 글 수정·발행은 Markdown 편집과 Git으로 관리합니다. 출력은 최근 명령 40개까지 유지하고, `open`으로 글을 열면 해당 글만 표시합니다. 명령 기록은 이번 페이지 방문의 최근 100개까지 유지하므로 `↑↓`와 `history`로 이전 명령을 다시 확인할 수 있습니다.
 
 `open`은 주소를 글의 고유 주소로 갱신합니다. 그 주소를 공유하거나 새로고침하면 동일한 글을 CLI에서 엽니다. 카테고리 주소는 해당 디렉터리의 목록으로, `/about/`는 소개로 연결됩니다. 브라우저 뒤로·앞으로 이동도 지원합니다.
 
@@ -82,7 +83,7 @@ home
 ---
 title: "Rust 소유권을 이해하며"
 date: "2026-10-30T20:00:00+09:00"
-category: development
+category: development/rust
 description: "소유권과 빌림을 직접 실험해 본 기록입니다."
 ---
 
@@ -93,7 +94,9 @@ description: "소유권과 빌림을 직접 실험해 본 기록입니다."
 
 소개는 `src/about.html`, 전체 화면 스타일은 `src/assets/terminal.css`, 명령과 화면 동작은 `src/assets/terminal.js`에서 수정합니다. `src/_includes/terminal.html`은 터미널 마크업, `src/_layouts/`는 공통 HTML과 비활성 본문 템플릿, `src/_data/categories.json`은 분류 정보입니다. 사이트 URL과 GitHub 링크는 `_config.yml`에 있습니다.
 
-HTML의 `{{ ... }}`와 `{% ... %}`는 빌드할 때 처리되는 Liquid 문법입니다. `src/_plugins/blog_filters.rb`는 검색용 본문 텍스트와 읽기 시간을 계산합니다.
+콘솔 테마는 시스템의 밝은·어두운 화면 설정을 따릅니다. 본문은 Noto Sans KR 18px(모바일 17px), 명령어와 코드는 JetBrains Mono를 사용하며 Google Fonts를 불러오지 못하면 시스템 글꼴로 표시합니다. 본문 폭은 최대 680px입니다.
+
+HTML의 `{{ ... }}`와 `{% ... %}`는 빌드할 때 처리되는 Liquid 문법입니다. `src/_plugins/blog_filters.rb`는 검색용 본문 텍스트와 읽기 시간을 계산하고, `src/_plugins/category_pages.rb`는 대분류·하위 분류의 주소와 글 수를 생성합니다.
 
 ## 티스토리 이전
 
@@ -125,6 +128,6 @@ npm run check
 
 ## 확인 범위
 
-`npm run check`는 이전한 글 전체의 제목·작성일·본문 텍스트 SHA-256·이미지 개수, 6개 카테고리, 생성 페이지의 내부 링크와 로컬 파일, 검색 인덱스, RSS와 사이트맵을 검사합니다. 외부 사이트 링크의 장기 생존 여부나 비공개 글까지 확인하는 검사는 아닙니다.
+`npm run check`는 이전한 글 전체의 제목·작성일·본문 텍스트 SHA-256·이미지 개수, 6개 대분류와 하위 목차, 생성 페이지의 내부 링크와 로컬 파일, 검색 인덱스, RSS와 사이트맵을 검사합니다. 외부 사이트 링크의 장기 생존 여부나 비공개 글까지 확인하는 검사는 아닙니다.
 
 전체 HTML이 CLI만 포함하는지, 터미널의 실제 글 경로 매핑·직접 주소·디렉터리 이동·검색·명령 파싱·자동완성·잘못된 입력 처리도 검사합니다. Jekyll 전환 내역은 [전환 기록](migration/jekyll.md)에 있습니다.
