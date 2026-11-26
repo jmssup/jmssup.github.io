@@ -9,7 +9,7 @@ permalink: /search.json
     "url": {{ post.url | relative_url | jsonify }},
     "date": {{ post.date | date: "%Y-%m-%d" | jsonify }},
     {% assign category = site.data.categories | where: "id", post.category | first %}
-    "category": {{ category.name | jsonify }},
+    "category": {{ category.label | jsonify }},
     "categoryId": {{ post.category | jsonify }},
     "originalCategory": {{ post.originalCategory | default: "" | jsonify }},
     "description": {{ post.description | default: "" | jsonify }},

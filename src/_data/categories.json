@@ -1,8 +1,176 @@
 [
-  {"id":"development","name":"개발","english":"Development","icon":"code","description":"직접 구현한 프로젝트와 개발 과정의 기록.","color":"green"},
-  {"id":"ctf","name":"CTF/Wargame","english":"CTF & Wargame","icon":"flag","description":"CTF·워게임 문제 풀이와 실습 기록.","color":"violet"},
-  {"id":"bug-bounty","name":"Bug Bounty","english":"Bug Bounty","icon":"bug","description":"버그 바운티 프로그램 참여와 실제 취약점 제보 기록.","color":"orange"},
-  {"id":"writing","name":"블로그/기술문서","english":"Notes & Docs","icon":"book","description":"개념 설명, 도구 사용법, 학습 정리와 회고.","color":"blue"},
-  {"id":"research","name":"논문/컨퍼런스","english":"Research","icon":"research","description":"논문 탐색·분석과 연구·학술활동 기록.","color":"rose"},
-  {"id":"achievements","name":"공모전/자격증","english":"Milestones","icon":"award","description":"공모전 참가·수상과 자격증 취득·준비 기록.","color":"gold"}
+  {
+    "id": "cs",
+    "name": "컴퓨터과학",
+    "label": "컴퓨터과학",
+    "vaultPath": "CS",
+    "description": "알고리즘, 자료구조, 컴파일러와 언어의 기초를 정리합니다."
+  },
+  {
+    "id": "cs/algorithms",
+    "name": "알고리즘",
+    "label": "컴퓨터과학 / 알고리즘",
+    "vaultPath": "CS/Algorithms"
+  },
+  {
+    "id": "cs/data-structures",
+    "name": "자료구조",
+    "label": "컴퓨터과학 / 자료구조",
+    "vaultPath": "CS/Data Structures"
+  },
+  {
+    "id": "cs/compilers",
+    "name": "컴파일러·계산이론",
+    "label": "컴퓨터과학 / 컴파일러·계산이론",
+    "vaultPath": "CS/Compilers"
+  },
+  {
+    "id": "cs/c",
+    "name": "C 언어",
+    "label": "컴퓨터과학 / C 언어",
+    "vaultPath": "CS/C"
+  },
+  {
+    "id": "security",
+    "name": "보안",
+    "label": "보안",
+    "vaultPath": "Security",
+    "description": "시스템 보안부터 워게임 풀이, 퍼징과 암호학까지 실습하며 기록합니다."
+  },
+  {
+    "id": "security/system",
+    "name": "시스템 보안",
+    "label": "보안 / 시스템 보안",
+    "vaultPath": "Security/System"
+  },
+  {
+    "id": "security/pwnable",
+    "name": "Pwnable",
+    "label": "보안 / Pwnable",
+    "vaultPath": "Security/Pwnable"
+  },
+  {
+    "id": "security/reversing",
+    "name": "Reversing",
+    "label": "보안 / Reversing",
+    "vaultPath": "Security/Reversing"
+  },
+  {
+    "id": "security/fuzzing",
+    "name": "Fuzzing",
+    "label": "보안 / Fuzzing",
+    "vaultPath": "Security/Fuzzing"
+  },
+  {
+    "id": "security/web",
+    "name": "웹 보안",
+    "label": "보안 / 웹 보안",
+    "vaultPath": "Security/Web"
+  },
+  {
+    "id": "security/crypto",
+    "name": "암호학",
+    "label": "보안 / 암호학",
+    "vaultPath": "Security/Crypto"
+  },
+  {
+    "id": "security/forensics",
+    "name": "디지털 포렌식",
+    "label": "보안 / 디지털 포렌식",
+    "vaultPath": "Security/Forensics"
+  },
+  {
+    "id": "security/blockchain",
+    "name": "블록체인",
+    "label": "보안 / 블록체인",
+    "vaultPath": "Security/Blockchain"
+  },
+  {
+    "id": "security/fundamentals",
+    "name": "보안 기초",
+    "label": "보안 / 보안 기초",
+    "vaultPath": "Security/Fundamentals"
+  },
+  {
+    "id": "development",
+    "name": "개발",
+    "label": "개발",
+    "vaultPath": "Development",
+    "description": "Rust 학습과 웹·시스템·임베디드 개발 과정을 기록합니다."
+  },
+  {
+    "id": "development/rust",
+    "name": "Rust",
+    "label": "개발 / Rust",
+    "vaultPath": "Development/Rust"
+  },
+  {
+    "id": "development/web",
+    "name": "웹 개발",
+    "label": "개발 / 웹 개발",
+    "vaultPath": "Development/Web"
+  },
+  {
+    "id": "development/system",
+    "name": "시스템 개발",
+    "label": "개발 / 시스템 개발",
+    "vaultPath": "Development/System"
+  },
+  {
+    "id": "development/embedded",
+    "name": "임베디드·OP-TEE",
+    "label": "개발 / 임베디드·OP-TEE",
+    "vaultPath": "Development/Embedded"
+  },
+  {
+    "id": "ai",
+    "name": "인공지능",
+    "label": "인공지능",
+    "vaultPath": "AI",
+    "description": "머신러닝의 기초와 생성 모델, Diffusion을 공부합니다."
+  },
+  {
+    "id": "ai/foundations",
+    "name": "머신러닝 기초",
+    "label": "인공지능 / 머신러닝 기초",
+    "vaultPath": "AI/Foundations"
+  },
+  {
+    "id": "ai/diffusion",
+    "name": "Diffusion 학습 기록",
+    "label": "인공지능 / Diffusion 학습 기록",
+    "vaultPath": "AI/Diffusion"
+  },
+  {
+    "id": "study-logs",
+    "name": "모각코",
+    "label": "모각코",
+    "vaultPath": "Study Logs",
+    "description": "계획, 회차별 학습과 결과, 회고를 시간순으로 모았습니다."
+  },
+  {
+    "id": "study-logs/2025-summer",
+    "name": "2025 하계 모각코",
+    "label": "모각코 / 2025 하계 모각코",
+    "vaultPath": "Study Logs/2025 Summer"
+  },
+  {
+    "id": "study-logs/2025-winter",
+    "name": "2025 동계 모각코",
+    "label": "모각코 / 2025 동계 모각코",
+    "vaultPath": "Study Logs/2025 Winter"
+  },
+  {
+    "id": "study-logs/2026-summer",
+    "name": "2026 하계 모각코",
+    "label": "모각코 / 2026 하계 모각코",
+    "vaultPath": "Study Logs/2026 Summer"
+  },
+  {
+    "id": "troubleshooting",
+    "name": "문제 해결",
+    "label": "문제 해결",
+    "vaultPath": "Troubleshooting",
+    "description": "개발 도구와 원격 작업 환경에서 만난 문제를 정리합니다."
+  }
 ]
