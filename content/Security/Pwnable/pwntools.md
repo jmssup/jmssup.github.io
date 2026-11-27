@@ -1,0 +1,316 @@
+---
+title: "pwntools"
+date: "2025-07-12"
+---
+
+## 개념
+
+빠른 공격 스크립트 작성에 도움을 주는 프레임워크로 Python 패키지 형태로 제공된다.
+
+## 동작 원리
+
+### 프로세스 간 통신 과정
+
+프로세스 간 통신은 프로세스를 연결하고 데이터를 주고 받으며 통신한 뒤 연결을 종료하는 과정으로 진행된다.
+
+마찬가지로 pwntools 에서 서버 프로세스와 통신하는 과정도 동일하게 진행된다.
+
+이 글에서는 간단하게 각 과정에서 사용되는 함수들을 얘기하겠다.
+
+##### process()
+
+process()는 로컬에 위치한 프로그램을 실행하여 통신할 때 사용되는 함수다.
+
+process()의 인자로 프로그램의 경로를 전달하면 프로그램을 실행한 뒤 프로그램과 연결을 맺어준다.
+
+```shell
+from pwn import *
+p = process("./example_program")
+```
+
+process 함수로 성공적인 연결이 이뤄지면 해당 함수는 데이터 송수신에 사용될 pwnlib.tubes 클래스를 반환한다.
+
+프로그램을 실행할 때 인자를 전달하거나 환경 변수를 설정하는 경우 다음과 같이 작성할 수 있다.
+
+```python
+from pwn import *
+p = process(["./example_program", "AAAA"], env={"LD_PRELOAD":"./libc.so.6"})
+```
+
+argv\[1\] 에 "AAAA" 문자열을 전달하고 LD\_PRELOAD 환경 변수를 ./libc.so.6 로 설정하여 실행하는 코드이다.
+
+##### remote()
+
+remote()는 호스트의 도메인 혹은 IP주소와 포트 번호를 인자로 받아 원격 서버에 통신할 때 사용된다.
+
+성공적으로 연결이 되면 precess와 마찬가지로 pwnlib.tubes 클래스를 반환한다.
+
+```python
+from pwn import *
+r = remote("example.com", 1337)
+```
+
+example.com 호스트의 1337 포트에 연결하는 코드이다.
+
+기본적으로 TCP 연결을 한다. 만약 TCP 대신에 UDP 연결을 하고 싶다면 다음 코드와 같이 typ 인자에 'udp'를 전달한다.
+
+```python
+r = remote("example.com", 1337, typ='udp')
+```
+
+##### ssh()
+
+SSH 서버에 접속해 통신하기 위해 ssh()를 사용할 수 있다.
+
+```python
+s = ssh("user", "127.0.0.1", port=22, password="userpassword")
+```
+
+127.0.0.1 호스트의 22번 포트에 열린 SSH 서버에 user 라는 사용자 이름과 userpassword 라는 비밀번호로 로그인을 해 접속하는 코드다.
+
+### 데이터 송수신 함수
+
+process 와 remote 를 이용하여 pwnlib.tubes 클래스를 생성해 통신 준비를 하면 이제 통신을 수행하는 함수들을 사용해야 한다.
+
+##### recv()
+
+recv() 는 데이터를 수신하기 위해 사용된다. pwntools는 관련하여 다양한 함수가 정의돼있다. 관련 함수들은 수신한 데이터를 bytes 클래스로 반환한다.
+
+```python
+from pwn import *
+p = process('./example_program')
+
+data = p.recv(1024)  # p가 출력하는 데이터를 최대 1024바이트까지 받아서 data에 저장
+data = p.recvline()  # p가 출력하는 데이터를 개행문자를 만날 때까지 받아서 data에 저장
+data = p.recvn(5)  # p가 출력하는 데이터를 5바이트만 받아서 data에 저장
+data = p.recvuntil(b'hello')  # p가 b'hello'를 출력할 때까지 데이터를 수신하여 data에 저장
+data = p.recvall()  # p가 출력하는 데이터를 프로세스가 종료될 때까지 받아서 data에 저장
+```
+
+recv는 데이터를 받지 못해도 당장 받을 수 있는 만큼 수신한 뒤 함수를 종료하지만 recvn은 인자값 만큼 데이터를 받아야 함수가 종료된다.
+
+##### send()
+
+send() 는 데이터의 전송을 위해 사용된다.
+
+마찬가지로 pwntools에 관련하여 다양한 함수가 정의돼있다. 관련 함수들은 인자로 bytes 클래스를 받아 전송한다.
+
+```python
+from pwn import*
+p = process('./example_program')
+
+p.send(b'A')  # ./example_program에 b'A'를 입력
+p.sendline(b'A')  # ./example_program에 b'A' + b'\n'을 입력
+p.sendafter(b'hello', b'A') # 프로그램이 b'hello'를 출력하면, b'A'를 입력
+p.sendlineafter(b'hello', b'A') # 프로그램이 b'hello'를 출력하면, b'A' + b'\n'을 입력
+```
+
+sendafter 와 sendlineafter는 실제 인자로 전달된 내용들이 나올 때까지 수신하고 데이터를 전송한다.
+
+만약 sendafter와 sendlineafter를 실행하고 데이터 수신 함수들로 데이터를 수신하면 sendafter와 sendlineafter 에서 수신한 데이터 이후의 데이터부터 수신하게 된다.
+
+##### interactive()
+
+interactive() 는 터미널에서 사용자가 실시간으로 데이터를 수신하고 전송할 수 있게 해준다.
+
+이 함수를 호출하면 터미널로 프로세스에 입력값을 전달할 수 있게 되고 프로세스의 출력도 실시간으로 터미널에 나타난다.
+
+send 와 recv 함수들처럼 pwnlib.tubes 클래스에 구현된 함수이다.
+
+```python
+from pwn import*
+p = process('./example_program')
+p.interactive()
+```
+
+interactive 를 호출하면 이후부터는 사용자가 직접 원하는 입력을 전송할 수 있고 프로세스의 출력을 받을 수 있다.
+
+이 함수가 호출된 상태로 연결을 종료하고 싶으면 터미널에 Ctrl+D 로 종료 가능하다.
+
+이 함수가 종료될 때는 프로세스와의 연결을 끊어 통신을 종료한다.
+
+### 연결을 종료하는 함수
+
+데이터의 송신 및 수신을 완료하고서는 연결을 종료해야 한다. 연결된 두 프로세스 중 한 프로세스가 연결을 종료하면 그 연결은 종료된다. 이는 프로세스와 통신할 때 내가 연결을 종료하는 경우와 통신하고 있는 상대 프로세스가 연결을 종료하는 경우가 있다.
+
+이 글에서 설명하는 함수는 내가 연결을 종료하는 함수다.
+
+##### close()
+
+close() 는 위에서 설명한 send, recv 그리고 interactive 와 동일하게 pwnlib.tubes 클래스에 구현된 함수다.
+
+```python
+from pwn import *
+p = process('./example_program')
+p.close() # 실행되는 순간에 연결이 유지되고 있는 상태여야 함
+```
+
+이 코드에서 p.close() 가 실행되면 pwnlib.tubes 클래스인 p 내부의 자원이 정리된다. 이후 send 나 recv를 호출하면 에러가 발생한다. interactive 를 호출한 경우 함수가 종료될 때 연결이 같이 종료되기에 close 함수를 추가로 사용할 필요없다.
+
+### 로그 출력
+
+pwntools 로 통신할 때 송수신 기록을 확인하려면 context.log\_level 을 이용하여 로그 출력의 상세도를 설정할 수 있다.
+
+context.log\_level 은 pwntools의 전역 설정 변수이다. 'debug', 'error' 등 값을 할당하면 어떤 정보를 출력할지 정할 수 있다.
+
+context.log\_level의 기본 값은 'info' 이다.
+
+```python
+from pwn import *
+context.log_level = 'debug'
+
+p = process("./example_program")
+p.recvall()
+```
+
+| **로그 레벨** | **출력 내용** |
+| --- | --- |
+| critical | 치명적인 오류 외에 출력안함 |
+| error | 에러 메세지만 출력 |
+| warning / warn | 경고 메세지 출력 |
+| info | 일반적인 상태 메세지 출력 |
+| debug | 송수신 데이터, 내부 변수 등 상세하게 출력 |
+
+### Packing &amp; Unpacking
+
+시스템 해킹에서는 정수 값을 bytes 클래스로 변환하거나 반대로 bytes 클래스를 정수값으로 바꾸는 경우가 빈번하게 일어난다.
+
+pwntools 에서는 p8(), p16(), p32(), p64() 를 이용하여 숫자를 bytes 클래스로 패킹하고 u8(), u16(), u32(), u64() 를 이용하여 언패킹을 진행한다.
+
+패킹 및 언패킹 함수는 기본적으로 리틀엔디안으로 진행된다.
+
+하지만 인자 값으로 endian='big' 을 넘겨주면 빅 엔디안으로 변경할 수 있다.
+
+```python
+from pwn import *
+
+s8 = 0x41
+s16 = 0x4142
+s32 = 0x41424344
+s64 = 0x4142434445464748
+
+print(p8(s8))
+print(p16(s16))
+print(p32(s32, endian='big'))
+print(p64(s64))
+
+s8 = b"A"
+s16 = b"AB"
+s32 = b"ABCD"
+s64 = b"ABCDEFGH"
+
+print(hex(u8(s8)))
+print(hex(u16(s16)))
+print(hex(u32(s32)))
+print(hex(u64(s64)))
+```
+
+```python
+b'A'
+b'BA'
+b'ABCD'
+b'HGFEDCBA'
+0x41
+0x4241
+0x44434241
+0x4847464544434241
+```
+
+### pwntools 와 gdb
+
+pwntools 에서는 gdb로의 연결에 관한 함수도 제공한다.
+
+gdb.attach의 인자로 연결해놓은 프로세스를 넘기면 gdb가 실행이 된다.
+
+이 때 remote로 실행한 프로세스는 내 로컬 서버에 존재하는 프로세스라면 연결되고 원격 서버에서 실행중인 프로세스라면 연결이 되지 않는다. 하지만 ssh 서버라면 가능하다. ssh 함수로 연결하면 pwntools 가 원격 서버에서 SSH로 로그인하여 원격서버에서 직접 명령을 수행할 수 있기에 gdb도 원격서버에서 실행되므로 gdb의 사용이 가능하다. 이 때 gdb는 원격서버에서 결과를 내 컴퓨터로 보내준다.
+
+```python
+# remote는 불가
+p = remote('target.server.com', 1234)
+gdb.attach(p)  # 불가능
+
+# ssh는 가능
+s = ssh('user', 'target.server.com', password='pw')
+p = s.process('./vuln')
+gdb.attach(p)  # 가능 (원격 서버에서 gdb가 attach)
+```
+
+보통 보안을 위해 일반 사용자가 SSH 서버에서의 gdb 사용을 막고 개발자, 운영자만이 사용가능하게 권한을 세분화해놓는다.
+
+### Assemble &amp; Disassemble
+
+context\_arch 로 아키텍처를 설정하여 어셈블, 디스어셈블을 수행할 수 있다.
+
+asm() 과 disasm() 으로 수행 가능하다.
+
+```python
+from pwn import *
+
+context.arch = "amd64" # x86-64 아키텍처로 설정
+
+machine_code = asm('mov eax, 0')  # 어셈블리 'mov eax, 0'를 기계어로 변환
+print(machine_code)
+assembly_code = disasm(machine_code)  # 기계어를 어셈블리어로 변환
+print(assembly_code)
+```
+
+```python
+b'\xb8\x00\x00\x00\x00'
+   0:   b8 00 00 00 00          mov    eax, 0x0
+```
+
+\+ pwntools로 ELF의 심볼들 정보도 쉽게 얻을 수 있다.
+
+### shellcraft
+
+shellcode 를 간단한 함수로 사용할 수 있도록 지원해준다.
+
+context 를 이용하여 서버의 운영체제와 아키택처를 지정해줄 수 있다.
+
+context.update() 혹은 context.arch='amd64' 등의 방식이 존재한다.
+
+shellcraft.sh() 는 서버에서 shellcode 가 실행 될 때 /bin/sh를 실행시키도록 하여 공격자에게 쉘이 띄워지도록 한다.
+
+shellcraft.open() 에 경로를 지정해주면 해당 경로의 파일을 실행한다.
+
+shellcraft.read() 는 인자로 fd, buffer, count 의 값이 들어간다.
+
+fd 값의미
+
+| 0 | 표준 입력(stdin) |
+| --- | --- |
+| 1 | 표준 출력(stdout) |
+| 2 | 표준 에러(stderr) |
+| 3 이상 | 파일, 소켓 등 기타 자원 |
+
+open을 사용하고 read로 값을 읽으려는 경우 open 시스템 콜로 받아온 해당 파일값은 rax 레지스터에 저장하기에 fd에 'rax' 로 지정해주는 경우가 많다.
+
+시스템콜 인자1 (fd) 인자2 (buffer) 인자3 (count)
+
+| read(fd, buf, n) | 읽을 대상 | 저장할 메모리 | 읽을 바이트 수 |
+| --- | --- | --- | --- |
+| write(fd, buf, n) | 출력 대상 | 출력할 데이터 | 출력할 바이트 수 |
+
+이 shellcraft로 생성한 shellcode는 어셈블리 코드로 구성돼있기에 실행 가능한 바이트 코드로 변환해줘야 한다.
+
+이를 위해 asm 함수를 사용한다. 반대의 일을 하는 disasm 함수도 존재한다.
+
+```python
+form pwn import *
+p=remote(HOST,POST)
+context.update(arch='amd64',os='linux',endian='little',log_level='debug')
+
+sc = ''
+sc += shellcraft.open('/home/example_file')      # rax ← fd
+sc += shellcraft.read('rax', 'rsp', 0x100)           # read(rax, rsp, 0x100)
+sc += shellcraft.write(1, 'rsp', 0x100)              # write(1, rsp, 0x100)
+
+p.sand(asm(sc))
+print(p.recvall())
+```
+
+## 관련 개념
+
+## 참고자료
+
+- [Tistory 원문](https://myinfosub.tistory.com/35)

@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bundle exec jekyll serve --host 127.0.0.1 --port 8080",
-    "build": "bundle exec jekyll build",
-    "check": "node scripts/check.mjs",
+    "dev": "npm run build && npm run preview:site",
+    "build": "bash scripts/quartz.sh build",
+    "preview:site": "bash scripts/quartz.sh preview",
+    "sync:blog": "bash scripts/quartz.sh export",
+    "check": "node scripts/check-quartz.mjs",
+    "check:jekyll": "bundle exec jekyll build && node scripts/check.mjs",
     "import:tistory": "node scripts/import-tistory.mjs"
   },
   "devDependencies": {

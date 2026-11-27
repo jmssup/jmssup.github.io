@@ -1,0 +1,82 @@
+configuration:
+  pageTitle: ssup
+  pageTitleSuffix: ""
+  locale: ko-KR
+  baseUrl: jmssup.github.io
+  enableSPA: true
+  enablePopovers: true
+  ignorePatterns: [".obsidian", "**/.DS_Store"]
+  analytics:
+    provider: "null"
+  defaultDateType: created
+  theme:
+    fontOrigin: googleFonts
+    cdnCaching: true
+    typography:
+      header: Noto Sans KR
+      body: Noto Sans KR
+      code: JetBrains Mono
+    colors:
+      lightMode:
+        light: "#f5f7f5"
+        lightgray: "#dce4dd"
+        gray: "#a6b1a8"
+        darkgray: "#38443b"
+        dark: "#16241a"
+        secondary: "#24633c"
+        tertiary: "#408454"
+        highlight: "#40845420"
+        textHighlight: "#ffe68b"
+      darkMode:
+        light: "#161c17"
+        lightgray: "#303b33"
+        gray: "#77897b"
+        darkgray: "#d2dfd4"
+        dark: "#edf5ed"
+        secondary: "#95d6a6"
+        tertiary: "#b2e8c1"
+        highlight: "#95d6a626"
+        textHighlight: "#826d29"
+links:
+  markdownLinkResolution: absolute
+contentIndex:
+  enableSiteMap: true
+  enableRSS: true
+plugins:
+  - source: "@quartz-community/created-modified-date"
+    enabled: true
+    options:
+      priority: [frontmatter, filesystem]
+  - source: "@quartz-community/github-flavored-markdown"
+    enabled: true
+  - source: "@quartz-community/obsidian-flavored-markdown"
+    enabled: true
+  - source: "@quartz-community/description"
+    enabled: true
+  - source: "@quartz-community/latex"
+    enabled: true
+  - source: "@quartz-community/content-page"
+    enabled: true
+  - source: "@quartz-community/folder-page"
+    enabled: true
+  - source: "@quartz-community/article-title"
+    enabled: true
+    layout: { position: beforeBody, priority: 10 }
+  - source: "@quartz-community/page-title"
+    enabled: true
+    layout: { position: left, priority: 10 }
+  - source: "@quartz-community/search"
+    enabled: true
+    layout: { position: left, priority: 20 }
+  - source: "@quartz-community/explorer"
+    enabled: true
+    layout: { position: left, priority: 50 }
+  - source: "@quartz-community/table-of-contents"
+    enabled: true
+    layout: { position: right, priority: 30 }
+  - source: "@quartz-community/footer"
+    enabled: true
+    options:
+      links:
+        GitHub: https://github.com/jmssup
+    layout: { position: footer, priority: 50 }

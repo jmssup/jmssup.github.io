@@ -1,133 +1,60 @@
 # ssup — 정명섭의 기록
 
-화면 전체가 CLI인 Jekyll 4 기반 GitHub Pages 블로그입니다. 방문자는 명령어로 6개 주제와 하위 분류를 탐색하고 글을 읽습니다. 홈·카테고리·글·소개 주소는 모두 같은 터미널을 사용합니다.
+Obsidian Vault에서 공개 글을 작성하고 Quartz로 빌드해 [jmssup.github.io](https://jmssup.github.io)의 루트에 배포합니다.
 
-## 실행
+## 저장 위치와 배포 흐름
 
-Ruby 3.3과 Bundler를 사용합니다. Node.js 24는 이전·검증 도구를 실행할 때 사용합니다.
-
-macOS에서 Ruby가 없다면 다음 명령으로 설치합니다.
-
-```sh
-brew install ruby@3.3
-export PATH="$(brew --prefix ruby@3.3)/bin:$PATH"
+```text
+~/Vault/Knowledge/
+├── 10 Projects/ · 20 Knowledge/ · 30 Courses/   글의 원문
+├── 40 Blog/                                     공개본과 블로그 목차
+│   ├── index.md                                 사이트 홈 /
+│   ├── about.md                                 소개 /about/
+│   └── CS/ · Security/ · Development/ · AI/ · Study Logs/ · Troubleshooting/
+└── 90 Attachments/Blog/                          공개 글에 사용할 첨부파일
+                ↓ 로컬에서 npm run sync:blog
+~/jmssup.github.io/
+├── content/                                     내보낸 Markdown과 media/ 첨부파일
+├── quartz.config.yaml                           Quartz 설정
+└── .github/workflows/pages.yml                   GitHub Actions 배포 설정
+                ↓ content/를 커밋하고 main에 반영
+GitHub Actions → Quartz → _site/ → jmssup.github.io/
 ```
 
+예를 들어 **여러가지 정렬**의 본문은 `20 Knowledge/CS/Algorithms/여러가지 정렬.md`에서 수정합니다. `40 Blog/CS/Algorithms/여러가지 정렬.md`가 원문을 임베드하며, 내보낸 본문은 저장소의 `content/CS/Algorithms/여러가지 정렬.md`에 생성됩니다.
+
+## 글 작성과 발행
+
+1. Vault의 `40 Blog`에 공개본을 작성하고, 발행할 글의 `status`를 `complete`로 설정합니다.
+2. `40 Blog`에 본문을 직접 쓰는 글은 `publish`를 비워둡니다. 원문을 불러오는 글은 양쪽 노트의 `publish`에 상대 노트의 위키링크를 넣고, 공개본 본문에 `![[원문 경로]]`, `![[원문 경로#절 제목]]`, `![[원문 경로#^블록ID]]` 중 필요한 임베드를 넣습니다.
+3. 공개할 첨부파일은 Vault의 `90 Attachments/Blog`에 두고, 공개할 본문에서 참조합니다.
+4. 저장소 루트에서 공개본을 내보내고 빌드합니다.
+
 ```sh
-bundle config set --local path vendor/bundle
-bundle install
+cd ~/jmssup.github.io
 npm ci
-bundle exec jekyll serve --host 127.0.0.1 --port 8080
-```
-
-터미널에 표시되는 `http://localhost:8080`에서 확인합니다. 글·템플릿·CSS 변경 시 자동으로 다시 빌드됩니다.
-
-```sh
-bundle exec jekyll build
+npm run sync:blog
+npm run build
 npm run check
+npm run preview:site
 ```
 
-`npm run dev`와 `npm run build`도 위 Jekyll 명령을 실행하는 편의 명령입니다. `_config.yml`이나 Ruby 플러그인을 변경하면 서버를 다시 시작합니다.
+`npm ci`는 최초 설치나 의존성이 바뀌었을 때 실행합니다. 미리보기 주소는 `http://127.0.0.1:8080/`입니다.
 
-최종 정적 파일은 `_site/`에 생성됩니다. 이 폴더는 Git에 올리지 않습니다.
+`sync:blog`는 기본적으로 `~/Vault/Knowledge`를 읽습니다. Vault 위치가 다르면 `npm run sync:blog -- "/path/to/vault"`를 사용합니다. 공개본의 임베드는 실제 본문으로 펼쳐지고, 참조된 첨부와 함께 `content/`에 저장됩니다. 공개본이 없는 노트의 링크는 표시 문구만 남습니다.
 
-## 카테고리
+`content/`는 내보낼 때마다 다시 생성합니다. 본문은 Vault에서 수정하고, 생성된 `content/`의 변경 사항을 검토한 뒤 파일 삭제분까지 함께 커밋합니다.
 
-| 표시 이름 | 글의 category 값 |
-| --- | --- |
-| 컴퓨터과학 | `cs` |
-| 보안 | `security` |
-| 개발 | `development` |
-| 인공지능 | `ai` |
-| 모각코 | `study-logs` |
-| 문제 해결 | `troubleshooting` |
+## GitHub Pages
 
-Vault의 `40 Blog` 주제별 목차를 따릅니다. `ls /`는 6개 대분류를, `ls security`는 Pwnable·Reversing·Fuzzing 등 하위 분류를 보여줍니다. `tree /`는 전체 분류 목차를 출력합니다. 대분류의 글 수와 `grep` 검색 범위에는 모든 하위 분류를 포함합니다. RSS(`/feed.xml`)와 사이트맵도 제공합니다.
+저장소의 **Settings → Pages → Build and deployment → Source**는 **GitHub Actions**를 사용합니다. 최초 전환 시 `content/`와 Quartz 설정, 스크립트, 배포 워크플로를 함께 `main`에 반영합니다. 이후에는 글을 내보내 생성한 `content/` 변경을 `main`에 반영하면 됩니다.
 
-하위 경로를 글의 `category`에 지정합니다. 예를 들어 Rust 글은 `development/rust`, OP-TEE 개발은 `development/embedded`, Dreamhack Pwnable 풀이는 `security/pwnable`, Diffusion 학습은 `ai/diffusion`입니다. 모각코는 시즌별로 분리합니다.
+Actions는 커밋된 `content/`를 Quartz 5.2.2로 빌드하고, 생성한 `_site/`를 사이트 루트에 배포합니다. Vault 내보내기는 로컬에서 실행합니다. PR에서는 빌드와 검증을 실행합니다. [배포 워크플로](.github/workflows/pages.yml) · [Quartz GitHub Pages 문서](https://quartz.jzhao.xyz/hosting#github-pages)
 
-공개 글 139개의 분류와 대응하는 Vault 공개 노트는 `migration/categories.json`, 전체 목차와 개수는 [분류 보고서](migration/categories.md)에 있습니다. 원문의 Tistory 주소로 대응 관계를 확인했으며 이번 변경에서 본문과 글 주소는 유지합니다. 검토한 분류는 이전 도구에서도 우선 적용합니다. 신규 글의 원래 분류가 알려지지 않은 경우에는 임의 배치하지 않고 분류 검토를 요청합니다.
+예전 `/posts/tistory/번호/`와 `/categories/…/`는 같은 글이나 분류의 Quartz 주소로 이동합니다. `/about/`와 `/feed.xml`도 기존 주소에서 열립니다.
 
-## CLI 사용법
+## 기존 Jekyll 기록
 
-CLI에서 카테고리를 디렉터리로 탐색하고 실제 글을 읽습니다. 예를 들어:
+`src/`의 터미널 블로그와 티스토리 이관 자료는 이전 기록으로 보관합니다. 기존 빌드와 검증은 Ruby 3.3, Bundler, `npm ci`를 준비한 뒤 `npm run check:jekyll`로 실행할 수 있습니다. 이 명령은 로컬 `_site/`를 Jekyll 결과로 갱신하므로 Quartz를 다시 보려면 `npm run build`를 실행합니다.
 
-```sh
-help
-ls
-tree /
-cd development/embedded
-ls
-cat tistory-147.md
-grep "OP-TEE"
-open tistory-147.md
-cd ..
-home
-```
-
-`pwd`, `whoami`, `about`, `links`, `history`, `clear`도 지원합니다. `cat`은 본문을 텍스트로 출력하고 `open`은 이미지·링크·코드 서식을 포함해 터미널 안에 표시합니다. Tab은 명령어·경로를 자동완성하고, ↑↓는 명령 기록을 탐색합니다. Esc는 입력 포커스를 해제합니다. 표시된 명령어·파일은 클릭할 수 있습니다. `grep`은 현재 디렉터리에서 검색하며 `grep OP-TEE /`처럼 전체 범위를 지정할 수 있습니다.
-
-`home`은 현재 출력 화면을 정리하고 소개 배너·전체 카테고리가 있는 처음 화면으로 돌아갑니다. 주소와 작업 경로도 `/`로 돌아가며 명령 기록은 유지됩니다.
-
-`src/assets/terminal.js`가 명령을 해석합니다. `/search.json`과 글 HTML을 GET으로 읽으므로 별도 애플리케이션 서버가 필요 없습니다. 방문자의 입력은 운영체제 명령으로 실행되지 않으며 글 수정·발행은 Markdown 편집과 Git으로 관리합니다. 출력은 최근 명령 40개까지 유지하고, `open`으로 글을 열면 해당 글만 표시합니다. 명령 기록은 이번 페이지 방문의 최근 100개까지 유지하므로 `↑↓`와 `history`로 이전 명령을 다시 확인할 수 있습니다.
-
-`open`은 주소를 글의 고유 주소로 갱신합니다. 그 주소를 공유하거나 새로고침하면 동일한 글을 CLI에서 엽니다. 카테고리 주소는 해당 디렉터리의 목록으로, `/about/`는 소개로 연결됩니다. 브라우저 뒤로·앞으로 이동도 지원합니다.
-
-글 본문은 각 HTML의 비활성 `<template data-document>`에 저장합니다. 터미널에서 읽을 때만 표시하며, 서식 보기에서는 실행 가능한 태그·이벤트 속성·위험한 URL을 제거합니다. 코드 블록과 이미지·표는 터미널 출력 안에서 읽습니다. 일반 블로그 헤더·카드·사이드바·글 목록 화면은 사용하지 않습니다.
-
-## 새 글 쓰기
-
-`src/_posts/`에 Markdown 파일을 추가합니다. 예를 들어 `src/_posts/2026-10-30-rust-ownership.md`:
-
-```md
----
-title: "Rust 소유권을 이해하며"
-date: "2026-10-30T20:00:00+09:00"
-category: development/rust
-description: "소유권과 빌림을 직접 실험해 본 기록입니다."
----
-
-여기에 본문을 작성합니다.
-```
-
-위 예시는 작성법을 보여주는 문서이며 실제 글로 게시되어 있지 않습니다. `날짜-이름.md` 형식으로 작성하며, 위 파일의 주소는 `/posts/rust-ownership/`입니다. 다른 주소를 원하면 `permalink`를 지정합니다. 이미지는 `src/assets/`에 넣고 `/assets/파일명.png`로 참조합니다. 글은 기본적으로 `post` 레이아웃을 사용합니다. `_config.yml`의 `render_with_liquid: false` 설정으로 본문의 `{{ ... }}` 등 코드가 템플릿으로 실행되지 않도록 했습니다.
-
-소개는 `src/about.html`, 전체 화면 스타일은 `src/assets/terminal.css`, 명령과 화면 동작은 `src/assets/terminal.js`에서 수정합니다. `src/_includes/terminal.html`은 터미널 마크업, `src/_layouts/`는 공통 HTML과 비활성 본문 템플릿, `src/_data/categories.json`은 분류 정보입니다. 사이트 URL과 GitHub 링크는 `_config.yml`에 있습니다.
-
-콘솔 테마는 시스템 설정과 관계없이 시안의 밝은 연녹색 배경(`#f5f7f5`)을 사용합니다. 명령어는 입력 후 Enter로 실행합니다. 본문은 Noto Sans KR 18px(모바일 17px), 명령어와 코드는 JetBrains Mono를 사용하며 Google Fonts를 불러오지 못하면 시스템 글꼴로 표시합니다. 본문 폭은 최대 680px입니다.
-
-HTML의 `{{ ... }}`와 `{% ... %}`는 빌드할 때 처리되는 Liquid 문법입니다. `src/_plugins/blog_filters.rb`는 검색용 본문 텍스트와 읽기 시간을 계산하고, `src/_plugins/category_pages.rb`는 대분류·하위 분류의 주소와 글 수를 생성합니다.
-
-## 티스토리 이전
-
-[기존 블로그](https://myinfosub.tistory.com)의 공개 글 139개를 가져왔습니다. 자세한 검증 결과와 원본에서 404가 발생한 이미지 13개의 범위는 [이전 보고서](migration/README.md)에 있습니다.
-
-```sh
-npm run import:tistory
-bundle exec jekyll build
-npm run check
-```
-
-이전 도구는 `src/_posts/날짜-tistory-번호.html`에 저장하고 기존 `/posts/tistory/번호/` 주소를 유지합니다. 공개 사이트맵을 읽으며 이미 가져온 글은 덮어쓰지 않습니다. 원본 HTML 캐시는 `.cache/tistory/`에 보관되며 Git에서 제외됩니다. `--refresh`는 원본을 다시 내려받고 가져온 글을 덮어쓰므로, 가져온 글을 직접 수정한 후에는 사용하지 마세요.
-
-비공개·보호 글, 댓글, 티스토리 통계는 공개 페이지에서 가져오지 않습니다. 티스토리의 글 주소를 변경하거나 삭제하지 않습니다. 로컬 글 사이의 링크는 새 주소로 연결하며, 원본 링크도 각 글에 남깁니다. 티스토리 도메인에 대한 자동 리디렉션은 별도 설정이 필요합니다.
-
-## GitHub Pages 배포
-
-배포 워크플로는 Ruby 3.3·Jekyll 4로 빌드하고 Node.js 검증을 통과한 `_site/`를 배포합니다. Ruby 의존성은 `Gemfile.lock`, Node.js 도구 의존성은 `package-lock.json`으로 고정합니다. Pages 소스는 **GitHub Actions**를 유지합니다.
-
-[GitHub의 공식 Pages 워크플로 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)에 맞췄습니다.
-
-1. GitHub 저장소의 **Settings → Pages → Build and deployment → Source**에서 **GitHub Actions**를 선택합니다.
-2. 변경 사항을 검토하고 `main` 브랜치에 올립니다.
-3. `Build and deploy Jekyll blog` 워크플로가 빌드·검증 후 배포합니다.
-
-배포 주소는 `https://jmssup.github.io`입니다. 기능 브랜치에 코드를 올리는 것과 사이트 배포는 별개이며, Pages 설정 후 `main`에 반영하면 배포됩니다. Pull Request에서는 빌드와 검증만 실행합니다.
-
-프로필의 GitHub 링크와 호스팅 저장소 계정은 모두 `jmssup`을 사용합니다.
-
-## 확인 범위
-
-`npm run check`는 이전한 글 전체의 제목·작성일·본문 텍스트 SHA-256·이미지 개수, 6개 대분류와 하위 목차, 생성 페이지의 내부 링크와 로컬 파일, 검색 인덱스, RSS와 사이트맵을 검사합니다. 외부 사이트 링크의 장기 생존 여부나 비공개 글까지 확인하는 검사는 아닙니다.
-
-전체 HTML이 CLI만 포함하는지, 터미널의 실제 글 경로 매핑·직접 주소·디렉터리 이동·검색·명령 파싱·자동완성·잘못된 입력 처리도 검사합니다. Jekyll 전환 내역은 [전환 기록](migration/jekyll.md)에 있습니다.
+콘솔 테마 작업은 밝은 연녹색 배경(`#f5f7f5`), 본문 Noto Sans KR, 코드 JetBrains Mono를 사용합니다. 자세한 내용은 [Jekyll 전환 기록](migration/jekyll.md)과 [티스토리 이전 보고서](migration/README.md)에 있습니다.
