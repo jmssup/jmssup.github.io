@@ -232,7 +232,6 @@ function articleView(article, url) {
 async function initTerminal(terminal) {
   const form = terminal.querySelector('[data-terminal-form]');
   const input = form.querySelector('input');
-  const submit = form.querySelector('button');
   const output = terminal.querySelector('[data-terminal-output]');
   const screen = terminal.querySelector('[data-terminal-screen]');
   const cwd = terminal.querySelector('[data-terminal-cwd]');
@@ -274,7 +273,7 @@ async function initTerminal(terminal) {
     if (busy || !state || !line.trim()) return;
     const version = routeVersion;
     busy = true;
-    input.disabled = submit.disabled = true;
+    input.disabled = true;
     const entry = document.createElement('div');
     entry.className = 'shell-entry';
     const echo = document.createElement('div');
@@ -328,7 +327,7 @@ async function initTerminal(terminal) {
       updatePrompt();
       while (output.children.length > 40) output.firstElementChild.remove();
       busy = false;
-      input.disabled = submit.disabled = false;
+      input.disabled = false;
       if (version !== routeVersion) await restoreRoute();
       else {
         if (focus) input.focus({ preventScroll: true });
@@ -402,7 +401,7 @@ async function initTerminal(terminal) {
     if (!response.ok) throw new Error();
     const config = JSON.parse(document.querySelector('#shell-data').textContent);
     state = createFilesystem(await response.json(), config.categories, config);
-    input.disabled = submit.disabled = false;
+    input.disabled = false;
     terminal.querySelector('[data-terminal-count]').textContent = `${config.categories.filter(category => !category.id.includes('/')).length}개 주제 · ${state.files.size}개 글`;
     await restoreRoute();
     if (!matchMedia('(pointer: coarse)').matches) input.focus({ preventScroll: true });

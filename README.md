@@ -94,7 +94,7 @@ description: "소유권과 빌림을 직접 실험해 본 기록입니다."
 
 소개는 `src/about.html`, 전체 화면 스타일은 `src/assets/terminal.css`, 명령과 화면 동작은 `src/assets/terminal.js`에서 수정합니다. `src/_includes/terminal.html`은 터미널 마크업, `src/_layouts/`는 공통 HTML과 비활성 본문 템플릿, `src/_data/categories.json`은 분류 정보입니다. 사이트 URL과 GitHub 링크는 `_config.yml`에 있습니다.
 
-콘솔 테마는 시스템의 밝은·어두운 화면 설정을 따릅니다. 본문은 Noto Sans KR 18px(모바일 17px), 명령어와 코드는 JetBrains Mono를 사용하며 Google Fonts를 불러오지 못하면 시스템 글꼴로 표시합니다. 본문 폭은 최대 680px입니다.
+콘솔 테마는 시스템 설정과 관계없이 시안의 밝은 연녹색 배경(`#f5f7f5`)을 사용합니다. 명령어는 입력 후 Enter로 실행합니다. 본문은 Noto Sans KR 18px(모바일 17px), 명령어와 코드는 JetBrains Mono를 사용하며 Google Fonts를 불러오지 못하면 시스템 글꼴로 표시합니다. 본문 폭은 최대 680px입니다.
 
 HTML의 `{{ ... }}`와 `{% ... %}`는 빌드할 때 처리되는 Liquid 문법입니다. `src/_plugins/blog_filters.rb`는 검색용 본문 텍스트와 읽기 시간을 계산하고, `src/_plugins/category_pages.rb`는 대분류·하위 분류의 주소와 글 수를 생성합니다.
 

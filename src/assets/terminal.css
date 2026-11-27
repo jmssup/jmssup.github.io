@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #f5f7f5;
   --text: #202820;
   --muted: #5b6a5f;
@@ -13,18 +13,6 @@
   font-size: 100%;
   background: var(--bg);
   color: var(--text);
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #151917;
-    --text: #e1e7e1;
-    --muted: #a6b6aa;
-    --accent: #9ac3a0;
-    --line: #354339;
-    --code-bg: #202a23;
-    --selection: #354e3c;
-    --error: #f0b49e;
-  }
 }
 * { box-sizing: border-box; }
 body { margin: 0; height: 100dvh; overflow: hidden; font: .9375rem/1.85 var(--mono), var(--sans); }
@@ -103,7 +91,6 @@ button:focus-visible, input:focus-visible, a:focus-visible, pre:focus-visible { 
 .shell-form > .shell-prompt { max-width: 60%; }
 .shell-form input { min-width: 0; width: 100%; padding: 5px 0; border: 0; border-radius: 0; background: none; color: var(--text); caret-color: var(--accent); font-size: 1rem; }
 .shell-form input::placeholder { color: var(--muted); opacity: 1; }
-.shell-form button { background: none; border: 1px solid var(--line); padding: 6px 14px; color: var(--text); border-radius: 0; white-space: nowrap; font: .875rem/1.6 var(--sans); }
 .shell-statusbar { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 0 4px 20px; color: var(--muted); font: .8125rem/1.8 var(--sans); }
 .shell-statusbar button { padding: 0; border: 0; background: none; color: var(--accent); font-family: var(--mono); text-decoration: underline; text-underline-offset: 3px; }
 .shell-statusbar kbd { font: inherit; color: var(--text); }
@@ -127,7 +114,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, pre:focus-visible { 
   .shell-statusbar { padding: 0 2px 14px; }
   .shell-statusbar > span:last-child { display: none; }
 }
-@media (pointer:coarse) { .shell-item, .shell-form button, .shell-statusbar button { min-height: 44px; } }
+@media (pointer:coarse) { .shell-item, .shell-statusbar button { min-height: 44px; } }
 @media (prefers-reduced-motion:reduce) { * { scroll-behavior: auto !important; } }
 @media print {
   :root { color-scheme: light; --bg: #fff; --text: #202820; --muted: #5b6a5f; --accent: #2c6541; --line: #cfd9d1; --code-bg: #e8eee9; }
